@@ -1,114 +1,96 @@
 package byow;
-
-// @https://www.youtube.com/watch?v=irkJ4gczM0I
 import java.util.List;
 
-/**  KDTree class should be immutable.
- *  Also note that while k-d trees can theoretically work
- *  for any number of dimensions, your implementation only
- *  has to work for the 2-dimensional case,
- *  i.e. when our points have only x and y coordinates.
- *
- *  REMINDER: A K-D Tree(also called as K-Dimensional Tree) is a binary search tree
- *  where data in each node is a K-Dimensional point in space!!!
- *
- * omg om g
- * omg
- * ogm g
- *
- * */
-
-public class KDTree implements PointSet {
+public class KDTree implements RoomSet {
 
     private Node root;
 
-    // You can assume points has at least size 1.
-    public KDTree(List<Point> points) {
-        for (Point p: points) {
-            insert(p);
+    // You can assume rooms has at least size 1.
+    public KDTree(List<Room> rooms) {
+        for (Room room: rooms) {
+            insert(room);
         }
     }
 
     private class Node {
         Node left; //also down
         Node right; // also up
-        Point point;
+        Room room;
 
-        Node(Point point) {
-            this.point = point;
+        Node(Room room) {
+            this.room = room;
         }
     }
 
-    @Override
-    public Point nearest(double x, double y) {
-        Point tmp = new Point(x, y);
+    public Room nearest(int x, int y, int w, int h) {
+        Room tmp = new Room(x, y, w, h );
         return nearest(tmp);
     }
 
-    public Point nearest(Point point) {
-        return nearestHelper(root, point, root.point, true);
+    public Room nearest(Room room) {
+        return nearestHelper(root, room, root.room, true);
     }
 
-    private Point nearestHelper(Node n, Point point, Point bestCandidate, boolean even) {
+    private Room nearestHelper(Node n, Room room, Room bestCandidate, boolean even) {
         // If everything's good until the end of the tree-
         if (n == null) {
             return bestCandidate;
         }
-        // If it's the same point overlapping
-        if (n.point.equals(point)) {
-            return point;
+        // If it's the same room overlapping
+        if (n.room.equals(room)) {
+            return room;
         }
-        // If the current node's point is better, replace
-        if (Point.distance(n.point, point) < Point.distance(bestCandidate, point)) {
-            bestCandidate = n.point;
+        // If the current node's room is better, replace
+        if (room.distance(n.room, room) < room.distance(bestCandidate, room)) {
+            bestCandidate = n.room;
         }
-        double kDSpaceLine = comparePoints(point, n, even);
+        double kDSpaceLine = comparerooms(room, n, even);
         if (kDSpaceLine < 0) {
-            bestCandidate = nearestHelper(n.left, point, bestCandidate, !even);
+            bestCandidate = nearestHelper(n.left, room, bestCandidate, !even);
 
-            if (Point.distance(bestCandidate, point)
+            if (room.distance(bestCandidate, room)
                     >= kDSpaceLine * kDSpaceLine) {
-                bestCandidate = nearestHelper(n.right, point, bestCandidate, !even);
+                bestCandidate = nearestHelper(n.right, room, bestCandidate, !even);
             }
         } else {
-            bestCandidate = nearestHelper(n.right, point, bestCandidate, !even);
+            bestCandidate = nearestHelper(n.right, room, bestCandidate, !even);
 
-            if (Point.distance(bestCandidate, point)
+            if (room.distance(bestCandidate, room)
                     >= kDSpaceLine * kDSpaceLine) {
-                bestCandidate = nearestHelper(n.left, point, bestCandidate, !even);
+                bestCandidate = nearestHelper(n.left, room, bestCandidate, !even);
             }
         }
         return bestCandidate;
     }
 
-    private double comparePoints(Point point, Node n, boolean even) {
+    private double comparerooms(Room room, Node n, boolean even) {
         if (even) { // If right up
-            return point.getX() - n.point.getX();
+            return room.getX() - n.room.getX();
         } else { // If left down
-            return point.getY() - n.point.getY();
+            return room.getY() - n.room.getY();
         }
     }
 
-    public void insert(Point point) {
-        root = insertHelper(root, point, true);
+    public void insert(Room room) {
+        root = insertHelper(root, room, true);
     }
 
-    private Node insertHelper(Node n, Point point, boolean even) {
+    private Node insertHelper(Node n, Room room, boolean even) {
         if (n == null) {
-            return new Node(point);
+            return new Node(room);
         }
-        double decider = comparePoints(point, n, even);
+        double decider = comparerooms(room, n, even);
         // Gotta go Left Node
         if (decider < 0 && even) {
-            n.left = insertHelper(n.left, point, !even);
+            n.left = insertHelper(n.left, room, !even);
         } else if (decider < 0 && !even) { // Bottom Nodes
-            n.left = insertHelper(n.left, point, !even);
+            n.left = insertHelper(n.left, room, !even);
         } else if (decider > 0 && even) { // Gotta go  Right Nodes
-            n.right = insertHelper(n.right, point, !even);
+            n.right = insertHelper(n.right, room, !even);
         } else if (decider > 0 && !even) {  // Gotta go Top Nodes
-            n.right = insertHelper(n.right, point, !even);
-        } else if (!n.point.equals(point)) {
-            n.right = insertHelper(n.right, point, !even);
+            n.right = insertHelper(n.right, room, !even);
+        } else if (!n.room.equals(room)) {
+            n.right = insertHelper(n.right, room, !even);
         }
         return n;
     }

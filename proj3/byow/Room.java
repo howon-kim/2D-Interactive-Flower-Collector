@@ -11,7 +11,6 @@ public class Room {
     public static KDTree BSPTree;
     public static TETile[][] world;
 
-    // 4 corners of the room
     public int x1;
     public int x2;
     public int y1;
@@ -29,6 +28,9 @@ public class Room {
         this.w = w;
         this.h = h;
     }
+
+    public int getX() { return this.x1; }
+    public int getY() { return this.y1; }
 
 
     public static void generateRoom(Location loc) {
@@ -57,7 +59,7 @@ public class Room {
             }
         }
 
-        BSPTree.insert(new Point(newRoom.x1, newRoom.y1));
+        BSPTree.insert(newRoom);
 
         if (!failed) {
             rooms.add(newRoom);
@@ -90,8 +92,7 @@ public class Room {
     }
 
     public static void connectRooms(Room room) {
-        Point roomPoint = new Point(room.x1, room.x2);
-        Point nearestRoom = BSPTree.nearest(roomPoint);
+        Room nearestRoom = BSPTree.nearest(room);
 
         // put Vertical or Horizontal Hallways connecting room and nearestRoom
         if (_____________) {
@@ -101,5 +102,34 @@ public class Room {
         }
     }
 
+    /**
+     * Returns the euclidean distance (L2 norm) squared between two points
+     * (x1, y1) and (x2, y2). Note: This is the square of the Euclidean distance,
+     * i.e. there's no square root.
+     */
+    private static double distance(double x1, double x2, double y1, double y2) {
+        return Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2);
+    }
+
+    /**
+     * Returns the euclidean distance (L2 norm) squared between two points.
+     * Note: This is the square of the Euclidean distance, i.e.
+     * there's no square root.
+     */
+    public static double distance(Room r1, Room r2) {
+        return distance(r1.getX(), r2.getX(), r1.getY(), r2.getY());
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) {
+            return false;
+        }
+        if (other.getClass() != this.getClass()) {
+            return false;
+        }
+        Room otherRoom = (Room) other;
+        return getX() == otherRoom.getX() && getY() == otherRoom.getY();
+    }
 
 }
