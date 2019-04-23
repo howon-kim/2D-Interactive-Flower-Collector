@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 public class Room {
 
+    public TETile[][] world; 
+
     // 4 corners of the room
     public int x1;
     public int x2;
@@ -25,7 +27,9 @@ public class Room {
         this.h = h;
     }
 
+
     public void generateRooms() {
+        // populates list of valid (not intersecting rooms) and adds room to TETile[][] world
         ArrayList<Room> rooms = new ArrayList<>();
 
         // generates random room dimensions
@@ -42,8 +46,6 @@ public class Room {
                 failed = true;
             }
         }
-
-        // if room does not overlap, add valid room to roomlist + adds room to TETile[][] world
         if (!failed) {
             rooms.add(newRoom);
             putRooms(newRoom, world);
