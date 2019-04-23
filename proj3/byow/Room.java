@@ -34,7 +34,6 @@ public class Room {
 
 
     public static void generateRoom(Location loc) {
-        // should there be max, min room sizes?
         // populates list of valid (not intersecting rooms) and adds room to TETile[][] world
         ArrayList<Room> rooms = new ArrayList<>();
 
@@ -92,6 +91,8 @@ public class Room {
     }
 
     public static void connectRooms(Room room) {
+
+        // using BSPTree would return itself-- abort
         Room nearestRoom = BSPTree.nearest(room);
 
         // put Vertical or Horizontal Hallways connecting room and nearestRoom
@@ -131,6 +132,11 @@ public class Room {
         }
         Room otherRoom = (Room) other;
         return getX() == otherRoom.getX() && getY() == otherRoom.getY();
+    }
+
+    public static void main(String[] args) {
+
+
     }
 
 }
