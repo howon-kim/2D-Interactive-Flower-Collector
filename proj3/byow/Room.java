@@ -31,7 +31,7 @@ public class Room {
     }
 
 
-    public void generateRooms(Location loc) {
+    public void generateRoom(Location loc) {
         // should there be max, min room sizes?
         // populates list of valid (not intersecting rooms) and adds room to TETile[][] world
         ArrayList<Room> rooms = new ArrayList<>();
@@ -58,12 +58,12 @@ public class Room {
         }
         if (!failed) {
             rooms.add(newRoom);
-            putRooms(newRoom, world);
+            putRoom(newRoom, world);
         }
         ////////////////////
     }
 
-    public void putRooms(Room room, TETile[][] world) {
+    public void putRoom(Room room, TETile[][] world) {
 
         for (int x = 0; x < w; x += 1) {
             world[room.x1 + x][room.y1] = Tileset.WALL;

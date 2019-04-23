@@ -1,7 +1,8 @@
 package byow;
 import byow.TileEngine.TETile;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
-
+import byow.Location;
+import byow.Room;
 import java.util.ArrayList;
 
 
@@ -16,13 +17,13 @@ public class WorldGenerator {
         this.seed = seed;
 
         // needs number of rooms from room array// how does world generator get this input?
-        this.connectedUF = new WeightedQuickUnionUF(roomNumber);
+        this.connectedUF = new WeightedQuickUnionUF(NumberofRooms);
 
         // partition the space randomly; output is list of Locations
         locations = BSP();
 
         for (Location loc: locations) {
-
+            generateRoom(loc); // generates room within location, puts into world
         }
     }
 
@@ -35,6 +36,7 @@ public class WorldGenerator {
         ArrayList<Location> locations = new ArrayList<>();
         // Binary Space Partitioning Mechanics //
         // should output specific range of x1, x2, y1, y2 values for Room to be Located
+
 
 
 
