@@ -6,6 +6,9 @@ import java.util.ArrayList;
 
 public class Room {
 
+    public static final int maxSize = 10;
+    public static final int minSize = 2;
+
     public TETile[][] world;
 
     // 4 corners of the room
@@ -29,16 +32,20 @@ public class Room {
 
 
     public void generateRooms(Location loc) {
+        // should there be max, min room sizes?
         // populates list of valid (not intersecting rooms) and adds room to TETile[][] world
         ArrayList<Room> rooms = new ArrayList<>();
 
         // generates random room dimensions
         // below values have to be within loc.x1, x2, y1, y2
-        Random random = new Random();
-        int x = random.nextInt();
-        int y = random.nextInt();
-        int w = random.nextInt();
-        int h = random.nextInt();
+
+        Random rand = new Random(seed);
+
+        int w = rand.nextInt(maxSize - minSize + 1) + minSize;
+        int h = rand.nextInt(maxSize - minSize + 1) + minSize;
+        int x = rand.nextInt(loc.x2- loc.x1) + loc.x1;
+        int y = rand.nextInt(loc.y2 - loc.y1) + loc.y1;
+
 
         Room newRoom = new Room(x, y, w, h);
         boolean failed = false;
