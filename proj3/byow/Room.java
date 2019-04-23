@@ -1,6 +1,7 @@
 package byow;
+import byow.TileEngine.TETile;
 import java.util.Random;
-
+import byow.TileEngine.Tileset;
 import java.util.ArrayList;
 
 public class Room {
@@ -24,9 +25,10 @@ public class Room {
         this.h = h;
     }
 
-    public void putRooms() {
+    public void generateRooms() {
         ArrayList<Room> rooms = new ArrayList<>();
 
+        // generates random room dimensions
         Random random = new Random();
         int x = random.nextInt();
         int y = random.nextInt();
@@ -40,35 +42,34 @@ public class Room {
                 failed = true;
             }
         }
+
+        // if room does not overlap, add valid room to roomlist + adds room to TETile[][] world
         if (!failed) {
             rooms.add(newRoom);
+            putRooms(newRoom, world);
         }
-
     }
 
-    public boolean overlaps(Room room) {
-        return (x1 <= room.x2 && x2 >= room.x1 &&
-                y1 <= room.y2 && room.y2 >= room.y1);
-    }
-
-
-    /**
-    public void makeRoom(int w, int h, TETile[][] world, Location loc) {
+    public void putRooms(Room room, TETile[][] world) {
         for (int x = 0; x < w; x += 1) {
-            world[loc.getX() + x][loc.getY()] = Tileset.WALL;
-            world[loc.getX() + x][loc.getY() + h - 1] = Tileset.WALL;
+            world[room.x1 + x][room.y1] = Tileset.WALL;
+            world[room.x1 + x][room.y1 + h - 1] = Tileset.WALL;
         }
         for (int y = 0; y < h; y += 1) {
-            world[loc.getX()][loc.getY() + y] = Tileset.WALL;
-            world[loc.getX() + w - 1][loc.getY() + y] = Tileset.WALL;
+            world[room.x1][room.y1 + y] = Tileset.WALL;
+            world[room.x1 + w - 1][room.y1 + y] = Tileset.WALL;
         }
         for (int x = 1; x < w - 1; x += 1) {
             for (int y = 1; y < h - 1; y += 1) {
-                world[loc.getX() + x][loc.getY() + y] = Tileset.FLOOR;
+                world[room.x1 + x][room.y1 + y] = Tileset.FLOOR;
             }
         }
     }
-    */
+
+    private boolean overlaps(Room room) {
+        return (x1 <= room.x2 && x2 >= room.x1 &&
+                y1 <= room.y2 && room.y2 >= room.y1);
+    }
 
 
 }
