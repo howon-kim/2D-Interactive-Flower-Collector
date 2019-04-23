@@ -1,6 +1,7 @@
 package byow;
-import byow.TileEngine.TETile;
-import byow.TileEngine.Tileset;
+import java.util.Random;
+
+import java.util.ArrayList;
 
 public class Room {
 
@@ -21,10 +22,35 @@ public class Room {
 
         this.w = w;
         this.h = h;
-
-        center = new Point(Math.floor((x1 + x2) / 2),
-                Math.floor((y1 + y2) / 2));
     }
+
+    public void putRooms() {
+        ArrayList<Room> rooms = new ArrayList<>();
+
+        Random random = new Random();
+        int x = random.nextInt();
+        int y = random.nextInt();
+        int w = random.nextInt();
+        int h = random.nextInt();
+
+        Room newRoom = new Room(x, y, w, h);
+        boolean failed = false;
+        for (Room r: rooms) {
+            if (newRoom.overlaps(r)) {
+                failed = true;
+            }
+        }
+        if (!failed) {
+            rooms.add(newRoom);
+        }
+
+    }
+
+    public boolean overlaps(Room room) {
+        return (x1 <= room.x2 && x2 >= room.x1 &&
+                y1 <= room.y2 && room.y2 >= room.y1);
+    }
+
 
     /**
     public void makeRoom(int w, int h, TETile[][] world, Location loc) {
@@ -43,10 +69,6 @@ public class Room {
         }
     }
     */
-
-    public boolean intersects(Room room) {
-        return
-    }
 
 
 }
