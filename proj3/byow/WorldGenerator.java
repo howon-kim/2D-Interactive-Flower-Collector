@@ -1,8 +1,11 @@
-package byow.Core;
+package byow;
+import byow.TileEngine.TETile;
 
 
 public class WorldGenerator {
 
-    KDTree;
-    
+    public TETile[][] world;
+    public int seed;
+
+
 }
