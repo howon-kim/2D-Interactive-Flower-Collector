@@ -58,6 +58,7 @@ public class Room {
 
     public static void randomRoom(int screen_w, int screen_h, TETile[][] world) {
         // should there be max, min room sizes?
+
         // populates list of valid (not intersecting rooms) and adds room to TETile[][] world
 
         // generates random room dimensions
@@ -154,6 +155,8 @@ public class Room {
 
 /*
     public static void connectRooms(Room room) {
+
+        // using BSPTree would return itself-- abort
         Room nearestRoom = BSPTree.nearest(room);
 
         // put Vertical or Horizontal Hallways connecting room and nearestRoom
@@ -193,6 +196,11 @@ public class Room {
         }
         Room otherRoom = (Room) other;
         return getX() == otherRoom.getX() && getY() == otherRoom.getY();
+    }
+
+    public static void main(String[] args) {
+
+
     }
 
 }
