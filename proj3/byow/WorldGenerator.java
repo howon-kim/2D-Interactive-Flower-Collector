@@ -29,7 +29,7 @@ public class WorldGenerator {
 
         for (Room room: rooms) {
             // hallway operations
-            connectedUF.union();
+            // connectedUF.union();
         }
     }
 
@@ -54,7 +54,8 @@ public class WorldGenerator {
     public boolean connected() {
 
         // is first room connected to last room
-        return connectedUF.connected(rooms.get(0), rooms.get(rooms.size() - 1));
+        // return connectedUF.connected(rooms.get(0), rooms.get(rooms.size() - 1));
+        return true;
     }
 
 

@@ -95,7 +95,8 @@ public class Room {
         Room nearestRoom = BSPTree.nearest(room);
 
         // put Vertical or Horizontal Hallways connecting room and nearestRoom
-        if (_____________) {
+        // how to build combination of these hallways to connect diagonal rooms// offset rooms
+        if (true) {
             Hallway.putVerticalHallway(world, room, nearestRoom);
         } else {
             Hallway.putHorizontalHallway( world, room, nearestRoom);
