@@ -8,7 +8,7 @@ public class Room {
 
     public static final int maxSize = 10;
     public static final int minSize = 2;
-
+    public static KDTree BSPTree;
     public static TETile[][] world;
 
     // 4 corners of the room
@@ -49,18 +49,20 @@ public class Room {
 
         Room newRoom = new Room(x, y, w, h);
 
-        // not needed if we're doing BSP
+        // redundant if we're doing BSP
         boolean failed = false;
         for (Room r: rooms) {
             if (newRoom.overlaps(r)) {
                 failed = true;
             }
         }
+
+        BSPTree.insert(new Point(newRoom.x1, newRoom.y1));
+
         if (!failed) {
             rooms.add(newRoom);
             putRoom(newRoom, world);
         }
-        ////////////////////
     }
 
     public static void putRoom(Room room, TETile[][] world) {
@@ -85,6 +87,18 @@ public class Room {
     private boolean overlaps(Room room) {
         return (x1 <= room.x2 && x2 >= room.x1 &&
                 y1 <= room.y2 && room.y2 >= room.y1);
+    }
+
+    public static void connectRooms(Room room) {
+        Point roomPoint = new Point(room.x1, room.x2);
+        Point nearestRoom = BSPTree.nearest(roomPoint);
+
+        // put Vertical or Horizontal Hallways connecting room and nearestRoom
+        if (_____________) {
+            Hallway.putVerticalHallway(world, room, nearestRoom);
+        } else {
+            Hallway.putHorizontalHallway( world, room, nearestRoom);
+        }
     }
 
 
