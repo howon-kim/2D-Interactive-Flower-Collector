@@ -48,6 +48,8 @@ public class Room {
 
 
         Room newRoom = new Room(x, y, w, h);
+
+        // not needed if we're doing BSP
         boolean failed = false;
         for (Room r: rooms) {
             if (newRoom.overlaps(r)) {
@@ -58,6 +60,7 @@ public class Room {
             rooms.add(newRoom);
             putRooms(newRoom, world);
         }
+        ////////////////////
     }
 
     public void putRooms(Room room, TETile[][] world) {

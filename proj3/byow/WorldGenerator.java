@@ -22,7 +22,7 @@ public class WorldGenerator {
         locations = BSP();
 
         for (Location loc: locations) {
-            
+
         }
     }
 
