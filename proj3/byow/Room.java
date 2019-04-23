@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Room {
 
-    public TETile[][] world; 
+    public TETile[][] world;
 
     // 4 corners of the room
     public int x1;
@@ -28,11 +28,12 @@ public class Room {
     }
 
 
-    public void generateRooms() {
+    public void generateRooms(Location loc) {
         // populates list of valid (not intersecting rooms) and adds room to TETile[][] world
         ArrayList<Room> rooms = new ArrayList<>();
 
         // generates random room dimensions
+        // below values have to be within loc.x1, x2, y1, y2
         Random random = new Random();
         int x = random.nextInt();
         int y = random.nextInt();
@@ -53,6 +54,7 @@ public class Room {
     }
 
     public void putRooms(Room room, TETile[][] world) {
+
         for (int x = 0; x < w; x += 1) {
             world[room.x1 + x][room.y1] = Tileset.WALL;
             world[room.x1 + x][room.y1 + h - 1] = Tileset.WALL;

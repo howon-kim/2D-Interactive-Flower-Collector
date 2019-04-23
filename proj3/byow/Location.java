@@ -2,19 +2,17 @@ package byow;
 
 public class Location {
 
-    private int x;
-    private int y;
+    public int x1;
+    public int x2;
+    public int y1;
+    public int y2;
 
-    public Location(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public Location(int x1, int x2, int y1, int y2) {
+        this.x1 = x1;
+        this.x2 = x2;
+        this.y1 = y1;
+        this.y1 = y1;
     }
 
-    public int getX() {
-        return this.x;
-    }
 
-    public int getY() {
-        return this.y;
-    }
 }
