@@ -5,10 +5,10 @@ import byow.TileEngine.Tileset;
 public class Hallway {
 
     public static TETile world;
-
+/*
     public static void putVerticalHallway(TETile[][] world, Room room1, Room room2) {
 
-        int h =
+      //  int h =
         // generating midpoints of room objects
 
         double midpoint1 = (room1.x1 - room1.x2) / 2;
@@ -26,7 +26,7 @@ public class Hallway {
 
     public static void putHorizontalHallway(TETile[][] world, Room room1, Room room2) {
 
-        int w =
+      //  int w =
         double midpoint1 = (room1.y1 - room1.y2) / 2;
         double midpoint2 = (room2.y1 - room2.y2) / 2;
 
@@ -38,5 +38,5 @@ public class Hallway {
             world[loc.x() + x][loc.y()    ] = Tileset.FLOOR;
         }
     }
-
+*/
 }
