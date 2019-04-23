@@ -18,7 +18,10 @@ public class Hallway {
 
         int w = 1;
         int h = rand.nextInt(maxSize - minSize + 1) + minSize;
-        
+
+        // function that picks direction randomly-- left, right, up, down
+        // then calculates midpoint
+        // then builds and fills that specified hallway
 
 
     }
