@@ -9,7 +9,7 @@ public class Room {
     public static final int maxSize = 10;
     public static final int minSize = 2;
 
-    public TETile[][] world;
+    public static TETile[][] world;
 
     // 4 corners of the room
     public int x1;
@@ -31,7 +31,7 @@ public class Room {
     }
 
 
-    public void generateRoom(Location loc) {
+    public static void generateRoom(Location loc) {
         // should there be max, min room sizes?
         // populates list of valid (not intersecting rooms) and adds room to TETile[][] world
         ArrayList<Room> rooms = new ArrayList<>();
@@ -39,7 +39,7 @@ public class Room {
         // generates random room dimensions
         // below values have to be within loc.x1, x2, y1, y2
 
-        Random rand = new Random(seed);
+        Random rand = new Random(123);
 
         int w = rand.nextInt(maxSize - minSize + 1) + minSize;
         int h = rand.nextInt(maxSize - minSize + 1) + minSize;
@@ -63,7 +63,9 @@ public class Room {
         ////////////////////
     }
 
-    public void putRoom(Room room, TETile[][] world) {
+    public static void putRoom(Room room, TETile[][] world) {
+        int w = room.w;
+        int h = room.h;
 
         for (int x = 0; x < w; x += 1) {
             world[room.x1 + x][room.y1] = Tileset.WALL;

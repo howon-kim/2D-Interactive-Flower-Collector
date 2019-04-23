@@ -9,7 +9,7 @@ public class WorldGenerator {
     public TETile[][] world;
     public int seed;
     public ArrayList<Location>  locations;
-    private WeightedQuickUnionUF connectedUF;
+    public WeightedQuickUnionUF connectedUF;
 
     public WorldGenerator(int seed) {
         this.seed = seed;
