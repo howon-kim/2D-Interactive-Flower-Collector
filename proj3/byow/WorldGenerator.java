@@ -10,6 +10,7 @@ public class WorldGenerator {
     public int seed;
     public ArrayList<Location>  locations;
     public WeightedQuickUnionUF connectedUF;
+    public ArrayList<Room> rooms;
 
     public WorldGenerator(int seed) {
         this.seed = seed;
@@ -18,12 +19,17 @@ public class WorldGenerator {
         locations = BSP();
 
         // needs number of rooms from room array// how does world generator get this input?
-        this.connectedUF = new WeightedQuickUnionUF(locations.size());
+        this.connectedUF = new WeightedQuickUnionUF(locations.size()  + 2);
 
 
         // for each location, generates room within location, puts into world
         for (Location loc: locations) {
             Room.generateRoom(loc);
+        }
+
+        for (Room room: rooms) {
+            // hallway operations
+            connectedUF.union();
         }
     }
 
@@ -46,7 +52,9 @@ public class WorldGenerator {
     }
 
     public boolean connected() {
-        return false;
+
+        // is first room connected to last room
+        return connectedUF.connected(rooms.get(0), rooms.get(rooms.size() - 1));
     }
 
 
