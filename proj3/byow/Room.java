@@ -78,9 +78,7 @@ public class Room {
 
             Room newRoom = new Room(x, y, w, h);
             if (outbound(newRoom)) {
-                System.out.println("outbound");
             } else if (intersects(newRoom, world)) {
-                System.out.println("intersect");
             } else{
                 putRoom(newRoom, world);
                 rooms.add(newRoom);
@@ -186,12 +184,10 @@ public class Room {
 
             for (Room otherRoom : rooms) {
                 if (newRoom.intersects(otherRoom, world)) {
-                    System.out.println("overlay");
                     failed = true;
                     return;
                 }
                 if (outbound(newRoom)) {
-                    System.out.println("outbound");
                     failed = true;
                     return;
                 }

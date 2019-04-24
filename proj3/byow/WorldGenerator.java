@@ -38,12 +38,12 @@ public class WorldGenerator {
             }
         }**/
         Scanner input = new Scanner(System.in);
-        System.out.print("Enter text: ");
+        //System.out.print("Enter text: ");
         String userInput = input.next();
-        System.out.println("Text entered = " +  userInput);
+        //System.out.println("Text entered = " +  userInput);
 
         userInput = userInput.substring(1, userInput.length() - 1);
-        System.out.println(userInput);
+        //System.out.println(userInput);
 
         TETile[][] world = engine.interactWithInputString(userInput);
         TERenderer ter = new TERenderer();
