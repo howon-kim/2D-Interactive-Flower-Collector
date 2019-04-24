@@ -64,7 +64,7 @@ public class Room {
         return this.y2;
     }
 
-    public static void random(TETile[][] world, long s){
+    public static TETile[][] random(TETile[][] world, long s){
         int width = Engine.WIDTH;
         int height = Engine.HEIGHT;
         SEED = s;
@@ -157,6 +157,7 @@ public class Room {
             }
         }
          **/
+        return world;
     }
     private static boolean outbound (Room room){
         if (room.getX2() >= Engine.WIDTH || room.getY2() >= Engine.HEIGHT

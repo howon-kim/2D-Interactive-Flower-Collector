@@ -59,8 +59,8 @@ public class Engine {
             }
         }
 
-        Room.random(finalWorldFrame, Long.parseLong(input));
-        ter.renderFrame(finalWorldFrame);
+        finalWorldFrame = Room.random(finalWorldFrame, Long.parseLong(input));
+        //ter.renderFrame(finalWorldFrame);
         return finalWorldFrame;
     }
 }
