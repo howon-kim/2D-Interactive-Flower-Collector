@@ -1,5 +1,6 @@
 package byow.lab12;
 
+import byow.Core.Engine;
 import byow.Location;
 import byow.Room;
 import byow.TileEngine.TERenderer;
@@ -14,7 +15,11 @@ public class BoringWorldDemo {
     public static final int HEIGHT = 20;
 
     public static void main(String[] args) {
+        Engine engine = new Engine();
+        engine.interactWithInputString("n5197880843569031643s");
+    }
         // initialize the tile rendering engine with a window of size WIDTH x HEIGHT
+        /**
         TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
 
@@ -47,10 +52,11 @@ public class BoringWorldDemo {
             }
         }
 
- */
+
         // draws the world to the screen
         ter.renderFrame(world);
     }
+**/
 
 
 }

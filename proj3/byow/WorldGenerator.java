@@ -14,10 +14,10 @@ import java.util.Scanner;
 
 public class WorldGenerator {
 
+    static Engine engine = new Engine();
 
     public static void main(String [] args) {
 
-        Engine engine = new Engine();
         /**
         InputSource inputSource = new KeyboardInputSource();
         String userInput = "";
@@ -37,6 +37,7 @@ public class WorldGenerator {
                 break;
             }
         }**/
+        /*
         Scanner input = new Scanner(System.in);
         //System.out.print("Enter text: ");
         String userInput = input.next();
@@ -44,10 +45,15 @@ public class WorldGenerator {
 
         userInput = userInput.substring(1, userInput.length() - 1);
         //System.out.println(userInput);
-
         TETile[][] world = engine.interactWithInputString(userInput);
+
+         */
+        TETile[][] world = engine.interactWithInputString("n5197880843569031643s");
+
         TERenderer ter = new TERenderer();
         ter.initialize(Engine.WIDTH, Engine.HEIGHT);
         ter.renderFrame(world);
+
+
     }
 }

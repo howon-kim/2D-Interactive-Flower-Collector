@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5a731807-5681-4e9a-9d19-46bf4c80cff6" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/proj3/byow/Room.java" beforeDir="false" afterPath="$PROJECT_DIR$/proj3/byow/Room.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proj3/byow/lab12/BoringWorldDemo.java" beforeDir="false" afterPath="$PROJECT_DIR$/proj3/byow/lab12/BoringWorldDemo.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,11 +17,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/proj3/byow/lab12/BoringWorldDemo.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="213">
-              <caret line="22" column="44" lean-forward="true" selection-start-line="22" selection-start-column="44" selection-end-line="22" selection-end-column="44" />
+            <state relative-caret-position="195">
+              <caret line="18" column="64" selection-start-line="18" selection-start-column="64" selection-end-line="18" selection-end-column="64" />
             </state>
           </provider>
         </entry>
@@ -38,11 +38,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/proj3/byow/Room.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="132">
-              <caret line="128" column="16" lean-forward="true" selection-start-line="128" selection-start-column="16" selection-end-line="128" selection-end-column="16" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="313">
+              <caret line="161" column="49" selection-start-line="161" selection-start-column="49" selection-end-line="161" selection-end-column="49" />
             </state>
           </provider>
         </entry>
@@ -50,7 +47,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/proj3/byow/WorldGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
+            <state relative-caret-position="706">
               <caret line="50" column="29" selection-start-line="50" selection-start-column="29" selection-end-line="50" selection-end-column="29" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -77,11 +74,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/proj3/byow/Core/Engine.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="95">
-              <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+            <state relative-caret-position="758">
+              <caret line="51" column="40" lean-forward="true" selection-start-line="51" selection-start-column="40" selection-end-line="51" selection-end-column="40" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -113,6 +110,8 @@
     <findStrings>
       <find>maxSize</find>
       <find>BoringWorld</find>
+      <find>WIDTH</find>
+      <find>HEIGHT</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -122,11 +121,11 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/proj3/byow/Hallway.java" />
-        <option value="$PROJECT_DIR$/proj3/byow/lab12/BoringWorldDemo.java" />
         <option value="$PROJECT_DIR$/proj3/byow/InputDemo/KeyboardInputSource.java" />
         <option value="$PROJECT_DIR$/proj3/byow/Core/Engine.java" />
-        <option value="$PROJECT_DIR$/proj3/byow/Room.java" />
         <option value="$PROJECT_DIR$/proj3/byow/WorldGenerator.java" />
+        <option value="$PROJECT_DIR$/proj3/byow/Room.java" />
+        <option value="$PROJECT_DIR$/proj3/byow/lab12/BoringWorldDemo.java" />
       </list>
     </option>
   </component>
@@ -265,12 +264,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1556123918351</updated>
-      <workItem from="1556123919671" duration="18904000" />
+      <workItem from="1556123919671" duration="19300000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="18904000" />
+    <option name="totallyTimeSpent" value="19300000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="75" y="208" width="1392" height="877" extended-state="0" />
@@ -326,13 +325,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/proj3/byow/lab12/BoringWorldDemo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="22" column="44" lean-forward="true" selection-start-line="22" selection-start-column="44" selection-end-line="22" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/proj3/byow/InputDemo/InputSource.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
@@ -361,19 +353,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/proj3/byow/Room.java">
+    <entry file="file://$PROJECT_DIR$/proj3/byow/Core/Engine.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="128" column="16" lean-forward="true" selection-start-line="128" selection-start-column="16" selection-end-line="128" selection-end-column="16" />
+        <state relative-caret-position="758">
+          <caret line="51" column="40" lean-forward="true" selection-start-line="51" selection-start-column="40" selection-end-line="51" selection-end-column="40" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/proj3/byow/Room.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="313">
+          <caret line="161" column="49" selection-start-line="161" selection-start-column="49" selection-end-line="161" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/proj3/byow/WorldGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
+        <state relative-caret-position="706">
           <caret line="50" column="29" selection-start-line="50" selection-start-column="29" selection-end-line="50" selection-end-column="29" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -381,13 +380,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/proj3/byow/Core/Engine.java">
+    <entry file="file://$PROJECT_DIR$/proj3/byow/lab12/BoringWorldDemo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="195">
+          <caret line="18" column="64" selection-start-line="18" selection-start-column="64" selection-end-line="18" selection-end-column="64" />
         </state>
       </provider>
     </entry>
