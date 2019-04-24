@@ -59,7 +59,9 @@ public class Engine {
             }
         }
 
-        finalWorldFrame = Room.random(finalWorldFrame, Long.parseLong(input));
+        String userInput = input.substring(1, input.length() - 1);
+
+        finalWorldFrame = Room.random(finalWorldFrame, Long.parseLong(userInput));
         //ter.renderFrame(finalWorldFrame);
         System.out.println("I am going out!");
         return finalWorldFrame;
