@@ -73,8 +73,8 @@ public class Room {
         for (int i = 0; i <= 10000; i++){
             int w = RANDOM.nextInt((7 - 4) + 1) + 4;
             int h = RANDOM.nextInt((7 - 4) + 1) + 4;
-            int x = RANDOM.nextInt(width - 1);
-            int y = RANDOM.nextInt(height - 1);
+            int x = RANDOM.nextInt(width);
+            int y = RANDOM.nextInt(height);
 
             Room newRoom = new Room(x, y, w, h);
             if (outbound(newRoom)) {
