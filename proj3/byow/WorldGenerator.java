@@ -16,7 +16,6 @@ public class WorldGenerator {
 
 
     public static void main(String [] args) {
-        TERenderer ter = new TERenderer();
 
         Engine engine = new Engine();
         /**
@@ -46,6 +45,9 @@ public class WorldGenerator {
         userInput = userInput.substring(1, userInput.length() - 1);
         System.out.println(userInput);
 
-        ter.renderFrame(engine.interactWithInputString(userInput));
+        TETile[][] world = engine.interactWithInputString(userInput);
+        TERenderer ter = new TERenderer();
+        ter.initialize(Engine.WIDTH, Engine.HEIGHT);
+        ter.renderFrame(world);
     }
 }

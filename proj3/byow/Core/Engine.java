@@ -49,7 +49,7 @@ public class Engine {
         // that works for many different input types.
 
         TERenderer ter = new TERenderer();
-        ter.initialize(WIDTH, HEIGHT);
+        //ter.initialize(WIDTH, HEIGHT);
 
         // initialize tiles
         TETile[][] finalWorldFrame = new TETile[WIDTH][HEIGHT];
@@ -61,6 +61,7 @@ public class Engine {
 
         finalWorldFrame = Room.random(finalWorldFrame, Long.parseLong(input));
         //ter.renderFrame(finalWorldFrame);
+        System.out.println("I am going out!");
         return finalWorldFrame;
     }
 }
