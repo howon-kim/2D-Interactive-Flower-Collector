@@ -11,11 +11,11 @@ public class Room {
 
     private static final int maxSize = 10;
     private static final int minSize = 4;
-    private static ArrayList<Room> rooms = new ArrayList<>();
-    private static long SEED;
-    private static Random RANDOM = new Random(SEED);
+    private  ArrayList<Room> rooms = new ArrayList<>();
+    private  long SEED;
+    private  Random RANDOM = new Random(SEED);
 
-    public static TETile[][] world;
+    //public static TETile[][] world;
     Boolean connected = false;
     private int x1;
     private int x2;
@@ -37,6 +37,9 @@ public class Room {
         this.h = h;
         this.centerX = (int) (x1 + x2) / 2;
         this.centerY = (int) (y1 + y2) / 2;
+    }
+    public Room() {
+
     }
 
 
@@ -64,7 +67,7 @@ public class Room {
         return this.y2;
     }
 
-    public static TETile[][] random(TETile[][] world, long s){
+    public TETile[][] random(TETile[][] world, long s){
         int width = Engine.WIDTH;
         int height = Engine.HEIGHT;
         SEED = s;
@@ -177,7 +180,7 @@ public class Room {
         //return (x1 <= room.x2 && x2 >= room.x1 && y1 <= room.y2 && room.y2 >= room.y1);
     }
 
-    public static void generateRoom(int x1, int x2, int w, int h, TETile[][] world) {
+    public  void generateRoom(int x1, int x2, int w, int h, TETile[][] world) {
         Room newRoom = new Room(x1, x2, w, h);
 
         boolean failed = false;
@@ -275,7 +278,7 @@ public class Room {
 
         }
 
-        public static void randomRoom ( int screen_w, int screen_h, TETile[][] world){
+        public  void randomRoom ( int screen_w, int screen_h, TETile[][] world){
             int w = RANDOM.nextInt((maxSize - minSize) + 1) + minSize;
             int h = RANDOM.nextInt((maxSize - minSize) + 1) + minSize;
             //int x = RANDOM.nextInt(screen_w);

@@ -61,7 +61,8 @@ public class Engine {
 
         String userInput = input.substring(1, input.length() - 1);
 
-        finalWorldFrame = Room.random(finalWorldFrame, Long.parseLong(userInput));
+        Room room = new Room();
+        finalWorldFrame = room.random(finalWorldFrame, Long.parseLong(userInput));
         //ter.renderFrame(finalWorldFrame);
         return finalWorldFrame;
     }

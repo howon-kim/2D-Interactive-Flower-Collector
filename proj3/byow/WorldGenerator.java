@@ -14,9 +14,10 @@ import java.util.Scanner;
 
 public class WorldGenerator {
 
-    static Engine engine = new Engine();
 
     public static void main(String [] args) {
+        Engine engine = new Engine();
+
 
         /**
         InputSource inputSource = new KeyboardInputSource();
