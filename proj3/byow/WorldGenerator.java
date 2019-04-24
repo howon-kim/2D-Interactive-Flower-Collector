@@ -23,9 +23,11 @@ public class WorldGenerator {
 
 
         // for each location, generates room within location, puts into world
+        /**
         for (Location loc: locations) {
             Room.generateRoom(loc);
         }
+         */
 
         for (Room room: rooms) {
             // hallway operations
