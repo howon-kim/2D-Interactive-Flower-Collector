@@ -22,14 +22,18 @@ public class Room {
     public int w;
     public int h;
 
+    public int centerX;
+    public int centerY;
+
     public Room(int x, int y, int w, int h) {
         this.x1 = x;
         this.x2 = x + w;
         this.y1 = y;
         this.y2 = y + h;
-
         this.w = w;
         this.h = h;
+        this.centerX = (int) (x1 + x2) / 2;
+        this.centerY = (int) (y1 + y2) / 2;
     }
 
 
@@ -43,14 +47,37 @@ public class Room {
 
     public static void generateRoom(int x1, int x2, int w, int h, TETile[][] world) {
         Room newRoom = new Room(x1, x2, w, h);
+
         if(Room.overlaps(newRoom)){
             System.out.println("overlay!");
             return;
+
         } else if(Room.outbound(newRoom)) {
             System.out.println("outbound");
-        } else{
+
+        } else {
+
             putRoom(newRoom, world);
             rooms.add(newRoom);
+
+            System.out.println("hallway creation");
+            int newCenterX = newRoom.centerX;
+            int newCenterY = newRoom.centerY;
+
+            if (rooms.size() != 0) {
+                int prevCenterX = rooms.get(rooms.size() - 1).centerX;
+                int prevCenterY = rooms.get(rooms.size() - 1).centerY;
+
+                if (RANDOM.nextInt(2) == 1) {
+                    Hallway.horizontalHallway(prevCenterX, newCenterX, prevCenterY);
+                    Hallway.verticalHallway(prevCenterY, newCenterY, newCenterX);
+
+                } else {
+                    Hallway.verticalHallway(prevCenterY, newCenterY, prevCenterX);
+                    Hallway.horizontalHallway(prevCenterX, newCenterX, newCenterY);
+
+                }
+            }
         }
     }
 
@@ -71,7 +98,7 @@ public class Room {
         }
     }
 
-    /**
+
     public static void randomRoom(int screen_w, int screen_h, TETile[][] world) {
         int w = RANDOM.nextInt((maxSize - minSize) + 1) + minSize;
         int h = RANDOM.nextInt((maxSize - minSize) + 1) + minSize;
@@ -81,7 +108,7 @@ public class Room {
         generateRoom(x, y, w, h, world);
 
     }
-     */
+
 
     private static boolean overlaps(Room room) {
         for (Room r: rooms) {

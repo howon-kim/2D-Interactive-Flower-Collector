@@ -16,18 +16,10 @@ public class WorldGenerator {
         this.seed = seed;
 
         // partition the space randomly; output is list of Locations
-        locations = BSP();
+        // locations = BSP();
 
         // needs number of rooms from room array// how does world generator get this input?
         this.connectedUF = new WeightedQuickUnionUF(locations.size()  + 2);
-
-
-        // for each location, generates room within location, puts into world
-        /**
-        for (Location loc: locations) {
-            Room.generateRoom(loc);
-        }
-         */
 
         for (Room room: rooms) {
             // hallway operations
@@ -40,7 +32,7 @@ public class WorldGenerator {
     }
 
 
-    public ArrayList<Location> BSP() {
+    /** public ArrayList<Location> BSP() {
         ArrayList<Location> locations = new ArrayList<>();
         // Binary Space Partitioning Mechanics //
         // should output specific range of x1, x2, y1, y2 values for Room to be Located
@@ -51,7 +43,7 @@ public class WorldGenerator {
 
 
         return locations;
-    }
+    } */
 
     public boolean connected() {
 

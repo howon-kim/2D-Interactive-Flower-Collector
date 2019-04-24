@@ -30,7 +30,6 @@ public class BoringWorldDemo {
         }
 
 
-
         // fills in a block 14 tiles wide by 4 tiles tall
 /*
         for (int x = 0; x < 35; x += 1) {
