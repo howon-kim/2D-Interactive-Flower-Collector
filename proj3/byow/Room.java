@@ -97,7 +97,7 @@ public class Room {
                 }
             }
             if (detect) {
-                for (int x = room.getX2(); x <= goalX+1; x++){
+                for (int x = room.getX2(); x <= goalX + 1; x++){
                     if(world[x][room.centerY - 1] == Tileset.NOTHING) {
                         world[x][room.centerY - 1] = Tileset.WALL;
                     }
@@ -158,8 +158,8 @@ public class Room {
         return world;
     }
     private static boolean outbound (Room room){
-        if (room.getX2() >= Engine.WIDTH || room.getY2() >= Engine.HEIGHT
-        || room.getX1() <= 0 || room.getY1() <= 0) {
+        if (room.getX2() >= Engine.WIDTH - 2|| room.getY2() >= Engine.HEIGHT - 2
+        || room.getX1() <= 2 || room.getY1() <= 2) {
             return true;
         }
         return false;
