@@ -4,6 +4,8 @@ import java.util.Random;
 import byow.TileEngine.Tileset;
 import java.util.ArrayList;
 
+
+// find out why there's always one room with an orphan hallway
 public class Room {
 
     private static final int maxSize = 10;
@@ -32,8 +34,8 @@ public class Room {
         this.y2 = y + h;
         this.w = w;
         this.h = h;
-        this.centerX = (int) (x1 + x2) / 2;
-        this.centerY = (int) (y1 + y2) / 2;
+        this.centerX = (x1 + x2) / 2;
+        this.centerY = (y1 + y2) / 2;
     }
 
 
@@ -68,7 +70,7 @@ public class Room {
 
             for (Room otherRoom : rooms) {
                 if (newRoom.intersects(otherRoom)) {
-                    System.out.println("overlay");
+                    System.out.println("overlaps room");
                     failed = true;
                     break;
                 }
@@ -95,10 +97,9 @@ public class Room {
                     if (RANDOM.nextInt(2) == 1) {
                         Hallway.horizontalHallway(prevCenterX, newCenterX, prevCenterY, world);
                         Hallway.verticalHallway(prevCenterY, newCenterY, newCenterX, world);
-
                     } else {
-                        Hallway.verticalHallway(prevCenterY, newCenterY, prevCenterX, world);
-                        Hallway.horizontalHallway(prevCenterX, newCenterX, newCenterY, world);
+                        Hallway.verticalHallway(prevCenterY,  newCenterY, prevCenterX, world);
+                        Hallway.horizontalHallway(prevCenterX,newCenterX, newCenterY, world);
                     }
                 }
             }
@@ -120,8 +121,9 @@ public class Room {
                 for (int y = y1; y < y2; y++) {
                     if (x == x1 || x == x2 - 1 || y == y1 || y == y2 - 1) {
                         world[x][y] = Tileset.WALL;
-                    } else
+                    } else {
                         world[x][y] = Tileset.FLOOR;
+                    }
                 }
             }
         }
@@ -143,7 +145,7 @@ public class Room {
         }
 
 
-        private static boolean outbound (Room room){
+    private static boolean outbound (Room room){
             if (room.getX2() > 60 || room.getY2() > 50) {
                 return true;
             }

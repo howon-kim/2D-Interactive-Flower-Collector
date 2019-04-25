@@ -31,20 +31,6 @@ public class WorldGenerator {
         return this.seed;
     }
 
-
-    /** public ArrayList<Location> BSP() {
-        ArrayList<Location> locations = new ArrayList<>();
-        // Binary Space Partitioning Mechanics //
-        // should output specific range of x1, x2, y1, y2 values for Room to be Located
-
-
-
-
-
-
-        return locations;
-    } */
-
     public boolean connected() {
 
         // is first room connected to last room
