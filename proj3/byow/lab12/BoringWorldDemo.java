@@ -1,11 +1,6 @@
 package byow.lab12;
 
 import byow.Core.Engine;
-import byow.Location;
-import byow.Room;
-import byow.TileEngine.TERenderer;
-import byow.TileEngine.TETile;
-import byow.TileEngine.Tileset;
 
 /**
  *  Draws a world that is mostly empty except for a small region.
