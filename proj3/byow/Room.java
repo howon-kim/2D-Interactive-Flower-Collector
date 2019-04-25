@@ -18,12 +18,12 @@ public class Room {
     private int centerY;
 
     public Room(int x, int y, int w, int h) {
+        this.w = w;
+        this.h = h;
         this.x1 = x;
         this.x2 = x + w;
         this.y1 = y;
         this.y2 = y + h;
-        this.w = w;
-        this.h = h;
         this.centerX = (int) (x1 + x2) / 2;
         this.centerY = (int) (y1 + y2) / 2;
     }
@@ -35,6 +35,7 @@ public class Room {
     /**
      * Getter
      **/
+
     public int getX1() {
         return this.x1;
     }
@@ -66,6 +67,7 @@ public class Room {
     /**
      * Setter
      **/
+
     public void setX1(int x1) {
         this.x1 = x1;
     }
@@ -83,11 +85,11 @@ public class Room {
     }
 
 
-    public void putRoom(TETile[][] world, Room r) {
-        int x01 = r.getX1();
-        int x02 = r.getX2();
-        int y01 = r.getY1();
-        int y02 = r.getY2();
+    public void putRoom(TETile[][] world, Room room) {
+        int x01 = room.getX1();
+        int x02 = room.getX2();
+        int y01 = room.getY1();
+        int y02 = room.getY2();
         for (int x = x01; x <= x02; x++) {
             for (int y = y01; y <= y02; y++) {
                 if (x == x01 || x == x02 || y == y01 || y == y02) {
@@ -97,6 +99,6 @@ public class Room {
                 }
             }
         }
-        rooms.add(r);
+        rooms.add(room);
     }
 }

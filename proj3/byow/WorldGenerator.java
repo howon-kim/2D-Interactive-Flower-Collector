@@ -30,6 +30,11 @@ public class WorldGenerator {
 
     public static void main(String[] args) {
         Engine engine = new Engine();
+        engine.interactWithKeyboard();
+        // TETile[][] world = engine.interactWithInputString("n5197880843569031643s");
+        // TERenderer ter = new TERenderer();
+        // ter.initialize(Engine.WIDTH, Engine.HEIGHT);
+        //ter.renderFrame(world);
 
 
         /**
@@ -50,8 +55,7 @@ public class WorldGenerator {
          System.out.println(userInput);
          break;
          }
-         }**/
-        /*
+         }
         Scanner input = new Scanner(System.in);
         //System.out.print("Enter text: ");
         String userInput = input.next();
@@ -60,13 +64,6 @@ public class WorldGenerator {
         //System.out.println(userInput);
         TETile[][] world = engine.interactWithInputString(userInput);
          */
-        TETile[][] world = engine.interactWithInputString("n5197880843569031643s");
-
-        TERenderer ter = new TERenderer();
-        ter.initialize(Engine.WIDTH, Engine.HEIGHT);
-        ter.renderFrame(world);
-
-
     }
 
     public void clearWorld() {

@@ -3,18 +3,71 @@ package byow.Core;
 import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
 import byow.WorldGenerator;
+import edu.princeton.cs.introcs.StdDraw;
+import java.awt.Color;
+import java.awt.Font;
 
 public class Engine {
     TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
+    private static long SEED;
+    private static final int MENUW = 40;
+    private static final int MENUH = 60;
+    private String keyboardInput;
 
     /**
      * Method used for exploring a fresh world. This method should handle all inputs,
      * including inputs from the main menu.
      */
     public void interactWithKeyboard() {
+        makeGUIBackground();
+        makeGUI();
+        StdDraw.show();
+        StdDraw.enableDoubleBuffering();
+
+        while (true) {
+            keyboardInput = "";
+            if (!StdDraw.hasNextKeyTyped()) {
+                continue;
+            }
+            char key = StdDraw.nextKeyTyped();
+            keyboardInput += key;
+            StdDraw.enableDoubleBuffering();
+            StdDraw.clear(Color.BLACK);
+
+            makeGUI();
+            StdDraw.show();
+
+            switch (key) {
+                case ('n'): {
+                    String seed = "";
+                    char c = 'l';
+                    StdDraw.clear(Color.BLACK);
+                    makeGUI();
+                    StdDraw.text(MENUW / 2, MENUH / 4,
+                            "Let's generate a new world! Input a seed, followed by 's'.");
+                    StdDraw.show();
+
+                    while (c != 's') {
+                        if (!StdDraw.hasNextKeyTyped()) {
+                            continue;
+                        }
+                        c = StdDraw.nextKeyTyped();
+                        seed += String.valueOf(c);
+                        if (c != 's') {
+                            StdDraw.clear(Color.BLACK);
+                            makeGUI();
+                            StdDraw.text(MENUW / 2, MENUH / 4, "World Seed: " + seed);
+                            StdDraw.show();
+                        }
+                    }
+
+                    SEED = stringToInt(seed);
+                }
+            }
+        }
     }
 
     /**
@@ -63,5 +116,41 @@ public class Engine {
         worldGenerator.randomizeWorld();
 
         return finalWorldFrame;
+    }
+
+    private static void makeGUIBackground() {
+        StdDraw.clear();
+        StdDraw.enableDoubleBuffering();
+        StdDraw.setCanvasSize(MENUW * 16, MENUH * 16);
+        Font font = new Font("Comic Sans Ms", Font.BOLD, 100);
+        StdDraw.setFont(font);
+        StdDraw.setXscale(0, MENUW);
+        StdDraw.setYscale(0, MENUH);
+        StdDraw.clear(Color.BLACK);
+    }
+
+    private static void makeGUI() {
+        Font title = new Font("Comic Sans Ms", Font.BOLD, 30);
+        Font mainMenu = new Font("Comic Sans Ms", Font.PLAIN, 20);
+        StdDraw.setFont(title);
+        StdDraw.setPenColor(Color.white);
+        StdDraw.text(MENUW / 2, MENUH * 2 / 2.5, "CS61B PROJECT 3: BYOW");
+        StdDraw.setFont(mainMenu);
+        StdDraw.text(MENUW / 2, MENUH * 5.5 / 10, "New World (n)");
+        StdDraw.text(MENUW / 2, MENUH * 4.5 / 10, "Load World (l)");
+        StdDraw.text(MENUW / 2, MENUH * 3.5 / 10, "Quit (q)");
+    }
+
+    private long stringToInt(String str) {
+        str = str.trim();
+        String str2 = "";
+        if (!"".equals(str)) {
+            for (int i = 0; i < str.length(); i++) {
+                if (str.charAt(i) >= 48 && str.charAt(i) <= 57) {
+                    str2 = str2 + str.charAt(i);
+                }
+            }
+        }
+        return Long.parseLong(str2);
     }
 }

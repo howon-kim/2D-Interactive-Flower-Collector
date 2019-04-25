@@ -13,6 +13,7 @@ public class BoringWorldDemo {
         Engine engine = new Engine();
         engine.interactWithInputString("n5197880843569031643s");
     }
+
     // initialize the tile rendering engine with a window of size WIDTH x HEIGHT
     /**
      TERenderer ter = new TERenderer();
@@ -46,6 +47,5 @@ public class BoringWorldDemo {
      ter.renderFrame(world);
      }
      **/
-
 
 }
