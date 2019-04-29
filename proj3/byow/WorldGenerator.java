@@ -11,12 +11,14 @@ public class WorldGenerator {
 
     private int WIDTH;
     private int HEIGHT;
-
     private long SEED;
     private Random RANDOM;
-
     private Room room;
+
+    /* For World Mechanics */
     public static TETile[][] world;
+    public static Location player;
+    private static Location lockedDoor;
 
 
     public WorldGenerator(TETile[][] w, long s) {
@@ -26,9 +28,29 @@ public class WorldGenerator {
         RANDOM = new Random(SEED);
         room = new Room();
         world = w;
+
     }
 
-    public static void generateWorld() {
+    public static void SetWorldLocs(Location doorloc, Location playerloc, TETile[][] world) {
+       lockedDoor = doorloc;
+       player = playerloc;
+    }
+
+    public static Location lockedDoor() {
+        return lockedDoor;
+    }
+
+    public static Location player() {
+        return player;
+    }
+
+    public static TETile[][] world() {
+        return world;
+    }
+
+    public static TETile[][] generateWorld() {
+
+        /* Rooms, Hallways, Frame */
         TETile[][] finalWorldFrame = new TETile[Engine.WIDTH][Engine.HEIGHT];
         WorldGenerator worldGenerator = new WorldGenerator(finalWorldFrame, Engine.SEED);
         worldGenerator.clearWorld();
@@ -36,15 +58,13 @@ public class WorldGenerator {
         TERenderer ter = new TERenderer();
         ter.initialize(Engine.WIDTH, Engine.HEIGHT);
         ter.renderFrame(world);
+
+        return finalWorldFrame;
     }
 
     public static void main(String[] args) {
         Engine engine = new Engine();
         engine.interactWithKeyboard();
-        // TETile[][] world = engine.interactWithInputString("n5197880843569031643s");
-        // TERenderer ter = new TERenderer();
-        // ter.initialize(Engine.WIDTH, Engine.HEIGHT);
-        // ter.renderFrame(world);
     }
 
         /**

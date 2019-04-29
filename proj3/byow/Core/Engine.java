@@ -1,12 +1,21 @@
 package byow.Core;
-
-import byow.SaveDemo.World;
 import byow.TileEngine.TERenderer;
-import byow.TileEngine.TETile;
+import byow.TileEngine.*;
 import byow.WorldGenerator;
+import byow.Location;
+
+
+import byow.WorldLocations;
 import edu.princeton.cs.introcs.StdDraw;
 import java.awt.Color;
-import byow.Core.Menu;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+
 
 public class Engine {
     TERenderer ter = new TERenderer();
@@ -17,6 +26,18 @@ public class Engine {
     private static final int MENUW = 40;
     private static final int MENUH = 60;
     private String keyboardInput;
+
+
+    /* For "Game" Mechanics */
+    private static boolean GAMEOVER = true;
+    private int HEALTH;
+    private int SANDNUMBER;
+    private String s;
+    private int COUNTER;
+    public static WorldLocations worldlocs;
+    public static TETile[][] world;
+    public static Location player;
+    private static Location lockedDoor;
 
     /**
      * Method used for exploring a fresh world. This method should handle all inputs,
@@ -42,6 +63,7 @@ public class Engine {
             StdDraw.show();
 
             switch (key) {
+                /* New Game Operations */
                 case ('n'): {
                     String seed = "";
                     char c = 'l';
@@ -69,11 +91,28 @@ public class Engine {
                     } while (c != 's');
 
                     SEED = stringToInt(seed);
-                    StdDraw.pause(500);
-                    System.out.println("## Game final SEED: " + SEED);
+
+                    System.out.println("## SEED: " + SEED);
 
                     WorldGenerator.generateWorld();
+                    break;
                 }
+
+                /* Load Operations */
+                case ('l'): {
+                    TETile[][] world = loadWorld();
+                    GAMEOVER = false;
+                    // playWorld(world);
+                    break;
+                }
+
+                case ('q'): {
+                    /* Quit Operations */
+                    GAMEOVER = true;
+                    System.exit(0);
+                    break;
+                }
+
             }
         }
     }
@@ -122,20 +161,59 @@ public class Engine {
 
         /** Initialize Tiles **/
         TETile[][] finalWorldFrame = new TETile[WIDTH][HEIGHT];
-
         /** String process **/
         String userInput = input.substring(1, input.length() - 1);
-
         /** World Generator Initiate **/
         WorldGenerator worldGenerator =
                 new WorldGenerator(finalWorldFrame, Long.parseLong(userInput));
-
         /** Clear the world **/
         worldGenerator.clearWorld();
-
         /** Randomize world **/
         worldGenerator.randomizeWorld();
-
         return finalWorldFrame;
     }
+
+
+    private static void saveWorld(TETile[][] world) {
+        File file = new File("./crazyWorld.txt");
+        try {
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileOutputStream fs = new FileOutputStream(file);
+            ObjectOutputStream os = new ObjectOutputStream(fs);
+            os.writeObject(world);
+        }  catch (FileNotFoundException e) {
+            System.out.println("File Not Found");
+            System.exit(0);
+        } catch (IOException e) {
+            System.out.println(e);
+            System.exit(0);
+        }
+    }
+
+    private static TETile[][] loadWorld() {
+        File file = new File("./savedWorld.txt");
+        if (file.exists()) {
+            try {
+                FileInputStream fs = new FileInputStream(file);
+                ObjectInputStream os = new ObjectInputStream(fs);
+                return (TETile[][]) os.readObject();
+            }
+            /* Necessary for ObjectInputStream */
+            catch (FileNotFoundException e) {
+                System.out.println("File Not Found");
+                System.exit(0);
+             } catch (IOException e) {
+                System.out.println(e);
+                System.exit(0);
+            } catch (ClassNotFoundException e) {
+                System.out.println("Class Not Found");
+                System.exit(0);
+            }
+        }
+        System.out.println("No World Saved Yet-- Random World Returned");
+        return WorldGenerator.generateWorld();
+    }
+
 }

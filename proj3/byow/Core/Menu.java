@@ -34,4 +34,16 @@ public class Menu {
         StdDraw.text(MENUW / 2, MENUH * 4.5 / 10, "Load World (l)");
         StdDraw.text(MENUW / 2, MENUH * 3.5 / 10, "Quit (q)");
     }
+
+    public static void makeCustomMessageScreen(String string) {
+        int x = MENUW / 2;
+        int y = MENUH / 2;
+        StdDraw.clear();
+        StdDraw.clear(Color.black);
+        Font bigFont = new Font("Comic Sans Ms", Font.BOLD, 30);
+        StdDraw.setFont(bigFont);
+        StdDraw.setPenColor(Color.red);
+        StdDraw.text(x, y, string);
+        StdDraw.show();
+    }
 }
