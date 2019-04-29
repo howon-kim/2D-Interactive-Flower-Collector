@@ -1,5 +1,6 @@
 package byow.Core;
 
+import byow.SaveDemo.World;
 import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
 import byow.WorldGenerator;
@@ -12,7 +13,7 @@ public class Engine {
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
-    private static long SEED;
+    public static long SEED;
     private static final int MENUW = 40;
     private static final int MENUH = 60;
     private String keyboardInput;
@@ -47,24 +48,31 @@ public class Engine {
                     StdDraw.clear(Color.BLACK);
                     Menu.makeGUI();
                     StdDraw.text(MENUW / 2, MENUH / 4,
-                            "Let's generate a new world! Input a seed, followed by 's'.");
+                            "Let's generate a new world! Input a seed, then press 's' to begin.");
                     StdDraw.show();
 
-                    while (c != 's') {
+                    do {
                         if (!StdDraw.hasNextKeyTyped()) {
                             continue;
                         }
                         c = StdDraw.nextKeyTyped();
+                        if (c >= 48 && c <= 57) {
+                            seed += String.valueOf(c);
+                        }
                         seed += String.valueOf(c);
                         if (c != 's') {
                             StdDraw.clear(Color.BLACK);
                             Menu.makeGUI();
-                            StdDraw.text(MENUW / 2, MENUH / 4, "World Seed: " + seed);
+                            StdDraw.text(MENUW / 2, MENUH / 4, "Your seed is: " + seed);
                             StdDraw.show();
                         }
-                    }
+                    } while (c != 's');
 
                     SEED = stringToInt(seed);
+                    StdDraw.pause(500);
+                    System.out.println("## Game final SEED: " + SEED);
+
+                    WorldGenerator.generateWorld();
                 }
             }
         }

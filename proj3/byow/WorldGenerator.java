@@ -16,7 +16,7 @@ public class WorldGenerator {
     private Random RANDOM;
 
     private Room room;
-    private TETile[][] world;
+    public static TETile[][] world;
 
 
     public WorldGenerator(TETile[][] w, long s) {
@@ -28,14 +28,24 @@ public class WorldGenerator {
         world = w;
     }
 
+    public static void generateWorld() {
+        TETile[][] finalWorldFrame = new TETile[Engine.WIDTH][Engine.HEIGHT];
+        WorldGenerator worldGenerator = new WorldGenerator(finalWorldFrame, Engine.SEED);
+        worldGenerator.clearWorld();
+        worldGenerator.randomizeWorld();
+        TERenderer ter = new TERenderer();
+        ter.initialize(Engine.WIDTH, Engine.HEIGHT);
+        ter.renderFrame(world);
+    }
+
     public static void main(String[] args) {
         Engine engine = new Engine();
         engine.interactWithKeyboard();
         // TETile[][] world = engine.interactWithInputString("n5197880843569031643s");
         // TERenderer ter = new TERenderer();
         // ter.initialize(Engine.WIDTH, Engine.HEIGHT);
-        //ter.renderFrame(world);
-
+        // ter.renderFrame(world);
+    }
 
         /**
          InputSource inputSource = new KeyboardInputSource();
@@ -64,7 +74,6 @@ public class WorldGenerator {
         //System.out.println(userInput);
         TETile[][] world = engine.interactWithInputString(userInput);
          */
-    }
 
     public void clearWorld() {
         for (int x = 0; x < WIDTH; x += 1) {
