@@ -1,15 +1,12 @@
 package byow.Core;
+import byow.*;
 import byow.TileEngine.TERenderer;
 import byow.TileEngine.*;
-import byow.WorldGenerator;
-import byow.Location;
+
 import java.util.Random;
-import byow.Room;
 import java.util.ArrayList;
 
 
-
-import byow.WorldLocations;
 import edu.princeton.cs.introcs.StdDraw;
 import java.awt.Color;
 import java.io.File;
@@ -104,7 +101,7 @@ public class Engine {
 
                 /* Load Operations */
                 case ('l'): {
-                    TETile[][] world = loadWorld();
+                    TETile[][] world = (TETile[][]) loadWorld().get(0);
                     TERenderer ter = new TERenderer();
                     ter.initialize(Engine.WIDTH, Engine.HEIGHT);
                     ter.renderFrame(world);
@@ -178,7 +175,7 @@ public class Engine {
             for (int i = 0; i < record.length() - 1; i += 1) {
                 if ((record.charAt(i) == ':' && record.charAt(i + 1) == 'q')
                         || (record.charAt(i) == ':' && record.charAt(i + 1) == 'Q')) {
-                    saveWorld(world);
+                    saveWorld(world, player);
                     Menu.makeGUIBackground();
                     Menu.makeCustomMessageScreen("Your game has been saved!");
                     StdDraw.pause(3000);
@@ -293,31 +290,50 @@ public class Engine {
 
 
         /** String process **/
-        int end = input.indexOf("s");
-        String userInput = input.substring(1, end);
-        String characterInput = input.substring(end + 1, input.length());
-        //System.out.println(userInput);
+        String seed;
+        String move = "";
+        int endSeed;
+
+        char gameMode = input.charAt(0);
+
+        //System.out.println(end);
         //System.out.println(characterInput);
+        //System.out.println(gameMode);
 
-        /** World Generator Initiate **/
-        WorldGenerator worldGenerator =
-                new WorldGenerator(finalWorldFrame, Long.parseLong(userInput));
+        if(gameMode == 'n') {
+            endSeed = input.indexOf("s");
+            seed = input.substring(1, endSeed);
+            move = input.substring(endSeed + 1, input.length());
 
-        /** Clear the world **/
-        worldGenerator.clearWorld();
+            /** World Generator Initiate **/
+            WorldGenerator worldGenerator =
+                    new WorldGenerator(finalWorldFrame, Long.parseLong(seed));
 
-        /** Randomize world **/
-        worldGenerator.randomizeWorld();
+            /** Clear the world **/
+            worldGenerator.clearWorld();
+
+            /** Randomize world **/
+            worldGenerator.randomizeWorld();
+
+        } else if(gameMode == 'l') {
+            WorldGenerator worldGenerator =
+                    new WorldGenerator((TETile [][]) loadWorld().get(0));
+            move = input.substring(1, input.length());
+
+        } else {
+            System.out.println("Incorrect Game Mode");
+            return null;
+        }
 
 
 
         /** Move Character **/
-        player = makePlayer();
+        player = (Location) loadWorld().get(1);
         worldlocs = new WorldLocations(player, WorldGenerator.getWorld());
 
-        if(!characterInput.isEmpty()) {
-            for (int i = 0; i < characterInput.length(); i++){
-                worldlocs = move(worldlocs, characterInput.charAt(i));
+        if(!move.isEmpty()) {
+            for (int i = 0; i < move.length(); i++){
+                worldlocs = move(worldlocs, move.charAt(i));
                 //System.out.println();
             }
         }
@@ -348,7 +364,7 @@ public class Engine {
                     if ((input.charAt(i) == ':' && input.charAt(i + 1) == 'q')
                             || (input.charAt(i) == ':' && input.charAt(i + 1) == 'Q')) {
                         GAMEOVER = true;
-                        saveWorld(WorldGenerator.world);
+                        saveWorld(WorldGenerator.world, player);
                         System.out.println("Saved");
                         break;
                     }
@@ -356,7 +372,7 @@ public class Engine {
                 return WorldGenerator.getWorld();
             }
             case ('l'): {
-                WorldGenerator.world = loadWorld();
+                WorldGenerator.world = (TETile [][]) loadWorld().get(0);
                 int start = 1;
                 for (int i = 0; i < input.length(); i += 1) {
                     if (input.charAt(i) == 's' || input.charAt(i) == 'S') {
@@ -368,7 +384,7 @@ public class Engine {
                     if ((input.charAt(i) == ':' && input.charAt(i + 1) == 'q')
                             || (input.charAt(i) == ':' && input.charAt(i + 1) == 'Q')) {
                         GAMEOVER = true;
-                        saveWorld(WorldGenerator.getWorld());
+                        saveWorld(WorldGenerator.getWorld(), player);
                         System.out.println("Saved");
                         break;
                     }
@@ -398,13 +414,13 @@ public class Engine {
         }
     }
 
-    private static TETile[][] loadWorld() {
+    private static ArrayList loadWorld() {
         File file = new File("./proj3/byow/SavedWorlds/savedWorld.txt");
         if (file.exists()) {
             try {
                 FileInputStream fs = new FileInputStream(file);
                 ObjectInputStream os = new ObjectInputStream(fs);
-                return (TETile[][]) os.readObject();
+                return (ArrayList) os.readObject();
             }
 
             catch (FileNotFoundException e) {
@@ -419,10 +435,12 @@ public class Engine {
             }
         }
         System.out.println("No World Saved Yet-- Returning Brand New World");
-        return WorldGenerator.generateWorld();
+        ArrayList data = new ArrayList();
+        data.add(WorldGenerator.generateWorld());
+        return data;
     }
 
-    private static void saveWorld(TETile[][] world) {
+    private static void saveWorld(TETile[][] world, Location player) {
         File file = new File("./proj3/byow/SavedWorlds/savedWorld.txt");
         try {
             if (!file.exists()) {
@@ -430,7 +448,12 @@ public class Engine {
             }
             FileOutputStream fs = new FileOutputStream(file);
             ObjectOutputStream os = new ObjectOutputStream(fs);
-            os.writeObject(world);
+            ArrayList data = new ArrayList<Object>();
+            data.add(world);
+            data.add(player);
+
+            os.writeObject(data);
+
         }  catch (FileNotFoundException e) {
             System.out.println("File Not Found");
             System.exit(0);
