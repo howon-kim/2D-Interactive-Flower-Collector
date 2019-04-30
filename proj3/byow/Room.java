@@ -2,12 +2,12 @@ package byow;
 
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
-
+import java.util.Random;
 import java.util.ArrayList;
 
 public class Room {
 
-    protected ArrayList<Room> rooms;
+    public static ArrayList<Room> rooms;
     private int x1;
     private int x2;
     private int y1;
@@ -35,6 +35,9 @@ public class Room {
     /**
      * Getter
      **/
+
+    public int getW() { return this.w; }
+    public int getH() { return this.h; }
 
     public int getX1() {
         return this.x1;
@@ -100,5 +103,14 @@ public class Room {
             }
         }
         rooms.add(room);
+    }
+
+    public static Location innerRandomPoint(Room r) {
+        Random rand = new Random(WorldGenerator.SEED);
+        int innerX = rand.nextInt(r.getW() - 2) + r.getX1() + 1;
+        int innerY = rand.nextInt(r.getH() - 2) + r.getY1() + 1;
+        Location innerRandomPoint = new Location(innerX, innerY);
+        return innerRandomPoint;
+
     }
 }

@@ -11,7 +11,7 @@ public class WorldGenerator {
 
     private int WIDTH;
     private int HEIGHT;
-    private long SEED;
+    public static long SEED;
     private Random RANDOM;
     private Room room;
 
@@ -29,15 +29,6 @@ public class WorldGenerator {
         room = new Room();
         world = w;
 
-    }
-
-    public static void SetWorldLocs(Location doorloc, Location playerloc, TETile[][] world) {
-       lockedDoor = doorloc;
-       player = playerloc;
-    }
-
-    public static Location lockedDoor() {
-        return lockedDoor;
     }
 
     public static Location player() {
@@ -162,6 +153,10 @@ public class WorldGenerator {
                     break;
                 }
             }
+
+            /* Trying to add Room to rooms Arraylist */
+            /* how do we modify this so we can get an array of rooms? */
+
             if (detect) {
                 for (int y = r.getY2(); y <= goalY; y++) {
                     if (world[r.getCenterX() - 1][y] == Tileset.NOTHING) {

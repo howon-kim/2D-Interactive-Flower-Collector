@@ -3,6 +3,10 @@ import byow.TileEngine.TERenderer;
 import byow.TileEngine.*;
 import byow.WorldGenerator;
 import byow.Location;
+import java.util.Random;
+import byow.Room;
+import java.util.ArrayList;
+
 
 
 import byow.WorldLocations;
@@ -31,13 +35,11 @@ public class Engine {
     /* For "Game" Mechanics */
     private static boolean GAMEOVER = true;
     private int HEALTH;
-    private int SANDNUMBER;
     private String s;
     private int COUNTER;
     public static WorldLocations worldlocs;
     public static TETile[][] world;
     public static Location player;
-    private static Location lockedDoor;
 
     /**
      * Method used for exploring a fresh world. This method should handle all inputs,
@@ -93,8 +95,10 @@ public class Engine {
                     SEED = stringToInt(seed);
 
                     System.out.println("## SEED: " + SEED);
-
                     WorldGenerator.generateWorld();
+                    player = makePlayer(world, Room.rooms);
+                    worldlocs = new WorldLocations(player, world);
+                    playWorld(world);
                     break;
                 }
 
@@ -102,7 +106,7 @@ public class Engine {
                 case ('l'): {
                     TETile[][] world = loadWorld();
                     GAMEOVER = false;
-                    // playWorld(world);
+                    playWorld(world);
                     break;
                 }
 
@@ -117,6 +121,54 @@ public class Engine {
         }
     }
 
+    public static Location makePlayer(TETile[][] world, ArrayList<Room> rooms) {
+        Random rand = new Random(WorldGenerator.SEED);
+        Location p = Room.innerRandomPoint(rooms.get(rooms.size() - rand.nextInt(rooms.size() - 1) - 1));
+        world[p.getX()][p.getY()] = Tileset.AVATAR;
+        return p;
+    }
+
+    private void playWorld(TETile[][] world) {
+        new Thread(() -> {
+            while (COUNTER > 0) {
+                StdDraw.enableDoubleBuffering();
+
+                COUNTER--;
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+        char key;
+        String record = "";
+        while (!GAMEOVER) {
+            if (!StdDraw.hasNextKeyTyped()) {
+                continue;
+            }
+            key = StdDraw.nextKeyTyped();
+            record += key;
+
+            /* If Player Presses 'Q', Quit Immediately */
+            for (int i = 0; i < record.length() - 1; i += 1) {
+                if ((record.charAt(i) == ':' && record.charAt(i + 1) == 'q')
+                        || (record.charAt(i) == ':' && record.charAt(i + 1) == 'Q')) {
+                    saveWorld(world);
+                    Menu.makeGUIBackground();
+                    Menu.makeCustomMessageScreen("GAME OVER FOLKS!");
+                    StdDraw.pause(3000);
+                    GAMEOVER = true;
+                }
+            }
+            worldlocs = move(worldlocs, key);
+        }
+        Menu.makeGUIBackground();
+        Menu.makeCustomMessageScreen("TRY AGAIN!");
+        StdDraw.pause(5000);
+    }
+
     public long stringToInt(String str) {
         str = str.trim();
         String str2 = "";
@@ -129,6 +181,37 @@ public class Engine {
         }
         return Long.parseLong(str2);
     }
+
+     private WorldLocations move(WorldLocations worldlocs, char key) {
+        switch (key) {
+            case ('w'): {
+                worldlocs.world()[worldlocs.player().getX()][worldlocs.player().getY() + 1] = Tileset.AVATAR;
+                worldlocs.world()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
+                Location newPLAYER = new Location(worldlocs.player().getX(), worldlocs.player().getY() + 1);
+                return new WorldLocations(newPLAYER, worldlocs.world());
+                }
+            case ('s'): {
+                worldlocs.world()[worldlocs.player().getX()][worldlocs.player().getY() - 1] = Tileset.AVATAR;
+                worldlocs.world()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
+                Location newPLAYER = new Location(worldlocs.player().getX(), worldlocs.player().getY() - 1);
+                return new WorldLocations(newPLAYER, worldlocs.world());
+                }
+            case ('a'): {
+                worldlocs.world()[worldlocs.player().getX() - 1][worldlocs.player().getY()] = Tileset.AVATAR;
+                worldlocs.world()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
+                Location newPLAYER = new Location(worldlocs.player().getX() - 1, worldlocs.player().getY());
+                return new WorldLocations(newPLAYER, worldlocs.world());
+                }
+
+            case ('d'): {
+                worldlocs.world()[worldlocs.player().getX() + 1][worldlocs.player().getY()] = Tileset.AVATAR;
+                worldlocs.world()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
+                Location newPLAYER = new Location(worldlocs.player().getX() + 1, worldlocs.player().getY());
+                return new WorldLocations(newPLAYER, worldlocs.world());
+            } default: return worldlocs;
+        }
+     }
+
 
     /**
      * Method used for autograding and testing your code. The input string will be a series
@@ -204,7 +287,7 @@ public class Engine {
             catch (FileNotFoundException e) {
                 System.out.println("File Not Found");
                 System.exit(0);
-             } catch (IOException e) {
+            } catch (IOException e) {
                 System.out.println(e);
                 System.exit(0);
             } catch (ClassNotFoundException e) {
