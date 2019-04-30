@@ -96,15 +96,11 @@ public class Engine {
                     System.out.println("## SEED: " + SEED);
 
                     WorldGenerator.generateWorld();
-                    System.out.println("world generated");
-                    System.out.println(Room.rooms.size());
-                    player = makePlayer();
-                    System.out.println("player made");
-                    worldlocs = new WorldLocations(player, WorldGenerator.getWorld());
-                    System.out.println("worldlocs recorded");
 
-                    System.out.println(player.getX());
-                    System.out.println(player.getY());
+                    player = makePlayer();
+                    ter.renderFrame(WorldGenerator.getWorld());
+                    worldlocs = new WorldLocations(player, WorldGenerator.getWorld());
+
                     playWorld(WorldGenerator.getWorld());
                     break;
                 }
@@ -178,24 +174,27 @@ public class Engine {
             key = StdDraw.nextKeyTyped();
             record += key;
 
-            /**
-             * FOR QUIT
-            //System.out.println(record);
+            /* FOR QUIT */
+            System.out.println(record);
             for (int i = 0; i < record.length() - 1; i += 1) {
                 if ((record.charAt(i) == ':' && record.charAt(i + 1) == 'q')
                         || (record.charAt(i) == ':' && record.charAt(i + 1) == 'Q')) {
+                    System.out.println("Going to save world");
                     saveWorld(world);
                     Menu.makeGUIBackground();
                     Menu.makeCustomMessageScreen("Your game has been saved!");
+                    StdDraw.pause(3000);
                     GAMEOVER = true;
                 }
             }
-             */
+
             worldlocs = move(worldlocs, key);
-            System.out.println("moved");
+            ter.renderFrame(WorldGenerator.getWorld());
         }
         Menu.makeGUIBackground();
         Menu.makeCustomMessageScreen("Have an another try next time!");
+        StdDraw.show();
+        StdDraw.pause(5000);
     }
 
     public long stringToInt(String str) {
