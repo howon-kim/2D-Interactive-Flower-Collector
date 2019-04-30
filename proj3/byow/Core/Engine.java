@@ -190,7 +190,7 @@ public class Engine {
             ter.renderFrame(WorldGenerator.getWorld());
         }
         Menu.makeGUIBackground();
-        Menu.makeCustomMessageScreen("Have an another try next time!");
+        Menu.makeCustomMessageScreen("Try again next time!");
         StdDraw.show();
         StdDraw.pause(5000);
     }
@@ -310,10 +310,11 @@ public class Engine {
         switch (key) {
             case ('n'): {
                 SEED = stringToInt(input);
-                WorldGenerator.generateWorld();
-                player = makePlayer();
-                ter.renderFrame(WorldGenerator.getWorld());
-                worldlocs = new WorldLocations(player, WorldGenerator.getWorld());
+
+                // WorldGenerator.generateWorld();
+                // player = makePlayer();
+                // ter.renderFrame(WorldGenerator.getWorld());
+                // worldlocs = new WorldLocations(player, WorldGenerator.getWorld());
 
                 playWorld(WorldGenerator.getWorld());
 
