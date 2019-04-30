@@ -338,7 +338,7 @@ public class Engine {
 
 
 
-        System.out.println(move);
+        //System.out.println(move);
 
         /** Move Character **/
         worldlocs = new WorldLocations(player, WorldGenerator.getWorld());
@@ -346,7 +346,7 @@ public class Engine {
         if(!move.isEmpty()) {
             for (int i = 0; i < move.length(); i++){
                 worldlocs = move(worldlocs, move.charAt(i));
-                System.out.println(worldlocs.player().getX() + " " +  worldlocs.player().getY());
+                //System.out.println(worldlocs.player().getX() + " " +  worldlocs.player().getY());
             }
         }
         if(save != -1) {
