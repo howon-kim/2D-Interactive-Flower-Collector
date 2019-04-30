@@ -46,4 +46,9 @@ public class Menu {
         StdDraw.text(x, y, string);
         StdDraw.show();
     }
+
+    public static void makeHUD() {
+        StdDraw.filledRectangle(0.0, HEIGHT, 10,10);
+        StdDraw.show();
+    }
 }
