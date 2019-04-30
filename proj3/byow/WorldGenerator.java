@@ -30,6 +30,12 @@ public class WorldGenerator {
 
     }
 
+    public WorldGenerator(TETile[][] w) {
+        WIDTH = w.length;
+        HEIGHT = w[0].length;
+        world = w;
+    }
+
     public static Location player() {
         return player;
     }
@@ -53,8 +59,8 @@ public class WorldGenerator {
     public static void main(String[] args) {
         Engine engine = new Engine();
         // engine.interactWithKeyboard();
-        engine.interactWithInputString("7313251667695476404sasdw");
-        System.out.println(Room.rooms.size());
+        engine.interactWithInputString("lwsd");
+//        System.out.println(Room.rooms.size());
     }
 
         /**
