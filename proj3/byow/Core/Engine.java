@@ -94,13 +94,17 @@ public class Engine {
                     SEED = stringToInt(seed);
 
                     System.out.println("## SEED: " + SEED);
+
                     WorldGenerator.generateWorld();
+                    System.out.println("world generated");
                     player = makePlayer();
-                    worldlocs = new WorldLocations(player, WorldGenerator.world);
+                    System.out.println("player made");
+                    worldlocs = new WorldLocations(player, WorldGenerator.getWorld());
+                    System.out.println("worldlocs recorded");
 
                     System.out.println(player.getX());
                     System.out.println(player.getY());
-                    playWorld(WorldGenerator.world);
+                    playWorld(WorldGenerator.getWorld());
                     break;
                 }
 
@@ -125,19 +129,21 @@ public class Engine {
 
     public static Location makePlayer() {
         Location p = getplayerEntry();
-        WorldGenerator.world[p.getX()][p.getY()] = Tileset.FLOWER;
+        WorldGenerator.getWorld()[p.getX()][p.getY()] = Tileset.FLOWER;
         System.out.println("Set Avatar");
         return p;
     }
 
     private static Location getplayerEntry() {
-        Random rand = new Random(SEED);
-        // int x = rand.nextInt(WIDTH/3);
-        // int y = rand.nextInt(HEIGHT/3);
-
-        int x = Room.rooms.get(Room.rooms.size() - 1).getCenterX();
-        int y = Room.rooms.get(Room.rooms.size() - 1).getCenterY();
-        return new Location(x, y);
+        for (Room room: Room.rooms) {
+            int x = room.getCenterX();
+            int y = room.getCenterY();
+            if (WorldGenerator.getWorld()[x][y] == Tileset.FLOOR) {
+                return new Location(x, y);
+            }
+        }
+        System.out.println("No room is good");
+        return new Location(50, 20);
     }
 
 
@@ -207,29 +213,29 @@ public class Engine {
      private WorldLocations move(WorldLocations worldlocs, char key) {
         switch (key) {
             case ('w'): {
-                WorldGenerator.world[worldlocs.player().getX()][worldlocs.player().getY() + 1] = Tileset.AVATAR;
-                WorldGenerator.world[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
+                WorldGenerator.getWorld()[worldlocs.player().getX()][worldlocs.player().getY() + 1] = Tileset.AVATAR;
+                WorldGenerator.getWorld()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
                 Location newplayerlocation = new Location(worldlocs.player().getX(), worldlocs.player().getY() + 1);
-                return new WorldLocations(newplayerlocation, WorldGenerator.world);
+                return new WorldLocations(newplayerlocation, WorldGenerator.getWorld());
                 }
             case ('s'): {
-                WorldGenerator.world[worldlocs.player().getX()][worldlocs.player().getY() - 1] = Tileset.AVATAR;
-                WorldGenerator.world[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
+                WorldGenerator.getWorld()[worldlocs.player().getX()][worldlocs.player().getY() - 1] = Tileset.AVATAR;
+                WorldGenerator.getWorld()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
                 Location newplayerlocation = new Location(worldlocs.player().getX(), worldlocs.player().getY() - 1);
-                return new WorldLocations(newplayerlocation, WorldGenerator.world);
+                return new WorldLocations(newplayerlocation, WorldGenerator.getWorld());
                 }
             case ('a'): {
-                WorldGenerator.world[worldlocs.player().getX() - 1][worldlocs.player().getY()] = Tileset.AVATAR;
-                WorldGenerator.world[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
+                WorldGenerator.getWorld()[worldlocs.player().getX() - 1][worldlocs.player().getY()] = Tileset.AVATAR;
+                WorldGenerator.getWorld()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
                 Location newplayerlocation = new Location(worldlocs.player().getX() - 1, worldlocs.player().getY());
-                return new WorldLocations(newplayerlocation, WorldGenerator.world);
+                return new WorldLocations(newplayerlocation, WorldGenerator.getWorld());
                 }
 
             case ('d'): {
-                WorldGenerator.world[worldlocs.player().getX() + 1][worldlocs.player().getY()] = Tileset.AVATAR;
-                WorldGenerator.world[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
+                WorldGenerator.getWorld()[worldlocs.player().getX() + 1][worldlocs.player().getY()] = Tileset.AVATAR;
+                WorldGenerator.getWorld()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
                 Location newplayerlocation = new Location(worldlocs.player().getX() + 1, worldlocs.player().getY());
-                return new WorldLocations(newplayerlocation, WorldGenerator.world);
+                return new WorldLocations(newplayerlocation, WorldGenerator.getWorld());
             } default: return worldlocs;
         }
      }

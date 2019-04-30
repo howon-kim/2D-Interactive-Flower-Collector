@@ -18,7 +18,6 @@ public class WorldGenerator {
     /* For World Mechanics */
     public static TETile[][] world;
     public static Location player;
-    private static Location lockedDoor;
 
 
     public WorldGenerator(TETile[][] w, long s) {
@@ -35,28 +34,27 @@ public class WorldGenerator {
         return player;
     }
 
-    public static TETile[][] world() {
+    public static TETile[][] getWorld() {
         return world;
     }
 
     public static TETile[][] generateWorld() {
 
-        /* Rooms, Hallways, Frame */
-        TETile[][] finalWorldFrame = new TETile[Engine.WIDTH][Engine.HEIGHT];
-        WorldGenerator worldGenerator = new WorldGenerator(finalWorldFrame, Engine.SEED);
+        world = new TETile[Engine.WIDTH][Engine.HEIGHT];
+        WorldGenerator worldGenerator = new WorldGenerator(world, Engine.SEED);
         worldGenerator.clearWorld();
         worldGenerator.randomizeWorld();
         TERenderer ter = new TERenderer();
         ter.initialize(Engine.WIDTH, Engine.HEIGHT);
         ter.renderFrame(world);
-
-        return finalWorldFrame;
+        return world;
     }
 
     public static void main(String[] args) {
         Engine engine = new Engine();
         engine.interactWithKeyboard();
         // engine.interactWithInputString("434839s");
+        System.out.println(Room.rooms.size());
     }
 
         /**
