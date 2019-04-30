@@ -165,7 +165,7 @@ public class Engine {
 
         char key;
         String record = "";
-
+        Menu.makeHUD();
         while (!GAMEOVER) {
             if (!StdDraw.hasNextKeyTyped()) {
                 continue;
