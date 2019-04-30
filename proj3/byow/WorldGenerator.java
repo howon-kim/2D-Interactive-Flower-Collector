@@ -53,7 +53,7 @@ public class WorldGenerator {
     public static void main(String[] args) {
         Engine engine = new Engine();
         // engine.interactWithKeyboard();
-        engine.interactWithInputString("n7313251667695476404sasdw");
+        engine.interactWithInputString("7313251667695476404sasdw");
         System.out.println(Room.rooms.size());
     }
 
