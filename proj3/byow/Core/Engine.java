@@ -286,7 +286,7 @@ public class Engine {
 
 
     private static void saveWorld(TETile[][] world) {
-        File file = new File("./crazyWorld.txt");
+        File file = new File("./savedWorld.txt");
         try {
             if (!file.exists()) {
                 file.createNewFile();
@@ -323,7 +323,7 @@ public class Engine {
                 System.exit(0);
             }
         }
-        System.out.println("No World Saved Yet-- Random World Returned");
+        System.out.println("No World Saved Yet-- Returning Brand New World");
         return WorldGenerator.generateWorld();
     }
 

@@ -104,13 +104,4 @@ public class Room {
         }
         rooms.add(room);
     }
-
-    public static Location innerRandomPoint(Room r) {
-        Random rand = new Random(WorldGenerator.SEED);
-        int innerX = rand.nextInt(r.getW() - 2) + r.getX1() + 1;
-        int innerY = rand.nextInt(r.getH() - 2) + r.getY1() + 1;
-        Location innerRandomPoint = new Location(innerX, innerY);
-        return innerRandomPoint;
-
-    }
 }
