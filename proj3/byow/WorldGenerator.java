@@ -52,9 +52,9 @@ public class WorldGenerator {
 
     public static void main(String[] args) {
         Engine engine = new Engine();
-        engine.interactWithKeyboard();
-        // engine.interactWithInputString("434839s");
-        System.out.println(Room.rooms.size());
+        //engine.interactWithKeyboard();
+        engine.interactWithInputString("434839sswas");
+        //System.out.println(Room.rooms.size());
     }
 
         /**
