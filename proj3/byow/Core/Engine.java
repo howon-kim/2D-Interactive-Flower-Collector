@@ -279,7 +279,81 @@ public class Engine {
         worldGenerator.clearWorld();
         /** Randomize world **/
         worldGenerator.randomizeWorld();
+
         return finalWorldFrame;
+    }
+
+    private TETile[][] inputStringGame(char key, String input) {
+        switch (key) {
+            case ('n'): {
+                SEED = stringToInt(input);
+                WorldGenerator.generateWorld();
+                player = makePlayer();
+                ter.renderFrame(WorldGenerator.getWorld());
+                worldlocs = new WorldLocations(player, WorldGenerator.getWorld());
+
+                playWorld(WorldGenerator.getWorld());
+
+                int start = 1;
+                for (int i = 0; i < input.length(); i += 1) {
+                    if (input.charAt(i) == 's' || input.charAt(i) == 'S') {
+                        start = i + 1;
+                        break;
+                    }
+                }
+                for (int i = start; i < input.length(); i += 1) {
+                    worldlocs = move(worldlocs, input.charAt(i));
+                    if ((input.charAt(i) == ':' && input.charAt(i + 1) == 'q')
+                            || (input.charAt(i) == ':' && input.charAt(i + 1) == 'Q')) {
+                        GAMEOVER = true;
+                        saveWorld(WorldGenerator.world);
+                        System.out.println("Saved");
+                        break;
+                    }
+                }
+                return WorldGenerator.getWorld();
+            }
+            case ('l'): {
+                WorldGenerator.world = loadWorld();
+                int start = 1;
+                for (int i = 0; i < input.length(); i += 1) {
+                    if (input.charAt(i) == 's' || input.charAt(i) == 'S') {
+                        start = i + 1;
+                        break;
+                    }
+                }
+                for (int i = start; i < input.length(); i += 1) {
+                    if ((input.charAt(i) == ':' && input.charAt(i + 1) == 'q')
+                            || (input.charAt(i) == ':' && input.charAt(i + 1) == 'Q')) {
+                        GAMEOVER = true;
+                        saveWorld(WorldGenerator.getWorld());
+                        System.out.println("Saved");
+                        break;
+                    }
+                    worldlocs = move(worldlocs, input.charAt(i));
+                }
+                return WorldGenerator.getWorld();
+            }
+            case ('q'): {
+                GAMEOVER = true;
+                TETile[][] world = new TETile[80][30];
+                for (TETile[] x : world) {
+                    for (TETile y : x) {
+                        y = Tileset.NOTHING;
+                    }
+                }
+                return world;
+            } default: {
+                GAMEOVER = true;
+                TETile[][] world = new TETile[80][30];
+                for (TETile[] x : world) {
+                    for (TETile y : x) {
+                        y = Tileset.NOTHING;
+                    }
+                }
+                return world;
+            }
+        }
     }
 
     private static TETile[][] loadWorld() {
