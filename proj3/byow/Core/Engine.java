@@ -33,12 +33,11 @@ public class Engine {
 
 
     /* For "Game" Mechanics */
-    private static boolean GAMEOVER = true;
+    private static boolean GAMEOVER = false;
     private int HEALTH;
     private String s;
     private int COUNTER;
     public static WorldLocations worldlocs;
-    public static TETile[][] world;
     public static Location player;
 
     /**
@@ -96,9 +95,12 @@ public class Engine {
 
                     System.out.println("## SEED: " + SEED);
                     WorldGenerator.generateWorld();
-                    player = makePlayer(world, Room.rooms);
-                    worldlocs = new WorldLocations(player, world);
-                    playWorld(world);
+                    player = makePlayer();
+                    worldlocs = new WorldLocations(player, WorldGenerator.world);
+
+                    System.out.println(player.getX());
+                    System.out.println(player.getY());
+                    playWorld(WorldGenerator.world);
                     break;
                 }
 
@@ -121,19 +123,35 @@ public class Engine {
         }
     }
 
-    public static Location makePlayer(TETile[][] world, ArrayList<Room> rooms) {
-        Random rand = new Random(WorldGenerator.SEED);
-        Location p = Room.innerRandomPoint(rooms.get(rooms.size() - rand.nextInt(rooms.size() - 1) - 1));
-        world[p.getX()][p.getY()] = Tileset.AVATAR;
+    public static Location makePlayer() {
+        Location p = getplayerEntry();
+        WorldGenerator.world[p.getX()][p.getY()] = Tileset.FLOWER;
+        System.out.println("Set Avatar");
         return p;
     }
 
+    private static Location getplayerEntry() {
+        Random rand = new Random(SEED);
+        // int x = rand.nextInt(WIDTH/3);
+        // int y = rand.nextInt(HEIGHT/3);
+
+        int x = Room.rooms.get(Room.rooms.size() - 1).getCenterX();
+        int y = Room.rooms.get(Room.rooms.size() - 1).getCenterY();
+        return new Location(x, y);
+    }
+
+
     private void playWorld(TETile[][] world) {
-        new Thread(() -> {
+
+        /** new Thread(() -> {
             while (COUNTER > 0) {
                 StdDraw.enableDoubleBuffering();
 
-                COUNTER--;
+                timeCounter--;
+                //long hh = timeCounter / 60 / 60 % 60;
+                //long mm = timeCounter / 60 % 60;
+                //long ss = timeCounter % 60;
+                //System.out.println("left + hh + "hours" + mm + "minutes" + ss + "seconds");
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -141,9 +159,11 @@ public class Engine {
                 }
             }
         }).start();
+         */
 
         char key;
         String record = "";
+
         while (!GAMEOVER) {
             if (!StdDraw.hasNextKeyTyped()) {
                 continue;
@@ -151,22 +171,24 @@ public class Engine {
             key = StdDraw.nextKeyTyped();
             record += key;
 
-            /* If Player Presses 'Q', Quit Immediately */
+            /**
+             * FOR QUIT
+            //System.out.println(record);
             for (int i = 0; i < record.length() - 1; i += 1) {
                 if ((record.charAt(i) == ':' && record.charAt(i + 1) == 'q')
                         || (record.charAt(i) == ':' && record.charAt(i + 1) == 'Q')) {
                     saveWorld(world);
                     Menu.makeGUIBackground();
-                    Menu.makeCustomMessageScreen("GAME OVER FOLKS!");
-                    StdDraw.pause(3000);
+                    Menu.makeCustomMessageScreen("Your game has been saved!");
                     GAMEOVER = true;
                 }
             }
+             */
             worldlocs = move(worldlocs, key);
+            System.out.println("moved");
         }
         Menu.makeGUIBackground();
-        Menu.makeCustomMessageScreen("TRY AGAIN!");
-        StdDraw.pause(5000);
+        Menu.makeCustomMessageScreen("Have an another try next time!");
     }
 
     public long stringToInt(String str) {
@@ -185,29 +207,29 @@ public class Engine {
      private WorldLocations move(WorldLocations worldlocs, char key) {
         switch (key) {
             case ('w'): {
-                worldlocs.world()[worldlocs.player().getX()][worldlocs.player().getY() + 1] = Tileset.AVATAR;
-                worldlocs.world()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
-                Location newPLAYER = new Location(worldlocs.player().getX(), worldlocs.player().getY() + 1);
-                return new WorldLocations(newPLAYER, worldlocs.world());
+                WorldGenerator.world[worldlocs.player().getX()][worldlocs.player().getY() + 1] = Tileset.AVATAR;
+                WorldGenerator.world[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
+                Location newplayerlocation = new Location(worldlocs.player().getX(), worldlocs.player().getY() + 1);
+                return new WorldLocations(newplayerlocation, WorldGenerator.world);
                 }
             case ('s'): {
-                worldlocs.world()[worldlocs.player().getX()][worldlocs.player().getY() - 1] = Tileset.AVATAR;
-                worldlocs.world()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
-                Location newPLAYER = new Location(worldlocs.player().getX(), worldlocs.player().getY() - 1);
-                return new WorldLocations(newPLAYER, worldlocs.world());
+                WorldGenerator.world[worldlocs.player().getX()][worldlocs.player().getY() - 1] = Tileset.AVATAR;
+                WorldGenerator.world[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
+                Location newplayerlocation = new Location(worldlocs.player().getX(), worldlocs.player().getY() - 1);
+                return new WorldLocations(newplayerlocation, WorldGenerator.world);
                 }
             case ('a'): {
-                worldlocs.world()[worldlocs.player().getX() - 1][worldlocs.player().getY()] = Tileset.AVATAR;
-                worldlocs.world()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
-                Location newPLAYER = new Location(worldlocs.player().getX() - 1, worldlocs.player().getY());
-                return new WorldLocations(newPLAYER, worldlocs.world());
+                WorldGenerator.world[worldlocs.player().getX() - 1][worldlocs.player().getY()] = Tileset.AVATAR;
+                WorldGenerator.world[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
+                Location newplayerlocation = new Location(worldlocs.player().getX() - 1, worldlocs.player().getY());
+                return new WorldLocations(newplayerlocation, WorldGenerator.world);
                 }
 
             case ('d'): {
-                worldlocs.world()[worldlocs.player().getX() + 1][worldlocs.player().getY()] = Tileset.AVATAR;
-                worldlocs.world()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
-                Location newPLAYER = new Location(worldlocs.player().getX() + 1, worldlocs.player().getY());
-                return new WorldLocations(newPLAYER, worldlocs.world());
+                WorldGenerator.world[worldlocs.player().getX() + 1][worldlocs.player().getY()] = Tileset.AVATAR;
+                WorldGenerator.world[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
+                Location newplayerlocation = new Location(worldlocs.player().getX() + 1, worldlocs.player().getY());
+                return new WorldLocations(newplayerlocation, WorldGenerator.world);
             } default: return worldlocs;
         }
      }
