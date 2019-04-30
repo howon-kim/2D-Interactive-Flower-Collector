@@ -289,16 +289,16 @@ public class Engine {
         // that works for many different input types.
 
         /** Initialize Tiles **/
-        TETile[][] finalWorldFrame = new TETile[WIDTH][HEIGHT];
+        // TETile[][] finalWorldFrame = new TETile[WIDTH][HEIGHT];
         /** String process **/
-        String userInput = input.substring(1, input.length() - 1);
+        // String userInput = input.substring(1, input.length() - 1);
         /** World Generator Initiate **/
-        WorldGenerator worldGenerator =
-                new WorldGenerator(finalWorldFrame, Long.parseLong(userInput));
+        //WorldGenerator worldGenerator =
+        //        new WorldGenerator(finalWorldFrame, Long.parseLong(userInput));
         /** Clear the world **/
-        worldGenerator.clearWorld();
+        //worldGenerator.clearWorld();
         /** Randomize world **/
-        worldGenerator.randomizeWorld();
+        // worldGenerator.randomizeWorld();
 
         char inputMode = input.charAt(0);
         System.out.println("MODE：" + inputMode);
