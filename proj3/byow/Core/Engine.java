@@ -294,7 +294,7 @@ public class Engine {
 
         /** String process **/
         int end = input.indexOf("s");
-        String userInput = input.substring(0, end);
+        String userInput = input.substring(1, end);
         String characterInput = input.substring(end + 1, input.length());
         //System.out.println(userInput);
         //System.out.println(characterInput);
