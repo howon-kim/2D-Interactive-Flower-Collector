@@ -290,15 +290,37 @@ public class Engine {
 
         /** Initialize Tiles **/
         TETile[][] finalWorldFrame = new TETile[WIDTH][HEIGHT];
+
+
         /** String process **/
-        String userInput = input.substring(1, input.length() - 1);
+        int end = input.indexOf("s");
+        String userInput = input.substring(0, end);
+        String characterInput = input.substring(end + 1, input.length());
+        //System.out.println(userInput);
+        //System.out.println(characterInput);
+
         /** World Generator Initiate **/
         WorldGenerator worldGenerator =
                 new WorldGenerator(finalWorldFrame, Long.parseLong(userInput));
+
         /** Clear the world **/
         worldGenerator.clearWorld();
+
         /** Randomize world **/
         worldGenerator.randomizeWorld();
+
+
+
+        /** Move Character **/
+        player = makePlayer();
+        worldlocs = new WorldLocations(player, WorldGenerator.getWorld());
+
+        if(!characterInput.isEmpty()) {
+            for (int i = 0; i < characterInput.length(); i++){
+                worldlocs = move(worldlocs, characterInput.charAt(i));
+                //System.out.println();
+            }
+        }
         return finalWorldFrame;
     }
 
