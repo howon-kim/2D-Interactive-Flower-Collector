@@ -97,6 +97,7 @@ public class Engine {
 
                     WorldGenerator.generateWorld();
                     System.out.println("world generated");
+                    System.out.println(Room.rooms.size());
                     player = makePlayer();
                     System.out.println("player made");
                     worldlocs = new WorldLocations(player, WorldGenerator.getWorld());
@@ -129,7 +130,7 @@ public class Engine {
 
     public static Location makePlayer() {
         Location p = getplayerEntry();
-        WorldGenerator.getWorld()[p.getX()][p.getY()] = Tileset.FLOWER;
+        WorldGenerator.getWorld()[p.getX()][p.getY()] = Tileset.AVATAR;
         System.out.println("Set Avatar");
         return p;
     }
