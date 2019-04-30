@@ -287,6 +287,8 @@ public class Engine {
 
         /** Initialize Tiles **/
         TETile[][] finalWorldFrame = new TETile[WIDTH][HEIGHT];
+        input = input.toLowerCase();
+        System.out.println(input);
 
 
         /** String process **/
