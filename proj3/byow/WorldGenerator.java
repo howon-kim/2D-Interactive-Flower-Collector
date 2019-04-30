@@ -59,7 +59,7 @@ public class WorldGenerator {
     public static void main(String[] args) {
         Engine engine = new Engine();
         // engine.interactWithKeyboard();
-        engine.interactWithInputString("lwsd");
+        engine.interactWithInputString("n5643591630821615871swwaawd");
 //        System.out.println(Room.rooms.size());
     }
 

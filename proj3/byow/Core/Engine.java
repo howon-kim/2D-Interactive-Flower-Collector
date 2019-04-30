@@ -315,9 +315,13 @@ public class Engine {
             /** Randomize world **/
             worldGenerator.randomizeWorld();
 
+            player = makePlayer();
+
         } else if(gameMode == 'l') {
             WorldGenerator worldGenerator =
                     new WorldGenerator((TETile [][]) loadWorld().get(0));
+            player = (Location) loadWorld().get(1);
+
             move = input.substring(1, input.length());
 
         } else {
@@ -328,13 +332,12 @@ public class Engine {
 
 
         /** Move Character **/
-        player = (Location) loadWorld().get(1);
         worldlocs = new WorldLocations(player, WorldGenerator.getWorld());
 
         if(!move.isEmpty()) {
             for (int i = 0; i < move.length(); i++){
                 worldlocs = move(worldlocs, move.charAt(i));
-                //System.out.println();
+                //System.out.println(move.charAt(i));
             }
         }
         return finalWorldFrame;
