@@ -74,14 +74,11 @@ public class Engine {
                             "Let's generate a new world! Input a seed, then press 's' to begin.");
                     StdDraw.show();
 
-                    do {
+                    while (c != 's') {
                         if (!StdDraw.hasNextKeyTyped()) {
                             continue;
                         }
                         c = StdDraw.nextKeyTyped();
-                        if (c >= 48 && c <= 57) {
-                            seed += String.valueOf(c);
-                        }
                         seed += String.valueOf(c);
                         if (c != 's') {
                             StdDraw.clear(Color.BLACK);
@@ -89,7 +86,7 @@ public class Engine {
                             StdDraw.text(MENUW / 2, MENUH / 4, "Your seed is: " + seed);
                             StdDraw.show();
                         }
-                    } while (c != 's');
+                    }
 
                     SEED = stringToInt(seed);
 
@@ -108,6 +105,9 @@ public class Engine {
                 /* Load Operations */
                 case ('l'): {
                     TETile[][] world = loadWorld();
+                    TERenderer ter = new TERenderer();
+                    ter.initialize(Engine.WIDTH, Engine.HEIGHT);
+                    ter.renderFrame(world);
                     GAMEOVER = false;
                     playWorld(world);
                     break;
@@ -139,7 +139,6 @@ public class Engine {
                 return new Location(x, y);
             }
         }
-        System.out.println("No room is good");
         return new Location(50, 20);
     }
 
@@ -179,7 +178,6 @@ public class Engine {
             for (int i = 0; i < record.length() - 1; i += 1) {
                 if ((record.charAt(i) == ':' && record.charAt(i + 1) == 'q')
                         || (record.charAt(i) == ':' && record.charAt(i + 1) == 'Q')) {
-                    System.out.println("Going to save world");
                     saveWorld(world);
                     Menu.makeGUIBackground();
                     Menu.makeCustomMessageScreen("Your game has been saved!");
@@ -284,9 +282,32 @@ public class Engine {
         return finalWorldFrame;
     }
 
+    private static TETile[][] loadWorld() {
+        File file = new File("./proj3/byow/SavedWorlds/savedWorld.txt");
+        if (file.exists()) {
+            try {
+                FileInputStream fs = new FileInputStream(file);
+                ObjectInputStream os = new ObjectInputStream(fs);
+                return (TETile[][]) os.readObject();
+            }
+
+            catch (FileNotFoundException e) {
+                System.out.println("File Not Found");
+                System.exit(0);
+            } catch (IOException e) {
+                System.out.println(e);
+                System.exit(0);
+            } catch (ClassNotFoundException e) {
+                System.out.println("Class Not Found");
+                System.exit(0);
+            }
+        }
+        System.out.println("No World Saved Yet-- Returning Brand New World");
+        return WorldGenerator.generateWorld();
+    }
 
     private static void saveWorld(TETile[][] world) {
-        File file = new File("./savedWorld.txt");
+        File file = new File("./proj3/byow/SavedWorlds/savedWorld.txt");
         try {
             if (!file.exists()) {
                 file.createNewFile();
@@ -301,30 +322,6 @@ public class Engine {
             System.out.println(e);
             System.exit(0);
         }
-    }
-
-    private static TETile[][] loadWorld() {
-        File file = new File("./savedWorld.txt");
-        if (file.exists()) {
-            try {
-                FileInputStream fs = new FileInputStream(file);
-                ObjectInputStream os = new ObjectInputStream(fs);
-                return (TETile[][]) os.readObject();
-            }
-            /* Necessary for ObjectInputStream */
-            catch (FileNotFoundException e) {
-                System.out.println("File Not Found");
-                System.exit(0);
-            } catch (IOException e) {
-                System.out.println(e);
-                System.exit(0);
-            } catch (ClassNotFoundException e) {
-                System.out.println("Class Not Found");
-                System.exit(0);
-            }
-        }
-        System.out.println("No World Saved Yet-- Returning Brand New World");
-        return WorldGenerator.generateWorld();
     }
 
 }
