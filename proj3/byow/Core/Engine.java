@@ -300,7 +300,10 @@ public class Engine {
         /** Randomize world **/
         worldGenerator.randomizeWorld();
 
-        return finalWorldFrame;
+        char inputMode = input.charAt(0);
+        System.out.println("MODE：" + inputMode);
+        return inputStringGame(inputMode, input);
+
     }
 
     private TETile[][] inputStringGame(char key, String input) {
