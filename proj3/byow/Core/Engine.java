@@ -316,7 +316,7 @@ public class Engine {
                 // ter.renderFrame(WorldGenerator.getWorld());
                 // worldlocs = new WorldLocations(player, WorldGenerator.getWorld());
 
-                playWorld(WorldGenerator.getWorld());
+                WorldGenerator.getWorld();
 
                 int start = 1;
                 for (int i = 0; i < input.length(); i += 1) {
