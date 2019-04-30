@@ -292,18 +292,17 @@ public class Engine {
         /** String process **/
         String seed;
         String move = "";
-        int endSeed;
+        int endSeed = 0;
 
+        int save = input.indexOf(":Q");
         char gameMode = input.charAt(0);
 
-        //System.out.println(end);
         //System.out.println(characterInput);
         //System.out.println(gameMode);
 
         if(gameMode == 'n') {
             endSeed = input.indexOf("s");
             seed = input.substring(1, endSeed);
-            move = input.substring(endSeed + 1, input.length());
 
             /** World Generator Initiate **/
             WorldGenerator worldGenerator =
@@ -322,14 +321,22 @@ public class Engine {
                     new WorldGenerator((TETile [][]) loadWorld().get(0));
             player = (Location) loadWorld().get(1);
 
-            move = input.substring(1, input.length());
-
         } else {
             System.out.println("Incorrect Game Mode");
             return null;
         }
 
+        if(save != -1) {
+            move = input.substring(endSeed + 1, save);
+        } else{
+            move = input.substring(endSeed + 1, input.length());
+        }
 
+        System.out.println(save);
+
+
+
+        System.out.println(move);
 
         /** Move Character **/
         worldlocs = new WorldLocations(player, WorldGenerator.getWorld());
@@ -337,9 +344,13 @@ public class Engine {
         if(!move.isEmpty()) {
             for (int i = 0; i < move.length(); i++){
                 worldlocs = move(worldlocs, move.charAt(i));
-                //System.out.println(move.charAt(i));
+                System.out.println(worldlocs.player().getX() + " " +  worldlocs.player().getY());
             }
         }
+        if(save != -1) {
+            saveWorld(WorldGenerator.world, player);
+        }
+
         return finalWorldFrame;
     }
 
@@ -456,6 +467,7 @@ public class Engine {
             data.add(player);
 
             os.writeObject(data);
+            System.out.println("saved");
 
         }  catch (FileNotFoundException e) {
             System.out.println("File Not Found");
