@@ -210,32 +210,52 @@ public class Engine {
         return Long.parseLong(str2);
     }
 
+    private Boolean moveHelper(Location loc){
+        if(WorldGenerator.getWorld()[loc.getX()][loc.getY()] == Tileset.WALL) {
+            return false;
+        } else {
+            WorldGenerator.getWorld()[loc.getX()][loc.getY()] = Tileset.AVATAR;
+            return true;
+        }
+    }
      private WorldLocations move(WorldLocations worldlocs, char key) {
         switch (key) {
             case ('w'): {
-                WorldGenerator.getWorld()[worldlocs.player().getX()][worldlocs.player().getY() + 1] = Tileset.AVATAR;
-                WorldGenerator.getWorld()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
                 Location newplayerlocation = new Location(worldlocs.player().getX(), worldlocs.player().getY() + 1);
-                return new WorldLocations(newplayerlocation, WorldGenerator.getWorld());
+                if (moveHelper(newplayerlocation)) {
+                    WorldGenerator.getWorld()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
+                    return new WorldLocations(newplayerlocation, WorldGenerator.getWorld());
+                } else {
+                    return worldlocs;
                 }
+            }
             case ('s'): {
-                WorldGenerator.getWorld()[worldlocs.player().getX()][worldlocs.player().getY() - 1] = Tileset.AVATAR;
-                WorldGenerator.getWorld()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
                 Location newplayerlocation = new Location(worldlocs.player().getX(), worldlocs.player().getY() - 1);
-                return new WorldLocations(newplayerlocation, WorldGenerator.getWorld());
+                if (moveHelper(newplayerlocation)) {
+                    WorldGenerator.getWorld()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
+                    return new WorldLocations(newplayerlocation, WorldGenerator.getWorld());
+                } else {
+                    return worldlocs;
                 }
+            }
             case ('a'): {
-                WorldGenerator.getWorld()[worldlocs.player().getX() - 1][worldlocs.player().getY()] = Tileset.AVATAR;
-                WorldGenerator.getWorld()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
                 Location newplayerlocation = new Location(worldlocs.player().getX() - 1, worldlocs.player().getY());
-                return new WorldLocations(newplayerlocation, WorldGenerator.getWorld());
+                if (moveHelper(newplayerlocation)) {
+                    WorldGenerator.getWorld()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
+                    return new WorldLocations(newplayerlocation, WorldGenerator.getWorld());
+                } else {
+                    return worldlocs;
                 }
+            }
 
             case ('d'): {
-                WorldGenerator.getWorld()[worldlocs.player().getX() + 1][worldlocs.player().getY()] = Tileset.AVATAR;
-                WorldGenerator.getWorld()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
                 Location newplayerlocation = new Location(worldlocs.player().getX() + 1, worldlocs.player().getY());
-                return new WorldLocations(newplayerlocation, WorldGenerator.getWorld());
+                if (moveHelper(newplayerlocation)) {
+                    WorldGenerator.getWorld()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
+                    return new WorldLocations(newplayerlocation, WorldGenerator.getWorld());
+                } else {
+                    return worldlocs;
+                }
             } default: return worldlocs;
         }
      }
