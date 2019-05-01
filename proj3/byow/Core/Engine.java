@@ -42,7 +42,7 @@ public class Engine {
     private static boolean GAMEOVER = false;
     private int HEALTH = 0;
     private int FLOWERS = 0;
-    private int TIMELEFT = 30;
+    private int TIMELEFT = 60;
     private String message = null;
 
     /** FILE SAVING COMPONENT **/
