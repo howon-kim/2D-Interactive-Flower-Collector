@@ -419,7 +419,13 @@ public class Engine {
             StdDraw.enableDoubleBuffering();
             StdDraw.setPenColor(Color.white);
             StdDraw.text(WIDTH * 4 / 5, 1, "you");
-            StdDraw.text(WIDTH / 2, 1, "That's you! Look at you go!");
+            StdDraw.text(WIDTH / 2, 1, "That's you! And you're running out of time!");
+        } else if (world[mx][my].equals(Tileset.NEWAVATAR)) {
+                ter.renderFrame(world);
+                StdDraw.enableDoubleBuffering();
+                StdDraw.setPenColor(Color.white);
+                StdDraw.text(WIDTH * 4 / 5, 1, "you");
+                StdDraw.text(WIDTH / 2, 1, "That's you! Look at you go!");
         } else if (world[mx][my].equals(Tileset.FLOOR)) {
             ter.renderFrame(world);
             StdDraw.enableDoubleBuffering();
@@ -438,6 +444,12 @@ public class Engine {
             StdDraw.setPenColor(Color.white);
             StdDraw.text(WIDTH * 4 / 5, 1, "flower");
             StdDraw.text(WIDTH / 2, 1, "A flower! Collect it!");
+        } else if (world[mx][my].equals(Tileset.NOTE)) {
+            ter.renderFrame(world);
+            StdDraw.enableDoubleBuffering();
+            StdDraw.setPenColor(Color.white);
+            StdDraw.text(WIDTH * 4 / 5, 1, "zen message");
+            StdDraw.text(WIDTH / 2, 1, "A calming message for you!");
         } else {
             ter.renderFrame(world);
             StdDraw.enableDoubleBuffering();
