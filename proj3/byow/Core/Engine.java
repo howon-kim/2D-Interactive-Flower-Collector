@@ -46,10 +46,14 @@ public class Engine {
      * including inputs from the main menu.
      */
     public void interactWithKeyboard() {
+        TERenderer ter = new TERenderer();
+        ter.initialize(Engine.WIDTH, Engine.HEIGHT);
+
         Menu.makeGUIBackground();
         Menu.makeGUI();
         StdDraw.show();
         StdDraw.enableDoubleBuffering();
+
 
         while (true) {
             keyboardInput = "";
@@ -112,7 +116,7 @@ public class Engine {
 
                     //System.out.println(world[3][3].toString());
 
-                    TERenderer ter = new TERenderer();
+                    ter = new TERenderer();
                     ter.initialize(Engine.WIDTH, Engine.HEIGHT);
                     ter.renderFrame(world);
                     GAMEOVER = false;
