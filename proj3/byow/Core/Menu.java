@@ -6,12 +6,17 @@ import java.awt.*;
 
 public class Menu {
 
-    public static final int WIDTH = 80;
-    public static final int HEIGHT = 30;
-    private static long SEED;
-    private static final int MENUW = 40;
-    private static final int MENUH = 60;
+    private static final int WIDTH = Engine.WIDTH;
+    private static final int HEIGHT = Engine.HEIGHT;
+    private static final int MENUW = Engine.MENUW;
+    private static final int MENUH = Engine.MENUH;
 
+    public static void initializeGUI() {
+        makeGUIBackground();
+        makeGUI();
+        StdDraw.show();
+        StdDraw.enableDoubleBuffering();
+    }
     public static void makeGUIBackground() {
         StdDraw.clear();
         StdDraw.enableDoubleBuffering();
@@ -50,5 +55,55 @@ public class Menu {
     public static void makeHUD() {
         StdDraw.filledRectangle(0.0, HEIGHT, 10, 10);
         StdDraw.show();
+    }
+
+    public static void enterSeedScreen() {
+        StdDraw.text(MENUW / 2, MENUH / 4,
+                "Let's generate a new world! Input a seed, then press 's' to begin.");
+        StdDraw.show();
+    }
+
+    public static void displayEnteredSeed(String seed) {
+        StdDraw.clear(Color.BLACK);
+        Menu.makeGUI();
+        StdDraw.text(MENUW / 2, MENUH / 4, "Your seed is: " + seed);
+        StdDraw.show();
+    }
+
+    public static void lostScreen() {
+        Menu.makeGUIBackground();
+        Menu.makeCustomMessageScreen("You lost! You failed to collect all the flowers :(");
+        StdDraw.pause(2000);
+    }
+
+    public static void winScreen() {
+        Menu.makeGUIBackground();
+        Menu.makeCustomMessageScreen("You did it! You collected all the flowers :)");
+        StdDraw.pause(2000);
+    }
+
+    public static void collectedHeart(){
+        StdDraw.text(WIDTH / 2, HEIGHT - 1,
+                "You've collected 3 hearts and gained 20 seconds!");
+        StdDraw.show();
+    }
+
+    public static void saveScreen(){
+        Menu.makeGUIBackground();
+        Menu.makeCustomMessageScreen("Your game has been saved!");
+        StdDraw.pause(1500);
+    }
+
+    public static void gameOverScreen(){
+        Menu.makeGUIBackground();
+        Menu.makeCustomMessageScreen("Do you want to start over (y/n)?");
+    }
+
+    public static void endGameScreen(){
+        Menu.makeGUIBackground();
+        Menu.makeCustomMessageScreen("Thank you for playing!");
+        StdDraw.show();
+        StdDraw.pause(800);
+        System.exit(0);
     }
 }

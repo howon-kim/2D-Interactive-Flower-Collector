@@ -23,15 +23,14 @@ import java.util.Random;
 public class Engine {
 
     TERenderer ter = new TERenderer();
-    /* Feel free to change the width and height. */
+
+    /** GLOBAL SCREEN SIZE COMPONENT **/
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
-    private static long SEED;
+    public static final int MENUW = 40;
+    public static final int MENUH = 60;
+    private long SEED;
     private Random RANDOM;
-
-    private static final int MENUW = 40;
-    private static final int MENUH = 60;
-    private String keyboardInput;
 
 
     /* For "Game" Mechanics */
@@ -46,81 +45,35 @@ public class Engine {
     private int TIMELEFT = 60;
     private static WorldLocations worldlocs;
 
+    /** FILE SAVING COMPONENT **/
+    private String input = "";
+
     /**
      * Method used for exploring a fresh world. This method should handle all inputs,
      * including inputs from the main menu.
      */
     public void interactWithKeyboard() {
-        Menu.makeGUIBackground();
-        Menu.makeGUI();
-        StdDraw.show();
-        StdDraw.enableDoubleBuffering();
 
+        Menu.initializeGUI();
 
         while (true) {
-            keyboardInput = "";
             if (!StdDraw.hasNextKeyTyped()) {
                 continue;
             }
-
-            char key = StdDraw.nextKeyTyped();
-            keyboardInput += key;
-
-            switch (key) {
-                /* New Game Operations */
+            switch (Character.toLowerCase(StdDraw.nextKeyTyped())) {
+                /** NEW GAME OPERATION **/
                 case ('n'): {
-                    String seed = "";
-                    char c = 'l';
-
-                    StdDraw.text(MENUW / 2, MENUH / 4,
-                            "Let's generate a new world! Input a seed, then press 's' to begin.");
-                    StdDraw.show();
-
-                    while (c != 's') {
-                        if (!StdDraw.hasNextKeyTyped()) {
-                            continue;
-                        }
-                        c = StdDraw.nextKeyTyped();
-                        seed += String.valueOf(c);
-                        if (c != 's') {
-                            StdDraw.clear(Color.BLACK);
-                            Menu.makeGUI();
-                            StdDraw.text(MENUW / 2, MENUH / 4, "Your seed is: " + seed);
-                            StdDraw.show();
-                        }
-                    }
-
-                    SEED = stringToInt(seed);
-                    RANDOM = new Random(SEED);
-                    System.out.println("## SEED: " + SEED);
-                    world = WorldGenerator.generateWorld(SEED);
-                    player = makePlayer();
-                    putHearts();
-                    keys = makeKeys();
-                    displayKeys();
-                    // added +10
-                    ter.initialize(Engine.WIDTH, Engine.HEIGHT + 3);
-                    ter.renderFrame(world);
-                    worldlocs = new WorldLocations(player, world);
-
-                    playWorld(world);
+                    playTheNewWorld();
                     break;
                 }
 
-                /* Load Operations */
+                /** LOAD OPERATION **/
                 case ('l'): {
-                    ArrayList data = loadWorld();
-                    world = (TETile[][]) data.get(0);
-                    player = (Location) data.get(1);
-
-                    ter = new TERenderer();
-                    ter.initialize(Engine.WIDTH, Engine.HEIGHT);
-                    ter.renderFrame(world);
-                    GAMEOVER = false;
-                    playWorld(world);
+                    loadTheWorld();
                     break;
                 }
 
+                /** QUIT OPERATION **/
                 case ('q'): {
                     /* Quit Operations */
                     GAMEOVER = true;
@@ -130,6 +83,78 @@ public class Engine {
                 default:
                     return;
             }
+        }
+    }
+
+    /** INITIALIZE THE WORLD **/
+    public void initializeWorld() {
+        ter.initialize(Engine.WIDTH, Engine.HEIGHT + 3);
+        world = WorldGenerator.generateWorld(SEED);
+        player = makePlayer();
+        putHearts();
+        keys = makeKeys();
+        displayKeys();
+        ter.renderFrame(world);
+    }
+
+    /** PLAY NEW WORLD **/
+    public void playTheNewWorld(){
+        Menu.enterSeedScreen();
+        String seed = "";
+        while(true) {
+            if (!StdDraw.hasNextKeyTyped()) {
+                continue;
+            }
+            char key = Character.toLowerCase(StdDraw.nextKeyTyped());
+            if (key == 's') {
+                setupSeed(seed);
+                input = SEED + " ";
+                initializeWorld();
+                break;
+            } else if (Character.isDigit(key)) {
+                seed += key;
+            } else {
+                // Ignore the input
+            }
+            Menu.displayEnteredSeed(seed);
+        }
+        System.out.println("Let's play the game");
+        playWorld(world);
+    }
+
+    public void loadTheWorld(){
+        input = loadWorld();
+        setupSeed(input.substring(0, input.indexOf(" ")));
+        String move = input.substring(input.indexOf(" ") + 1, input.length());
+
+        /* DEBUG PURPOSE **
+        System.out.println(input);
+        System.out.println("Seed :" + SEED);
+        System.out.println("MOVE :" + move);
+        **/
+
+        initializeWorld();
+        replay(move);
+        GAMEOVER = false;
+        playWorld(world);
+    }
+
+    /** SETUP THE SEED **/
+    public void setupSeed(String seed) {
+        SEED = Long.parseLong(seed);
+        RANDOM = new Random(SEED);
+        System.out.println("## SEED: " + SEED);
+    }
+
+    /** REPLAY **/
+    public void replay(String move) {
+        for (int i = 0; i < move.length(); i++) {
+            move(move.charAt(i));
+            /* DEBUG PURPOSE **
+            System.out.println(player.getX() + " " + player.getY());
+            **/
+            ter.renderFrame(world);
+            StdDraw.pause(100);
         }
     }
 
@@ -152,19 +177,16 @@ public class Engine {
 
 
     public Location makePlayer() {
-        Location p = getplayerEntry();
+        int index = RANDOM.nextInt(Room.getRooms().size());
+        Room room = (Room) Room.getRooms().get(index);
+        int x = room.getCenterX();
+        int y = room.getCenterY();
+        Location p = new Location(x, y);
         world[p.getX()][p.getY()] = Tileset.AVATAR;
         System.out.println("Set Avatar");
         return p;
     }
 
-    private Location getplayerEntry() {
-        int index = RANDOM.nextInt(Room.getRooms().size());
-        Room room = (Room) Room.getRooms().get(index);
-        int x = room.getCenterX();
-        int y = room.getCenterY();
-        return new Location(x, y);
-    }
 
     public ArrayList<Location> makeKeys() {
         int numKeys = 5;
@@ -190,179 +212,123 @@ public class Engine {
     private void playWorld(TETile[][] w) {
 
         new Thread(() -> {
-         while (TIMELEFT > 0) {
-         StdDraw.enableDoubleBuffering();
-         TIMELEFT--;
-
-         try {
-             Thread.sleep(1000);
-         } catch (InterruptedException e) {
-             e.printStackTrace();
-         }}}).start();
+            while (TIMELEFT > 0) {
+                StdDraw.enableDoubleBuffering();
+                TIMELEFT--;
+                if (TIMELEFT == 0) {
+                    GAMEOVER = true;
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }}}).start();
 
         char key;
-        String record = "";
+        String move = "";
 
         while (!GAMEOVER) {
             mouseHover();
-            // mouseHover2();
             if (!StdDraw.hasNextKeyTyped()) {
                 continue;
             }
-            key = StdDraw.nextKeyTyped();
-            record += key;
+            key = Character.toLowerCase(StdDraw.nextKeyTyped());
+            move += key;
 
             if (TIMELEFT == 0) {
                 GAMEOVER = true;
-                Menu.makeGUIBackground();
-                Menu.makeCustomMessageScreen("You lost! You failed to collect all the flowers :(");
-                StdDraw.pause(2000);
-                break;
+                Menu.lostScreen();
             }
 
             if (FLOWERS == 5) {
-                Menu.makeGUIBackground();
-                Menu.makeCustomMessageScreen("You did it! You collected all the flowers :)");
-                StdDraw.pause(2000);
+                Menu.winScreen();
                 break;
             }
+
             if (HEALTH == 3) {
                 TIMELEFT += 20;
                 HEALTH = 0;
-                StdDraw.text(WIDTH / 2, HEIGHT - 1,
-                        "You've collected 3 hearts and gained 20 seconds!");
-                StdDraw.show();
+                Menu.collectedHeart();
             }
 
-
-            /* FOR QUIT */
-            System.out.println(record);
-            for (int i = 0; i < record.length() - 1; i += 1) {
-                if ((record.charAt(i) == ':' && record.charAt(i + 1) == 'q')
-                        || (record.charAt(i) == ':' && record.charAt(i + 1) == 'Q')) {
-                    saveWorld(w, player);
-                    Menu.makeGUIBackground();
-                    Menu.makeCustomMessageScreen("Your game has been saved!");
-                    StdDraw.pause(1500);
+            /** FOR QUIT **/
+            /* DEBUG PURPOSE **
+            System.out.println(move);
+            **/
+            for (int i = 0; i < move.length() - 1; i += 1) {
+                if (move.charAt(i) == ':' && move.charAt(i + 1) == 'q') {
+                    input += move.substring(0, i);
+                    saveWorld(input);
                     GAMEOVER = true;
                 }
             }
 
-            move(player, key);
-            // System.out.println(player.getX() + " " + player.getY());
-            // ter.renderFrame(w);
+            move(key);
         }
-        Menu.makeGUIBackground();
-        Menu.makeCustomMessageScreen("Do you want to start over (y/n)?");
-        while(true) {
-            if (!StdDraw.hasNextKeyTyped()) {
-                continue;
-            }
-            key = StdDraw.nextKeyTyped();
-            if (key == 'y' || key == 'Y') {
-                GAMEOVER = false;
-                interactWithKeyboard();
-            } else {
-                Menu.makeGUIBackground();
-                Menu.makeCustomMessageScreen("Thank you for playing!");
-                StdDraw.show();
-                StdDraw.pause(800);
-                System.exit(0);
-            }
-        }
-    }
 
-    public long stringToInt(String str) {
-        str = str.trim();
-        String str2 = "";
-        if (!"".equals(str)) {
-            for (int i = 0; i < str.length(); i++) {
-                if (str.charAt(i) >= 48 && str.charAt(i) <= 57) {
-                    str2 = str2 + str.charAt(i);
+        if(GAMEOVER) {
+            Menu.gameOverScreen();
+            while (true) {
+                if (!StdDraw.hasNextKeyTyped()) {
+                    continue;
+                }
+                if (Character.toLowerCase(StdDraw.nextKeyTyped()) == 'y') {
+                    GAMEOVER = false;
+                    interactWithKeyboard();
+                } else {
+                    Menu.endGameScreen();
                 }
             }
         }
-        return Long.parseLong(str2);
     }
 
-    private Boolean moveHelper(Location obj) {
-        if (world[obj.getX()][obj.getY()].character() == Tileset.WALL.character()) {
-            return false;
-        } else {
-            world[obj.getX()][obj.getY()] = Tileset.AVATAR;
-            return true;
+
+
+    private void eatFood(Location obj_e) {
+        if (world[obj_e.getX()][obj_e.getY()] == Tileset.HEART) {
+            HEALTH += 1;
+        }
+        if (world[obj_e.getX()][obj_e.getY()] == Tileset.KEY) {
+            FLOWERS += 1;
+        }
+        if (world[obj_e.getX()][obj_e.getY()] != Tileset.WALL) {
+            world[obj_e.getX()][obj_e.getY()] = Tileset.AVATAR;
+            world[player.getX()][player.getY()] = Tileset.FLOOR;
+            player = obj_e;
         }
     }
 
-    private void move(Location obj, char key) {
+    private void move(char key) {
+        Location newplayerlocation = new Location(player.getX(), player.getY());
+        //System.out.println(player.getX() + " " + player.getY());
         switch (key) {
             case ('w'): {
-                Location newplayerlocation = new Location(obj.getX(), obj.getY() + 1);
-                if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.HEART) {
-                    HEALTH += 1;
-                }
-                if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.KEY) {
-                    FLOWERS += 1;
-                }
-                if (moveHelper(newplayerlocation)) {
-                    world[obj.getX()][obj.getY()] = Tileset.FLOOR;
-                    player = newplayerlocation;
-                }
+                newplayerlocation = new Location(player.getX(), player.getY() + 1);
                 break;
             }
             case ('s'): {
-                Location newplayerlocation = new Location(obj.getX(), obj.getY() - 1);
-                if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.HEART) {
-                    HEALTH += 1;
-                }
-                if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.KEY) {
-                    FLOWERS += 1;
-                }
-                if (moveHelper(newplayerlocation)) {
-                    world[obj.getX()][obj.getY()] = Tileset.FLOOR;
-                    player = newplayerlocation;
-                }
+                newplayerlocation = new Location(player.getX(), player.getY() - 1);
                 break;
             }
             case ('a'): {
-                Location newplayerlocation = new Location(obj.getX() - 1, obj.getY());
-                if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.HEART) {
-                    HEALTH += 1;
-                }
-                if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.KEY) {
-                    FLOWERS += 1;
-                }
-                if (moveHelper(newplayerlocation)) {
-                    world[obj.getX()][obj.getY()] = Tileset.FLOOR;
-                    player = newplayerlocation;
-                }
+                newplayerlocation = new Location(player.getX() - 1, player.getY());
                 break;
             }
-
             case ('d'): {
-                Location newplayerlocation = new Location(obj.getX() + 1, obj.getY());
-                if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.HEART) {
-                    HEALTH += 1;
-                }
-                if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.KEY) {
-                    FLOWERS += 1;
-                }
-                if (moveHelper(newplayerlocation)) {
-                    world[obj.getX()][obj.getY()] = Tileset.FLOOR;
-                    player = newplayerlocation;
-                }
+                newplayerlocation = new Location(player.getX() + 1, player.getY());
                 break;
             }
             default:
                 return;
         }
+        eatFood(newplayerlocation);
     }
 
     private void mouseHover() {
-        System.out.println("Before coordinates");
+        //System.out.println("Before coordinates");
         int mx = (int) StdDraw.mouseX();
         int my = (int) StdDraw.mouseY();
-        System.out.println("After coordinates");
+        //System.out.println("After coordinates");
 
         // check if loc in image!!!! important
         Location loc = new Location(mx, my);
@@ -479,8 +445,7 @@ public class Engine {
             displayKeys();
 
         } else if (gameMode == 'l') {
-            world = (TETile[][]) loadWorld().get(0);
-            player = (Location) loadWorld().get(1);
+            input = loadWorld();
 
         } else {
             System.out.println("Incorrect Game Mode");
@@ -497,24 +462,24 @@ public class Engine {
         /** Move Character **/
         if (!move.isEmpty()) {
             for (int i = 0; i < move.length(); i++) {
-                move(player, move.charAt(i));
+                move(move.charAt(i));
                 //System.out.println(worldlocs.player().getX() + " " +  worldlocs.player().getY());
             }
         }
 
         if (save != -1) {
-            saveWorld(world, player);
+            saveWorld(input);
         }
         return world;
     }
 
-    private static ArrayList loadWorld() {
+    private String loadWorld() {
         File file = new File("./save_data.txt");
         if (file.exists()) {
             try {
                 FileInputStream fs = new FileInputStream(file);
                 ObjectInputStream os = new ObjectInputStream(fs);
-                return (ArrayList) os.readObject();
+                return (String) os.readObject();
             } catch (FileNotFoundException e) {
                 System.out.println("File Not Found");
                 System.exit(0);
@@ -527,12 +492,11 @@ public class Engine {
             }
         }
         System.out.println("No World Saved Yet-- Returning Brand New World");
-        ArrayList data = new ArrayList();
-        data.add(WorldGenerator.generateWorld(SEED));
-        return data;
+        playTheNewWorld();
+        return null;
     }
 
-    private static void saveWorld(TETile[][] world, Location player) {
+    private void saveWorld(String data) {
         File file = new File("./save_data.txt");
         try {
             if (!file.exists()) {
@@ -540,21 +504,29 @@ public class Engine {
             }
             FileOutputStream fs = new FileOutputStream(file);
             ObjectOutputStream os = new ObjectOutputStream(fs);
-            ArrayList data = new ArrayList<Object>();
-            data.add(world);
-            data.add(player);
-
             os.writeObject(data);
-            System.out.println("saved");
-
+            Menu.saveScreen();
         } catch (FileNotFoundException e) {
             System.out.println("File Not Found");
             System.exit(0);
         } catch (IOException e) {
-            System.out.println("wqrqwcasgwtqw");
             System.out.println(e);
             System.exit(0);
         }
     }
-
 }
+
+/** TRASH CAN
+ public long stringToInt(String str) {
+ str = str.trim();
+ String str2 = "";
+ if (!"".equals(str)) {
+ for (int i = 0; i < str.length(); i++) {
+ if (str.charAt(i) >= 48 && str.charAt(i) <= 57) {
+ str2 = str2 + str.charAt(i);
+ }
+ }
+ }
+ return Long.parseLong(str2);
+ }
+ **/

@@ -1,9 +1,7 @@
 package byow;
 
-import java.io.Serializable;
 
-
-public class Location implements Serializable {
+public class Location {
     private int x;
     private int y;
 
