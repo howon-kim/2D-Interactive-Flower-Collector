@@ -43,9 +43,9 @@ public class WorldGenerator {
         return world;
     }
 
-    public static TETile[][] generateWorld() {
+    public static TETile[][] generateWorld(long seed) {
         world = new TETile[Engine.WIDTH][Engine.HEIGHT];
-        WorldGenerator worldGenerator = new WorldGenerator(world, Engine.SEED);
+        WorldGenerator worldGenerator = new WorldGenerator(world, seed);
         worldGenerator.clearWorld();
         worldGenerator.randomizeWorld();
         System.out.println(world[0][0].description());

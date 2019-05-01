@@ -2,12 +2,11 @@ package byow;
 
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
-import java.util.Random;
 import java.util.ArrayList;
 
 public class Room {
 
-    public static ArrayList<Room> rooms;
+    protected static ArrayList<Room> rooms;
     private int x1;
     private int x2;
     private int y1;
@@ -36,8 +35,13 @@ public class Room {
      * Getter
      **/
 
-    public int getW() { return this.w; }
-    public int getH() { return this.h; }
+    public int getW() {
+        return this.w;
+    }
+
+    public int getH() {
+        return this.h;
+    }
 
     public int getX1() {
         return this.x1;
@@ -63,7 +67,7 @@ public class Room {
         return this.centerY;
     }
 
-    public ArrayList getRooms() {
+    public static ArrayList getRooms() {
         return rooms;
     }
 
