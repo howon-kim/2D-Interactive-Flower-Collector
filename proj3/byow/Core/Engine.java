@@ -230,7 +230,7 @@ public class Engine {
 
         while (!GAMEOVER) {
             if (message != null) {
-                StdDraw.text(WIDTH / 5, 1, message);
+                StdDraw.text(WIDTH / 5, 1, "Zen Message:" +message);
                 StdDraw.show();
             }
             mouseHover();
@@ -328,12 +328,12 @@ public class Engine {
 
     private String chooseMessage() {
         ArrayList<String> strings = new ArrayList<>();
-        strings.add("Good job!");
-        strings.add("Excellent");
-        strings.add("Amazing!");
-        strings.add("That's just great");
-        strings.add("Nice!");
-        strings.add("Wow!");
+        strings.add("Look at you, working those keys!");
+        strings.add("You smell great today, you know that?");
+        strings.add("Keep your eyes on the prize!");
+        strings.add("What a time it is to be alive!");
+        strings.add("You should get boba after this! You deserve it.");
+        strings.add("Keep it up, soldier!");
         return strings.get(RANDOM.nextInt(5));
     }
 
@@ -348,7 +348,7 @@ public class Engine {
                     FLOWERS += 1;
                 }
                 if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.NOTE) {
-                    message = "Message:"+ chooseMessage();
+                    message = chooseMessage();
                 }
                 if (moveHelper(newplayerlocation)) {
                     world[obj.getX()][obj.getY()] = Tileset.FLOOR;
@@ -365,7 +365,7 @@ public class Engine {
                     FLOWERS += 1;
                 }
                 if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.NOTE) {
-                    message = "Message:"+ chooseMessage();
+                    message = chooseMessage();
                 }
                 if (moveHelper(newplayerlocation)) {
                     world[obj.getX()][obj.getY()] = Tileset.FLOOR;
@@ -382,7 +382,7 @@ public class Engine {
                     FLOWERS += 1;
                 }
                 if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.NOTE) {
-                    message = "Message:"+ chooseMessage();
+                    message = chooseMessage();
                 }
                 if (moveHelper(newplayerlocation)) {
                     world[obj.getX()][obj.getY()] = Tileset.FLOOR;
@@ -400,7 +400,7 @@ public class Engine {
                     FLOWERS += 1;
                 }
                 if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.NOTE) {
-                    message = "Message:"+ chooseMessage();
+                    message = chooseMessage();
                 }
                 if (moveHelper(newplayerlocation)) {
                     world[obj.getX()][obj.getY()] = Tileset.FLOOR;
