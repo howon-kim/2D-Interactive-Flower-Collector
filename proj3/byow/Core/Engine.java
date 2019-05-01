@@ -393,7 +393,7 @@ public class Engine {
         }
 
         if(save != -1) {
-            saveWorld(WorldGenerator.world, player);
+            saveWorld(world, player);
         }
         System.out.println(world[0][0].description());
 
