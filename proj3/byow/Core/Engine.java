@@ -347,7 +347,6 @@ public class Engine {
         // that works for many different input types.
 
         /** Initialize Tiles **/
-        TETile[][] finalWorldFrame = new TETile[WIDTH][HEIGHT];
         input = input.toLowerCase();
         System.out.println(input);
 
@@ -398,7 +397,7 @@ public class Engine {
         }
         System.out.println(world[0][0].description());
 
-        return finalWorldFrame;
+        return world;
     }
 
     private TETile[][] inputStringGame(char key, String input) {
