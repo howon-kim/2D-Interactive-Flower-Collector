@@ -1,9 +1,5 @@
 package byow.Core;
-
-import byow.*;
 import byow.TileEngine.TERenderer;
-import byow.TileEngine.*;
-
 import java.util.ArrayList;
 
 import edu.princeton.cs.introcs.StdDraw;
@@ -36,17 +32,12 @@ public class Engine {
     /* For "Game" Mechanics */
     private TETile[][] world;
     private Location player;
-    private int TIMELEFT = 10001001;
-    private int HEALTH = 3;
 
     private static boolean GAMEOVER = false;
+    private int HEALTH;
     private String s;
-<<<<<<< HEAD
-    public static WorldLocations worldlocs;
-=======
     private int COUNTER;
     private static WorldLocations worldlocs;
->>>>>>> 2f05b31c55ecb2b8101acfeb81b61b99be008041
     //public static Location player;
 
     /**
@@ -98,9 +89,6 @@ public class Engine {
                     System.out.println("## SEED: " + SEED);
                     world = WorldGenerator.generateWorld(SEED);
                     player = makePlayer();
-
-                    putHearts();
-
                     ter.initialize(Engine.WIDTH, Engine.HEIGHT);
                     ter.renderFrame(world);
                     worldlocs = new WorldLocations(player, world);
@@ -114,11 +102,7 @@ public class Engine {
                     ArrayList data = loadWorld();
                     world = (TETile[][]) data.get(0);
                     player = (Location) data.get(1);
-<<<<<<< HEAD
-                    //worldlocs = new WorldLocations((Location) loadWorld().get(1), WorldGenerator.getWorld());
-=======
 
->>>>>>> 2f05b31c55ecb2b8101acfeb81b61b99be008041
                     ter = new TERenderer();
                     ter.initialize(Engine.WIDTH, Engine.HEIGHT);
                     ter.renderFrame(world);
@@ -135,23 +119,6 @@ public class Engine {
                 }
                 default:
                     return;
-            }
-        }
-    }
-
-    public void putHearts() {
-        ArrayList<Location> heartlocs = new ArrayList<>();
-        for (Room room: Room.rooms) {
-            int x = room.getCenterX();
-            int y = room.getCenterY();
-            if (world[x][y] == Tileset.FLOOR) {
-                Location loc = new Location(x, y);
-                heartlocs.add(loc);
-            }
-            for (Location l: heartlocs) {
-                if (world[l.getX()][l.getY()] != Tileset.AVATAR) {
-                    world[l.getX()][l.getY()] = Tileset.HEART;
-                }
             }
         }
     }
@@ -174,24 +141,9 @@ public class Engine {
 
     private void playWorld(TETile[][] w) {
 
-<<<<<<< HEAD
-        new Thread(() -> {
-            while (TIMELEFT > 0) {
-                StdDraw.enableDoubleBuffering();
-
-                TIMELEFT--;
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-=======
         /** new Thread(() -> {
          while (COUNTER > 0) {
          StdDraw.enableDoubleBuffering();
-
          timeCounter--;
          //long hh = timeCounter / 60 / 60 % 60;
          //long mm = timeCounter / 60 % 60;
@@ -205,26 +157,17 @@ public class Engine {
          }
          }).start();
          */
->>>>>>> 2f05b31c55ecb2b8101acfeb81b61b99be008041
 
         char key;
         String record = "";
+        Menu.makeHUD();
 
         while (!GAMEOVER) {
-            mouseHover();
             if (!StdDraw.hasNextKeyTyped()) {
                 continue;
             }
             key = StdDraw.nextKeyTyped();
             record += key;
-
-            if (HEALTH == 0 || TIMELEFT == 0) {
-                GAMEOVER = true;
-                Menu.makeGUIBackground();
-                Menu.makeCustomMessageScreen("You Died.");
-                StdDraw.pause(2000);
-                break;
-            }
 
             /* FOR QUIT */
             System.out.println(record);
@@ -234,11 +177,7 @@ public class Engine {
                     saveWorld(w, player);
                     Menu.makeGUIBackground();
                     Menu.makeCustomMessageScreen("Your game has been saved!");
-<<<<<<< HEAD
-                    StdDraw.pause(2000);
-=======
                     StdDraw.pause(1500);
->>>>>>> 2f05b31c55ecb2b8101acfeb81b61b99be008041
                     GAMEOVER = true;
                 }
             }
@@ -248,11 +187,6 @@ public class Engine {
             ter.renderFrame(w);
         }
         Menu.makeGUIBackground();
-<<<<<<< HEAD
-        Menu.makeCustomMessageScreen("Try again next time!");
-        StdDraw.show();
-        StdDraw.pause(2000);
-=======
         Menu.makeCustomMessageScreen("Do you want to start over (y/n)?");
         while(true) {
             if (!StdDraw.hasNextKeyTyped()) {
@@ -270,7 +204,6 @@ public class Engine {
                 System.exit(0);
             }
         }
->>>>>>> 2f05b31c55ecb2b8101acfeb81b61b99be008041
     }
 
     public long stringToInt(String str) {
@@ -299,9 +232,6 @@ public class Engine {
         switch (key) {
             case ('w'): {
                 Location newplayerlocation = new Location(obj.getX(), obj.getY() + 1);
-                if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.HEART) {
-                    HEALTH += 1;
-                }
                 if (moveHelper(newplayerlocation)) {
                     world[obj.getX()][obj.getY()] = Tileset.FLOOR;
                     player = newplayerlocation;
@@ -310,9 +240,6 @@ public class Engine {
             }
             case ('s'): {
                 Location newplayerlocation = new Location(obj.getX(), obj.getY() - 1);
-                if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.HEART) {
-                    HEALTH += 1;
-                }
                 if (moveHelper(newplayerlocation)) {
                     world[obj.getX()][obj.getY()] = Tileset.FLOOR;
                     player = newplayerlocation;
@@ -321,93 +248,20 @@ public class Engine {
             }
             case ('a'): {
                 Location newplayerlocation = new Location(obj.getX() - 1, obj.getY());
-                if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.HEART) {
-                    HEALTH += 1;
-                }
                 if (moveHelper(newplayerlocation)) {
                     world[obj.getX()][obj.getY()] = Tileset.FLOOR;
                     player = newplayerlocation;
                 }
                 break;
             }
+
             case ('d'): {
                 Location newplayerlocation = new Location(obj.getX() + 1, obj.getY());
-                if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.HEART) {
-                    System.out.println(HEALTH);
-                }
                 if (moveHelper(newplayerlocation)) {
                     world[obj.getX()][obj.getY()] = Tileset.FLOOR;
                     player = newplayerlocation;
                 }
                 break;
-<<<<<<< HEAD
-            }
-            default:
-                return;
-        }
-    }
-
-    private void mouseHover() {
-        int mx = (int) StdDraw.mouseX();
-        int my = (int) StdDraw.mouseY();
-
-        if (world[mx][my].equals(Tileset.WALL)) {
-            ter.renderFrame(world);
-            StdDraw.enableDoubleBuffering();
-            StdDraw.setPenColor(Color.white);
-            StdDraw.text(WIDTH / 2, 1, "That's a wall! Nothing hidden there.");
-        } else  if (world[mx][my].equals(Tileset.AVATAR)) {
-            ter.renderFrame(world);
-            StdDraw.enableDoubleBuffering();
-            StdDraw.setPenColor(Color.white);
-            StdDraw.text(WIDTH / 2, 1, "That's you! You're so small!");
-        } else if (world[mx][my].equals(Tileset.FLOOR)) {
-            ter.renderFrame(world);
-            StdDraw.enableDoubleBuffering();
-            StdDraw.setPenColor(Color.white);
-            StdDraw.text(WIDTH / 2, 1, "That's the floor! Nothing interesting there.");
-        } else if (world[mx][my].equals(Tileset.HEART)) {
-            ter.renderFrame(world);
-            StdDraw.enableDoubleBuffering();
-            StdDraw.setPenColor(Color.white);
-            StdDraw.text(WIDTH / 2, 1, "A heart! Eat it to gain health!");
-        } else {
-            ter.renderFrame(world);
-            StdDraw.enableDoubleBuffering();
-            StdDraw.setPenColor(Color.white);
-            StdDraw.text(WIDTH / 2, 1, "Absolutely nothing.");
-        }
-        StdDraw.text(WIDTH  * 4 / 5, HEIGHT - 1,
-                "Health: " + (HEALTH));
-        StdDraw.text(WIDTH / 2, HEIGHT - 1,
-                "Time Left: " + (TIMELEFT));
-        StdDraw.show();
-    }
-
-
-    /**
-     private WorldLocations move(WorldLocations worldlocs, char key) {
-
-         switch (key) {
-            case ('w'): {
-                Location newplayerlocation = new Location(worldlocs.player().getX(), worldlocs.player().getY() + 1);
-                if (moveHelper(newplayerlocation)) {
-                    WorldGenerator.getWorld()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
-                    return new WorldLocations(newplayerlocation, WorldGenerator.getWorld());
-                } else {
-                    return worldlocs;
-                }
-            }
-            case ('s'): {
-                Location newplayerlocation = new Location(worldlocs.player().getX(), worldlocs.player().getY() - 1);
-                if (moveHelper(newplayerlocation)) {
-                    WorldGenerator.getWorld()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
-                    return new WorldLocations(newplayerlocation, WorldGenerator.getWorld());
-                } else {
-                    return worldlocs;
-                }
-=======
->>>>>>> 2f05b31c55ecb2b8101acfeb81b61b99be008041
             }
             default:
                 return;
