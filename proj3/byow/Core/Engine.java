@@ -80,8 +80,8 @@ public class Engine {
                     System.exit(0);
                     break;
                 }
-                default:
-                    return;
+                //default:
+                 //   return;
             }
         }
     }
