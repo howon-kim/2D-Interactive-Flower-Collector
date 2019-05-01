@@ -388,26 +388,31 @@ public class Engine {
             ter.renderFrame(world);
             StdDraw.enableDoubleBuffering();
             StdDraw.setPenColor(Color.white);
+            StdDraw.text(WIDTH * 4 / 5, 1, "wall");
             StdDraw.text(WIDTH / 2, 1, "A wall! Nothing interesting there.");
         } else if (world[mx][my].equals(Tileset.AVATAR)) {
             ter.renderFrame(world);
             StdDraw.enableDoubleBuffering();
             StdDraw.setPenColor(Color.white);
+            StdDraw.text(WIDTH * 4 / 5, 1, "you");
             StdDraw.text(WIDTH / 2, 1, "That's you! Look at you go!");
         } else if (world[mx][my].equals(Tileset.FLOOR)) {
             ter.renderFrame(world);
             StdDraw.enableDoubleBuffering();
             StdDraw.setPenColor(Color.white);
+            StdDraw.text(WIDTH * 4 / 5, 1, "floor");
             StdDraw.text(WIDTH / 2, 1, "The floor! Nothing interesting there.");
         } else if (world[mx][my].equals(Tileset.HEART)) {
             ter.renderFrame(world);
             StdDraw.enableDoubleBuffering();
             StdDraw.setPenColor(Color.white);
-            StdDraw.text(WIDTH / 2, 1, "A heart! Collect it to gain health!");
+            StdDraw.text(WIDTH * 4 / 5, 1, "heart");
+            StdDraw.text(WIDTH / 2, 1, "A heart! Collect it to extend your time!");
         } else if (world[mx][my].equals(Tileset.KEY)) {
             ter.renderFrame(world);
             StdDraw.enableDoubleBuffering();
             StdDraw.setPenColor(Color.white);
+            StdDraw.text(WIDTH * 4 / 5, 1, "flower");
             StdDraw.text(WIDTH / 2, 1, "A flower! Collect it!");
         } else {
             ter.renderFrame(world);
