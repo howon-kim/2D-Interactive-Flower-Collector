@@ -358,48 +358,6 @@ public class Engine {
         }
     }
 
-    private void mouseHover2() {
-        updateImg();
-        while (true) {
-            Location mouse = listen();
-            if(inImg(mouse)) {
-                String s = world[mouse.getX()][mouse.getY()].description();
-                drawGUI(s);
-            } else {
-                drawGUI("");
-            }
-
-            if(StdDraw.hasNextKeyTyped()) {
-                break;
-            }
-        }
-    }
-
-    public void drawGUI(String s) {
-        for (int x = 0; x < world.length; x += 1) {
-            for (int y = HEIGHT; y < HEIGHT; y += 1) {
-                world[x][y].draw(x, y);
-            }
-        }
-        StdDraw.setPenColor(Color.white);
-        StdDraw.textLeft(1, HEIGHT, s);
-        StdDraw.show();
-    }
-
-    public Location listen() {
-        int x = (int)StdDraw.mouseX();
-        int y = (int)StdDraw.mouseY();
-        return new Location(x,y);
-    }
-
-    private void updateImg() {
-        ter.renderFrame(world);
-    }
-
-    private boolean inImg(Location p) {
-        return (p.getX() >= 0 && p.getX() < WIDTH) && (p.getY() >= 0 && p.getY() < HEIGHT);
-    }
-
     private void mouseHover() {
         System.out.println("Before coordinates");
         int mx = (int) StdDraw.mouseX();
