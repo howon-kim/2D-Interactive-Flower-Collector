@@ -41,10 +41,10 @@ public class Engine {
 
     private static boolean GAMEOVER = false;
     private int HEALTH = 0;
+    private int FLOWERS = 0;
     private String s;
     private int TIMELEFT = 60;
     private static WorldLocations worldlocs;
-    //public static Location player;
 
     /**
      * Method used for exploring a fresh world. This method should handle all inputs,
@@ -198,28 +198,41 @@ public class Engine {
              Thread.sleep(1000);
          } catch (InterruptedException e) {
              e.printStackTrace();
-         }
-         }
-        }).start();
+         }}}).start();
 
         char key;
         String record = "";
 
         while (!GAMEOVER) {
             mouseHover();
+            // mouseHover2();
             if (!StdDraw.hasNextKeyTyped()) {
                 continue;
             }
             key = StdDraw.nextKeyTyped();
             record += key;
 
-            if (HEALTH == 3) {
+            if (TIMELEFT == 0) {
+                GAMEOVER = true;
+                Menu.makeGUIBackground();
+                Menu.makeCustomMessageScreen("You lost! You failed to collect all the flowers :(");
+                StdDraw.pause(2000);
+                break;
+            }
+
+            if (FLOWERS == 5) {
+                Menu.makeGUIBackground();
+                Menu.makeCustomMessageScreen("You did it! You collected all the flowers :)");
+                StdDraw.pause(2000);
+                break;
+            }
+            /* if (HEALTH == 3) {
                 TIMELEFT += 20;
                 HEALTH = 0;
                 StdDraw.text(WIDTH / 2, HEIGHT - 1,
                         "You've collected 5 hearts and gained 20 seconds!");
                 StdDraw.show();
-            }
+            } */
 
 
             /* FOR QUIT */
@@ -236,8 +249,8 @@ public class Engine {
             }
 
             move(player, key);
-            //System.out.println(player.getX() + " " + player.getY());
-            ter.renderFrame(w);
+            // System.out.println(player.getX() + " " + player.getY());
+            // ter.renderFrame(w);
         }
         Menu.makeGUIBackground();
         Menu.makeCustomMessageScreen("Do you want to start over (y/n)?");
@@ -253,7 +266,7 @@ public class Engine {
                 Menu.makeGUIBackground();
                 Menu.makeCustomMessageScreen("Thank you for playing!");
                 StdDraw.show();
-                StdDraw.pause(500);
+                StdDraw.pause(800);
                 System.exit(0);
             }
         }
@@ -288,6 +301,9 @@ public class Engine {
                 if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.HEART) {
                     HEALTH += 1;
                 }
+                if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.KEY) {
+                    FLOWERS += 1;
+                }
                 if (moveHelper(newplayerlocation)) {
                     world[obj.getX()][obj.getY()] = Tileset.FLOOR;
                     player = newplayerlocation;
@@ -299,6 +315,9 @@ public class Engine {
                 if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.HEART) {
                     HEALTH += 1;
                 }
+                if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.KEY) {
+                    FLOWERS += 1;
+                }
                 if (moveHelper(newplayerlocation)) {
                     world[obj.getX()][obj.getY()] = Tileset.FLOOR;
                     player = newplayerlocation;
@@ -309,6 +328,9 @@ public class Engine {
                 Location newplayerlocation = new Location(obj.getX() - 1, obj.getY());
                 if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.HEART) {
                     HEALTH += 1;
+                }
+                if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.KEY) {
+                    FLOWERS += 1;
                 }
                 if (moveHelper(newplayerlocation)) {
                     world[obj.getX()][obj.getY()] = Tileset.FLOOR;
@@ -322,6 +344,9 @@ public class Engine {
                 if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.HEART) {
                     HEALTH += 1;
                 }
+                if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.KEY) {
+                    FLOWERS += 1;
+                }
                 if (moveHelper(newplayerlocation)) {
                     world[obj.getX()][obj.getY()] = Tileset.FLOOR;
                     player = newplayerlocation;
@@ -333,9 +358,115 @@ public class Engine {
         }
     }
 
+    private void mouseHover2() {
+        updateImg();
+        while (true) {
+            Location mouse = listen();
+            if(inImg(mouse)) {
+                String s = world[mouse.getX()][mouse.getY()].description();
+                drawGUI(s);
+            } else {
+                drawGUI("");
+            }
+
+            if(StdDraw.hasNextKeyTyped()) {
+                break;
+            }
+        }
+    }
+
+    public void drawGUI(String s) {
+        for (int x = 0; x < world.length; x += 1) {
+            for (int y = HEIGHT; y < HEIGHT; y += 1) {
+                world[x][y].draw(x, y);
+            }
+        }
+        StdDraw.setPenColor(Color.white);
+        StdDraw.textLeft(1, HEIGHT, s);
+        StdDraw.show();
+    }
+
+    public Location listen() {
+        int x = (int)StdDraw.mouseX();
+        int y = (int)StdDraw.mouseY();
+        return new Location(x,y);
+    }
+
+    private void updateImg() {
+        ter.renderFrame(world);
+    }
+
+    private boolean inImg(Location p) {
+        return (p.getX() >= 0 && p.getX() < WIDTH) && (p.getY() >= 0 && p.getY() < HEIGHT);
+    }
+
     private void mouseHover() {
+        System.out.println("Before coordinates");
         int mx = (int) StdDraw.mouseX();
         int my = (int) StdDraw.mouseY();
+        System.out.println("After coordinates");
+
+        // check if loc in image
+        Location loc = new Location(mx, my);
+        if ((loc.getX() >= 0 && loc.getX() < WIDTH) && (loc.getY() >= 0 && loc.getY() < HEIGHT)) {
+            showDescriptions(loc);
+        }
+        StdDraw.text(WIDTH / 5, HEIGHT - 1,
+                    "Collect all the flowers before the time runs out!");
+        StdDraw.text(WIDTH * 4 / 5, HEIGHT - 1,
+                    "Health: " + HEALTH);
+        StdDraw.text(WIDTH / 2, HEIGHT - 1,
+                    "Time Left: " + TIMELEFT);
+        StdDraw.show();
+        }
+
+    private void showDescriptions(Location loc) {
+        int mx = loc.getX();
+        int my = loc.getY();
+
+        if (world[mx][my].equals(Tileset.WALL)) {
+            ter.renderFrame(world);
+            StdDraw.enableDoubleBuffering();
+            StdDraw.setPenColor(Color.white);
+            StdDraw.text(WIDTH / 2, 1, "A wall! Nothing interesting there.");
+        } else if (world[mx][my].equals(Tileset.AVATAR)) {
+            ter.renderFrame(world);
+            StdDraw.enableDoubleBuffering();
+            StdDraw.setPenColor(Color.white);
+            StdDraw.text(WIDTH / 2, 1, "That's you! Look at you go!");
+        } else if (world[mx][my].equals(Tileset.FLOOR)) {
+            ter.renderFrame(world);
+            StdDraw.enableDoubleBuffering();
+            StdDraw.setPenColor(Color.white);
+            StdDraw.text(WIDTH / 2, 1, "The floor! Nothing interesting there.");
+        } else if (world[mx][my].equals(Tileset.HEART)) {
+            ter.renderFrame(world);
+            StdDraw.enableDoubleBuffering();
+            StdDraw.setPenColor(Color.white);
+            StdDraw.text(WIDTH / 2, 1, "A heart! Collect it to gain health!");
+        } else if (world[mx][my].equals(Tileset.KEY)) {
+            ter.renderFrame(world);
+            StdDraw.enableDoubleBuffering();
+            StdDraw.setPenColor(Color.white);
+            StdDraw.text(WIDTH / 2, 1, "A flower! Collect it!");
+        } else {
+            ter.renderFrame(world);
+            StdDraw.enableDoubleBuffering();
+            StdDraw.setPenColor(Color.white);
+            StdDraw.text(WIDTH / 2, 1, "Absolutely nothing.");
+        }
+    }
+
+
+    /*private void mouseHover() {
+        System.out.println("Before coordinates");
+        int mx = (int) StdDraw.mouseX();
+        int my = (int) StdDraw.mouseY();
+        System.out.println("After coordinates");
+
+        // check if loc in image
+        Location loc = new Location(mx, my);
+        if (loc.getX() >= 0 && loc.getX() < WIDTH) && (loc.getY() >= 0 && loc.getY() < HEIGHT) {
 
         if (world[mx][my].equals(Tileset.WALL)) {
             ter.renderFrame(world);
@@ -376,7 +507,7 @@ public class Engine {
                 "Time Left: " + TIMELEFT);
         StdDraw.show();
     }
-
+    */
 
 
     /**

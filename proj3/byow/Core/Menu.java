@@ -40,7 +40,7 @@ public class Menu {
         int y = MENUH / 2;
         StdDraw.clear();
         StdDraw.clear(Color.black);
-        Font bigFont = new Font("Comic Sans Ms", Font.BOLD, 30);
+        Font bigFont = new Font("Comic Sans Ms", Font.BOLD, 25);
         StdDraw.setFont(bigFont);
         StdDraw.setPenColor(Color.red);
         StdDraw.text(x, y, string);
