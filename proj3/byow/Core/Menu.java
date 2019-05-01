@@ -28,7 +28,7 @@ public class Menu {
         Font mainMenu = new Font("Comic Sans Ms", Font.PLAIN, 20);
         StdDraw.setFont(title);
         StdDraw.setPenColor(Color.white);
-        StdDraw.text(MENUW / 2, MENUH * 2 / 2.5, "CS61B PROJECT 3: BYOW");
+        StdDraw.text(MENUW / 2, MENUH * 2 / 2.5, "Flower Collector");
         StdDraw.setFont(mainMenu);
         StdDraw.text(MENUW / 2, MENUH * 5.5 / 10, "New World (n)");
         StdDraw.text(MENUW / 2, MENUH * 4.5 / 10, "Load World (l)");

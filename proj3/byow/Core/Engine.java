@@ -226,13 +226,13 @@ public class Engine {
                 StdDraw.pause(2000);
                 break;
             }
-            /* if (HEALTH == 3) {
+            if (HEALTH == 3) {
                 TIMELEFT += 20;
                 HEALTH = 0;
                 StdDraw.text(WIDTH / 2, HEIGHT - 1,
-                        "You've collected 5 hearts and gained 20 seconds!");
+                        "You've collected 3 hearts and gained 20 seconds!");
                 StdDraw.show();
-            } */
+            }
 
 
             /* FOR QUIT */
@@ -364,13 +364,15 @@ public class Engine {
         int my = (int) StdDraw.mouseY();
         System.out.println("After coordinates");
 
-        // check if loc in image
+        // check if loc in image!!!! important
         Location loc = new Location(mx, my);
         if ((loc.getX() >= 0 && loc.getX() < WIDTH) && (loc.getY() >= 0 && loc.getY() < HEIGHT)) {
             showDescriptions(loc);
         }
-        StdDraw.text(WIDTH / 5, HEIGHT - 1,
+        StdDraw.text(WIDTH / 5, HEIGHT,
                     "Collect all the flowers before the time runs out!");
+        StdDraw.text(WIDTH / 5, HEIGHT - 1,
+                "Collect 3 hearts to extend your time!");
         StdDraw.text(WIDTH * 4 / 5, HEIGHT - 1,
                     "Health: " + HEALTH);
         StdDraw.text(WIDTH / 2, HEIGHT - 1,
@@ -414,59 +416,6 @@ public class Engine {
             StdDraw.text(WIDTH / 2, 1, "Absolutely nothing.");
         }
     }
-
-
-    /*private void mouseHover() {
-        System.out.println("Before coordinates");
-        int mx = (int) StdDraw.mouseX();
-        int my = (int) StdDraw.mouseY();
-        System.out.println("After coordinates");
-
-        // check if loc in image
-        Location loc = new Location(mx, my);
-        if (loc.getX() >= 0 && loc.getX() < WIDTH) && (loc.getY() >= 0 && loc.getY() < HEIGHT) {
-
-        if (world[mx][my].equals(Tileset.WALL)) {
-            ter.renderFrame(world);
-            StdDraw.enableDoubleBuffering();
-            StdDraw.setPenColor(Color.white);
-            StdDraw.text(WIDTH / 2, 1, "A wall! Nothing interesting there.");
-        } else if (world[mx][my].equals(Tileset.AVATAR)) {
-            ter.renderFrame(world);
-            StdDraw.enableDoubleBuffering();
-            StdDraw.setPenColor(Color.white);
-            StdDraw.text(WIDTH / 2, 1, "That's you! Look at you go!");
-        } else if (world[mx][my].equals(Tileset.FLOOR)) {
-            ter.renderFrame(world);
-            StdDraw.enableDoubleBuffering();
-            StdDraw.setPenColor(Color.white);
-            StdDraw.text(WIDTH / 2, 1, "The floor! Nothing interesting there.");
-        } else if (world[mx][my].equals(Tileset.HEART)) {
-            ter.renderFrame(world);
-            StdDraw.enableDoubleBuffering();
-            StdDraw.setPenColor(Color.white);
-            StdDraw.text(WIDTH / 2, 1, "A heart! Collect it to gain health!");
-        } else if (world[mx][my].equals(Tileset.KEY)) {
-                ter.renderFrame(world);
-                StdDraw.enableDoubleBuffering();
-                StdDraw.setPenColor(Color.white);
-                StdDraw.text(WIDTH / 2, 1, "A flower! Collect it!");
-        } else {
-            ter.renderFrame(world);
-            StdDraw.enableDoubleBuffering();
-            StdDraw.setPenColor(Color.white);
-            StdDraw.text(WIDTH / 2, 1, "Absolutely nothing.");
-        }
-        StdDraw.text(WIDTH / 5, HEIGHT - 1,
-                "Collect all the flowers before the time runs out!");
-        StdDraw.text(WIDTH  * 4 / 5, HEIGHT - 1,
-                "Health: " + HEALTH);
-        StdDraw.text(WIDTH / 2, HEIGHT - 1,
-                "Time Left: " + TIMELEFT);
-        StdDraw.show();
-    }
-    */
-
 
     /**
      * Method used for autograding and testing your code. The input string will be a series
