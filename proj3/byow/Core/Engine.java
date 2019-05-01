@@ -477,7 +477,7 @@ public class Engine {
     }
 
     private static ArrayList loadWorld() {
-        File file = new File("./proj3/byow/SavedWorlds/savedWorld.txt");
+        File file = new File("./save_data.txt");
         if (file.exists()) {
             try {
                 FileInputStream fs = new FileInputStream(file);
@@ -503,7 +503,7 @@ public class Engine {
     }
 
     private static void saveWorld(TETile[][] world, Location player) {
-        File file = new File("./proj3/byow/SavedWorlds/savedWorld.txt");
+        File file = new File("./save_data.txt");
         try {
             if (!file.exists()) {
                 file.createNewFile();
@@ -521,6 +521,7 @@ public class Engine {
             System.out.println("File Not Found");
             System.exit(0);
         } catch (IOException e) {
+            System.out.println("wqrqwcasgwtqw");
             System.out.println(e);
             System.exit(0);
         }
