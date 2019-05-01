@@ -35,9 +35,11 @@ public class Tileset {
     public static final TETile TREE = new TETile('♠', Color.green, Color.black, "tree");
 
     /* Added Tiles */
-    public static final TETile HEART = new TETile('❤', Color.red, Color.black, "heart");
+    public static final TETile HEART = new TETile('❤', Color.magenta, Color.black, "heart");
     public static final TETile KEY = new TETile('✿', Color.yellow, Color.black, "key");
-    // public static final TETile KEY = new TETile( '️', Color.yellow, Color.black, "key");
+    public static final TETile NEWAVATAR = new TETile('☹', Color.red, Color.black, "new you");
+    public static final TETile NOTE = new TETile('☯', Color.white, Color.black, "note");
+    // public static final TETile KEY = new TETile( '️', Color.yellow, Color.black"key");
 
 }
 
