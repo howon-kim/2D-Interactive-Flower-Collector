@@ -42,7 +42,7 @@ public class Engine {
     private static boolean GAMEOVER = false;
     private int HEALTH = 3;
     private String s;
-    private int TIMELEFT = 1032910301;
+    private int TIMELEFT = 120;
     private static WorldLocations worldlocs;
     //public static Location player;
 
@@ -331,22 +331,27 @@ public class Engine {
             ter.renderFrame(world);
             StdDraw.enableDoubleBuffering();
             StdDraw.setPenColor(Color.white);
-            StdDraw.text(WIDTH / 2, 1, "That's a wall! Nothing hidden there.");
+            StdDraw.text(WIDTH / 2, 1, "A wall! Nothing interesting there.");
         } else  if (world[mx][my].equals(Tileset.AVATAR)) {
             ter.renderFrame(world);
             StdDraw.enableDoubleBuffering();
             StdDraw.setPenColor(Color.white);
-            StdDraw.text(WIDTH / 2, 1, "That's you! You're so small!");
+            StdDraw.text(WIDTH / 2, 1, "That's you! Look at you go!");
         } else if (world[mx][my].equals(Tileset.FLOOR)) {
             ter.renderFrame(world);
             StdDraw.enableDoubleBuffering();
             StdDraw.setPenColor(Color.white);
-            StdDraw.text(WIDTH / 2, 1, "That's the floor! Nothing interesting there.");
+            StdDraw.text(WIDTH / 2, 1, "The floor! Nothing interesting there.");
         } else if (world[mx][my].equals(Tileset.HEART)) {
             ter.renderFrame(world);
             StdDraw.enableDoubleBuffering();
             StdDraw.setPenColor(Color.white);
             StdDraw.text(WIDTH / 2, 1, "A heart! Eat it to gain health!");
+        } else if (world[mx][my].equals(Tileset.FLOWER)) {
+                ter.renderFrame(world);
+                StdDraw.enableDoubleBuffering();
+                StdDraw.setPenColor(Color.white);
+                StdDraw.text(WIDTH / 2, 1, "A flower! Collect it!");
         } else {
             ter.renderFrame(world);
             StdDraw.enableDoubleBuffering();
