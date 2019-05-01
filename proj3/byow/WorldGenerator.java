@@ -50,9 +50,6 @@ public class WorldGenerator {
         WorldGenerator worldGenerator = new WorldGenerator(world, Engine.SEED);
         worldGenerator.clearWorld();
         worldGenerator.randomizeWorld();
-        TERenderer ter = new TERenderer();
-        ter.initialize(Engine.WIDTH, Engine.HEIGHT);
-        ter.renderFrame(world);
         return world;
     }
 

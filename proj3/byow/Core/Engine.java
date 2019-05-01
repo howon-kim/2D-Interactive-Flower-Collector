@@ -348,35 +348,24 @@ public class Engine {
 
 
         /** String process **/
-        String seed;
         String move = "";
         int endSeed = 0;
-
         int save = input.indexOf(":q");
         char gameMode = input.charAt(0);
 
         //System.out.println(characterInput);
         //System.out.println(gameMode);
-
         if(gameMode == 'n') {
+
             endSeed = input.indexOf("s");
-            seed = input.substring(1, endSeed);
+            SEED = Long.parseLong(input.substring(1, endSeed));
 
             /** World Generator Initiate **/
-            WorldGenerator worldGenerator =
-                    new WorldGenerator(finalWorldFrame, Long.parseLong(seed));
-
-            /** Clear the world **/
-            worldGenerator.clearWorld();
-
-            /** Randomize world **/
-            worldGenerator.randomizeWorld();
-
+            world = WorldGenerator.generateWorld();
             player = makePlayer();
 
         } else if(gameMode == 'l') {
-            WorldGenerator worldGenerator =
-                    new WorldGenerator((TETile [][]) loadWorld().get(0));
+            world = (TETile [][]) loadWorld().get(0);
             player = (Location) loadWorld().get(1);
 
         } else {
@@ -390,21 +379,15 @@ public class Engine {
             move = input.substring(endSeed + 1, input.length());
         }
 
-        System.out.println(save);
-
-
-
-        //System.out.println(move);
 
         /** Move Character **/
-        worldlocs = new WorldLocations(player, WorldGenerator.getWorld());
-
         if(!move.isEmpty()) {
             for (int i = 0; i < move.length(); i++){
-                //worldlocs = move(worldlocs, move.charAt(i));
+                move(player, move.charAt(i));
                 //System.out.println(worldlocs.player().getX() + " " +  worldlocs.player().getY());
             }
         }
+
         if(save != -1) {
             saveWorld(WorldGenerator.world, player);
         }
