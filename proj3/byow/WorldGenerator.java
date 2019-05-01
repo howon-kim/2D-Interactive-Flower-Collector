@@ -45,18 +45,18 @@ public class WorldGenerator {
     }
 
     public static TETile[][] generateWorld() {
-
         world = new TETile[Engine.WIDTH][Engine.HEIGHT];
         WorldGenerator worldGenerator = new WorldGenerator(world, Engine.SEED);
         worldGenerator.clearWorld();
         worldGenerator.randomizeWorld();
+        System.out.println(world[0][0].description());
         return world;
     }
 
     public static void main(String[] args) {
         Engine engine = new Engine();
         // engine.interactWithKeyboard();
-        engine.interactWithInputString("n7193300625454684331s");
+        engine.interactWithInputString("n7313251667695476404sasdw");
 //        System.out.println(Room.rooms.size());
     }
 
