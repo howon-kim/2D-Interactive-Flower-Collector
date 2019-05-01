@@ -182,7 +182,7 @@ public class Engine {
                     saveWorld(w, player);
                     Menu.makeGUIBackground();
                     Menu.makeCustomMessageScreen("Your game has been saved!");
-                    StdDraw.pause(3000);
+                    StdDraw.pause(1500);
                     GAMEOVER = true;
                 }
             }
@@ -192,9 +192,23 @@ public class Engine {
             ter.renderFrame(w);
         }
         Menu.makeGUIBackground();
-        Menu.makeCustomMessageScreen("Try again next time!");
-        StdDraw.show();
-        StdDraw.pause(5000);
+        Menu.makeCustomMessageScreen("Do you want to start over (y/n)?");
+        while(true) {
+            if (!StdDraw.hasNextKeyTyped()) {
+                continue;
+            }
+            key = StdDraw.nextKeyTyped();
+            if (key == 'y' || key == 'Y') {
+                GAMEOVER = false;
+                interactWithKeyboard();
+            } else {
+                Menu.makeGUIBackground();
+                Menu.makeCustomMessageScreen("Thank you for playing!");
+                StdDraw.show();
+                StdDraw.pause(500);
+                System.exit(0);
+            }
+        }
     }
 
     public long stringToInt(String str) {
