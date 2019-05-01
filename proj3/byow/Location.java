@@ -1,8 +1,9 @@
 package byow;
+
 import java.io.Serializable;
 
 
-public class Location implements Serializable{
+public class Location implements Serializable {
     private int x;
     private int y;
 
@@ -20,7 +21,7 @@ public class Location implements Serializable{
         return this.y;
     }
 
-    public void setLocation(Location loc){
+    public void setLocation(Location loc) {
         this.x = loc.getX();
         this.y = loc.getY();
     }

@@ -1,4 +1,5 @@
 package byow;
+
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
@@ -8,8 +9,8 @@ public class Hallway {
     private int x2;
     private int y1;
     private int y2;
-    public int w;
-    public int h;
+    private int w;
+    private int h;
 
     public static void horizontalHallway(int x1, int x2, int y, TETile[][] world) {
         System.out.println("h hallway");
@@ -36,7 +37,6 @@ public class Hallway {
             }
         }
     }
-
 
 
 }
