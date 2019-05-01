@@ -47,7 +47,6 @@ public class Engine {
      */
     public void interactWithKeyboard() {
         TERenderer ter = new TERenderer();
-        ter.initialize(Engine.WIDTH, Engine.HEIGHT);
 
         Menu.makeGUIBackground();
         Menu.makeGUI();
@@ -100,6 +99,8 @@ public class Engine {
                     world = WorldGenerator.generateWorld();
 
                     player = makePlayer();
+                    ter.initialize(Engine.WIDTH, Engine.HEIGHT);
+
                     ter.renderFrame(world);
                     worldlocs = new WorldLocations(player, world);
 
@@ -135,18 +136,18 @@ public class Engine {
         }
     }
 
-    public static Location makePlayer() {
+    public Location makePlayer() {
         Location p = getplayerEntry();
-        WorldGenerator.getWorld()[p.getX()][p.getY()] = Tileset.AVATAR;
+        world[p.getX()][p.getY()] = Tileset.AVATAR;
         System.out.println("Set Avatar");
         return p;
     }
 
-    private static Location getplayerEntry() {
+    private Location getplayerEntry() {
         for (Room room: Room.rooms) {
             int x = room.getCenterX();
             int y = room.getCenterY();
-            if (WorldGenerator.getWorld()[x][y] == Tileset.FLOOR) {
+            if (world[x][y] == Tileset.FLOOR) {
                 return new Location(x, y);
             }
         }
