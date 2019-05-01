@@ -88,7 +88,7 @@ public class Engine {
 
     /** INITIALIZE THE WORLD **/
     public void initializeWorld() {
-        ter.initialize(Engine.WIDTH, Engine.HEIGHT + 3);
+        ter.initialize(Engine.WIDTH, Engine.HEIGHT);
 
         GAMEOVER = false;
         HEALTH = 0;
