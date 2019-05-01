@@ -36,6 +36,7 @@ public class Tileset {
 
     /* Added Tiles */
     public static final TETile HEART = new TETile('❤', Color.red, Color.black, "heart");
+    public static final TETile KEY = new TETile('✿', Color.yellow, Color.black, "key");
     // public static final TETile KEY = new TETile( '️', Color.yellow, Color.black, "key");
 
 }

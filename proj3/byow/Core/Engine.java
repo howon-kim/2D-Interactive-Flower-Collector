@@ -40,9 +40,9 @@ public class Engine {
     private ArrayList<Location> keys;
 
     private static boolean GAMEOVER = false;
-    private int HEALTH = 3;
+    private int HEALTH = 0;
     private String s;
-    private int TIMELEFT = 120;
+    private int TIMELEFT = 60;
     private static WorldLocations worldlocs;
     //public static Location player;
 
@@ -98,7 +98,8 @@ public class Engine {
                     putHearts();
                     keys = makeKeys();
                     displayKeys();
-                    ter.initialize(Engine.WIDTH, Engine.HEIGHT);
+                    // added +10
+                    ter.initialize(Engine.WIDTH, Engine.HEIGHT + 3);
                     ter.renderFrame(world);
                     worldlocs = new WorldLocations(player, world);
 
@@ -181,7 +182,7 @@ public class Engine {
 
     public void displayKeys() {
         for (Location loc: keys) {
-            world[loc.getX()][loc.getY()] = Tileset.FLOWER;
+            world[loc.getX()][loc.getY()] = Tileset.KEY;
         }
     }
 
@@ -211,6 +212,15 @@ public class Engine {
             }
             key = StdDraw.nextKeyTyped();
             record += key;
+
+            if (HEALTH == 3) {
+                TIMELEFT += 20;
+                HEALTH = 0;
+                StdDraw.text(WIDTH / 2, HEIGHT - 1,
+                        "You've collected 5 hearts and gained 20 seconds!");
+                StdDraw.show();
+            }
+
 
             /* FOR QUIT */
             System.out.println(record);
@@ -332,7 +342,7 @@ public class Engine {
             StdDraw.enableDoubleBuffering();
             StdDraw.setPenColor(Color.white);
             StdDraw.text(WIDTH / 2, 1, "A wall! Nothing interesting there.");
-        } else  if (world[mx][my].equals(Tileset.AVATAR)) {
+        } else if (world[mx][my].equals(Tileset.AVATAR)) {
             ter.renderFrame(world);
             StdDraw.enableDoubleBuffering();
             StdDraw.setPenColor(Color.white);
@@ -346,8 +356,8 @@ public class Engine {
             ter.renderFrame(world);
             StdDraw.enableDoubleBuffering();
             StdDraw.setPenColor(Color.white);
-            StdDraw.text(WIDTH / 2, 1, "A heart! Eat it to gain health!");
-        } else if (world[mx][my].equals(Tileset.FLOWER)) {
+            StdDraw.text(WIDTH / 2, 1, "A heart! Collect it to gain health!");
+        } else if (world[mx][my].equals(Tileset.KEY)) {
                 ter.renderFrame(world);
                 StdDraw.enableDoubleBuffering();
                 StdDraw.setPenColor(Color.white);
@@ -358,6 +368,8 @@ public class Engine {
             StdDraw.setPenColor(Color.white);
             StdDraw.text(WIDTH / 2, 1, "Absolutely nothing.");
         }
+        StdDraw.text(WIDTH / 5, HEIGHT - 1,
+                "Collect all the flowers before the time runs out!");
         StdDraw.text(WIDTH  * 4 / 5, HEIGHT - 1,
                 "Health: " + HEALTH);
         StdDraw.text(WIDTH / 2, HEIGHT - 1,
