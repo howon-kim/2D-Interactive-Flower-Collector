@@ -4,6 +4,7 @@ import byow.*;
 import byow.TileEngine.TERenderer;
 import byow.TileEngine.*;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import edu.princeton.cs.introcs.StdDraw;
@@ -36,6 +37,7 @@ public class Engine {
     /* For "Game" Mechanics */
     private TETile[][] world;
     private Location player;
+    private ArrayList<Location> keys;
 
     private static boolean GAMEOVER = false;
     private int HEALTH;
@@ -93,6 +95,8 @@ public class Engine {
                     System.out.println("## SEED: " + SEED);
                     world = WorldGenerator.generateWorld(SEED);
                     player = makePlayer();
+                    keys = makeKeys();
+                    displayKeys();
                     ter.initialize(Engine.WIDTH, Engine.HEIGHT);
                     ter.renderFrame(world);
                     worldlocs = new WorldLocations(player, world);
@@ -140,6 +144,26 @@ public class Engine {
         int x = room.getCenterX();
         int y = room.getCenterY();
         return new Location(x, y);
+    }
+
+    public ArrayList<Location> makeKeys() {
+        int numKeys = 5;
+        int index;
+        ArrayList<Location> keys = new ArrayList<>();
+        for(int i = 1; i <= numKeys; i++) {
+            index =  RANDOM.nextInt(Room.getRooms().size());
+            Room room = (Room) Room.getRooms().get(index);
+            int x = room.getCenterX();
+            int y = room.getCenterY();
+            keys.add(new Location(x, y));
+        }
+        return keys;
+    }
+
+    public void displayKeys() {
+        for (Location loc: keys) {
+            world[loc.getX()][loc.getY()] = Tileset.FLOWER;
+        }
     }
 
 
@@ -325,6 +349,10 @@ public class Engine {
             /** World Generator Initiate **/
             world = WorldGenerator.generateWorld(SEED);
             player = makePlayer();
+
+            /** Put Keys **/
+            keys = makeKeys();
+            displayKeys();
 
         } else if (gameMode == 'l') {
             world = (TETile[][]) loadWorld().get(0);
