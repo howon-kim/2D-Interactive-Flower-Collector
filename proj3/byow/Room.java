@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Room {
 
-    protected static ArrayList<Room> rooms;
+    public static ArrayList<Room> rooms;
     private int x1;
     private int x2;
     private int y1;
