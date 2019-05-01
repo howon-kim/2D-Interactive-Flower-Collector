@@ -203,7 +203,6 @@ public class Engine {
 
         char key;
         String record = "";
-        Menu.makeHUD();
 
         while (!GAMEOVER) {
             mouseHover();
@@ -355,9 +354,9 @@ public class Engine {
             StdDraw.text(WIDTH / 2, 1, "Absolutely nothing.");
         }
         StdDraw.text(WIDTH  * 4 / 5, HEIGHT - 1,
-                "Health: " + (HEALTH));
+                "Health: " + HEALTH);
         StdDraw.text(WIDTH / 2, HEIGHT - 1,
-                "Time Left: " + (TIMELEFT));
+                "Time Left: " + TIMELEFT);
         StdDraw.show();
     }
 
