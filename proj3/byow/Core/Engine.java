@@ -38,12 +38,11 @@ public class Engine {
     private Location player;
     private ArrayList<Location> keys;
 
+    /* Default Setting */
     private static boolean GAMEOVER = false;
     private int HEALTH = 0;
     private int FLOWERS = 0;
-    private String s;
-    private int TIMELEFT = 60;
-    private static WorldLocations worldlocs;
+    private int TIMELEFT = 30;
     private String message = null;
 
     /** FILE SAVING COMPONENT **/
@@ -90,9 +89,17 @@ public class Engine {
     /** INITIALIZE THE WORLD **/
     public void initializeWorld() {
         ter.initialize(Engine.WIDTH, Engine.HEIGHT + 3);
+
+        GAMEOVER = false;
+        HEALTH = 0;
+        FLOWERS = 0;
+        TIMELEFT = 30;
+        message = null;
+        
         world = WorldGenerator.generateWorld(SEED);
         player = makePlayer();
         putHearts();
+        putNotes();
         keys = makeKeys();
         displayKeys();
         ter.renderFrame(world);
@@ -240,6 +247,9 @@ public class Engine {
                 if (TIMELEFT == 0) {
                     GAMEOVER = true;
                 }
+                if (TIMELEFT == 20) {
+                    world[player.getX()][player.getY()] = Tileset.NEWAVATAR;
+                }
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -271,11 +281,14 @@ public class Engine {
                 break;
             }
 
-            if (HEALTH == 3) {
-                TIMELEFT += 20;
+            if (HEALTH == 1) {
+                TIMELEFT += 5;
                 HEALTH = 0;
                 Menu.collectedHeart();
             }
+
+
+
 
             /** FOR QUIT **/
             /* DEBUG PURPOSE **
@@ -298,11 +311,14 @@ public class Engine {
                 if (!StdDraw.hasNextKeyTyped()) {
                     continue;
                 }
-                if (Character.toLowerCase(StdDraw.nextKeyTyped()) == 'y') {
+                char input = Character.toLowerCase(StdDraw.nextKeyTyped());
+                if (input == 'y') {
                     GAMEOVER = false;
                     interactWithKeyboard();
-                } else {
+                } else if(input == 'n') {
                     Menu.endGameScreen();
+                } else {
+                    // Nothing happens
                 }
             }
         }
@@ -317,16 +333,34 @@ public class Engine {
         if (world[obj_e.getX()][obj_e.getY()] == Tileset.KEY) {
             FLOWERS += 1;
         }
+        if (world[obj_e.getX()][obj_e.getY()] == Tileset.NOTE) {
+            message = chooseMessage();
+        }
         if (world[obj_e.getX()][obj_e.getY()] != Tileset.WALL) {
-            world[obj_e.getX()][obj_e.getY()] = Tileset.AVATAR;
+            if (TIMELEFT <= 20) {
+                world[obj_e.getX()][obj_e.getY()] = Tileset.NEWAVATAR;
+            } else {
+                world[obj_e.getX()][obj_e.getY()] = Tileset.AVATAR;
+            }
             world[player.getX()][player.getY()] = Tileset.FLOOR;
             player = obj_e;
         }
     }
 
+    private String chooseMessage() {
+        ArrayList<String> strings = new ArrayList<>();
+        strings.add("Look at you, working those keys!");
+        strings.add("You smell great today, you know that?");
+        strings.add("Keep your eyes on the prize!");
+        strings.add("What a time it is to be alive!");
+        strings.add("You should get boba after this! You deserve it.");
+        strings.add("Keep it up, soldier!");
+        return strings.get(RANDOM.nextInt(5));
+    }
+
+
     private void move(char key) {
         Location newplayerlocation = new Location(player.getX(), player.getY());
-        //System.out.println(player.getX() + " " + player.getY());
         switch (key) {
             case ('w'): {
                 newplayerlocation = new Location(player.getX(), player.getY() + 1);
