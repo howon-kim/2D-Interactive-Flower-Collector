@@ -45,6 +45,7 @@ public class Engine {
     private String s;
     private int TIMELEFT = 60;
     private static WorldLocations worldlocs;
+    private String message = null;
 
     /**
      * Method used for exploring a fresh world. This method should handle all inputs,
@@ -94,12 +95,15 @@ public class Engine {
                     RANDOM = new Random(SEED);
                     System.out.println("## SEED: " + SEED);
                     world = WorldGenerator.generateWorld(SEED);
-                    player = makePlayer();
+
+
                     putHearts();
+                    putNotes();
+                    player = makePlayer();
                     keys = makeKeys();
                     displayKeys();
-                    // added +10
-                    ter.initialize(Engine.WIDTH, Engine.HEIGHT + 3);
+
+                    ter.initialize(Engine.WIDTH, Engine.HEIGHT);
                     ter.renderFrame(world);
                     worldlocs = new WorldLocations(player, world);
 
@@ -143,10 +147,26 @@ public class Engine {
                 heartlocs.add(loc);
             }
             for (Location l: heartlocs) {
-                if (world[l.getX()][l.getY()] != Tileset.AVATAR) {
-                    world[l.getX()][l.getY()] = Tileset.HEART;
-                }
+                world[l.getX()][l.getY()] = Tileset.HEART;
             }
+        }
+    }
+
+    public void putNotes() {
+        int numNotes = 0;
+        int index;
+        ArrayList<Location> notes = new ArrayList<>();
+        for (Room room: Room.rooms) {
+            if (numNotes < 3) {
+                int x = room.getCenterX();
+                int y = room.getCenterY();
+                Location loc = new Location(x, y);
+                notes.add(loc);
+                numNotes += 1;
+            }
+        }
+        for (Location l: notes) {
+            world[l.getX()][l.getY()] = Tileset.NOTE;
         }
     }
 
@@ -171,11 +191,17 @@ public class Engine {
         int index;
         ArrayList<Location> keys = new ArrayList<>();
         for(int i = 1; i <= numKeys; i++) {
-            index =  RANDOM.nextInt(Room.getRooms().size());
+            index = RANDOM.nextInt(Room.getRooms().size());
             Room room = (Room) Room.getRooms().get(index);
             int x = room.getCenterX();
             int y = room.getCenterY();
-            keys.add(new Location(x, y));
+            Location loc = new Location(x, y);
+
+            if (world[x][y] != Tileset.AVATAR && world[x][y] != Tileset.KEY) {
+                keys.add(loc);
+            } else {
+                i -= 1;
+            }
         }
         return keys;
     }
@@ -185,7 +211,6 @@ public class Engine {
             world[loc.getX()][loc.getY()] = Tileset.KEY;
         }
     }
-
 
     private void playWorld(TETile[][] w) {
 
@@ -204,8 +229,11 @@ public class Engine {
         String record = "";
 
         while (!GAMEOVER) {
+            if (message != null) {
+                StdDraw.text(WIDTH / 5, 1, message);
+                StdDraw.show();
+            }
             mouseHover();
-            // mouseHover2();
             if (!StdDraw.hasNextKeyTyped()) {
                 continue;
             }
@@ -226,14 +254,13 @@ public class Engine {
                 StdDraw.pause(2000);
                 break;
             }
-            if (HEALTH == 3) {
-                TIMELEFT += 20;
+            if (HEALTH == 1) {
+                TIMELEFT += 5;
                 HEALTH = 0;
                 StdDraw.text(WIDTH / 2, HEIGHT - 1,
                         "You've collected 3 hearts and gained 20 seconds!");
                 StdDraw.show();
             }
-
 
             /* FOR QUIT */
             System.out.println(record);
@@ -247,10 +274,7 @@ public class Engine {
                     GAMEOVER = true;
                 }
             }
-
             move(player, key);
-            // System.out.println(player.getX() + " " + player.getY());
-            // ter.renderFrame(w);
         }
         Menu.makeGUIBackground();
         Menu.makeCustomMessageScreen("Do you want to start over (y/n)?");
@@ -288,10 +312,29 @@ public class Engine {
     private Boolean moveHelper(Location obj) {
         if (world[obj.getX()][obj.getY()].character() == Tileset.WALL.character()) {
             return false;
-        } else {
+        } else if (TIMELEFT > 20) {
             world[obj.getX()][obj.getY()] = Tileset.AVATAR;
             return true;
+        } else {
+            world[obj.getX()][obj.getY()] = Tileset.NEWAVATAR;
+            return true;
         }
+    }
+
+    private void showmessageBank() {
+        StdDraw.setPenColor(Color.white);
+        StdDraw.text(WIDTH / 5, 1, message);
+    }
+
+    private String chooseMessage() {
+        ArrayList<String> strings = new ArrayList<>();
+        strings.add("Good job!");
+        strings.add("Excellent");
+        strings.add("Amazing!");
+        strings.add("That's just great");
+        strings.add("Nice!");
+        strings.add("Wow!");
+        return strings.get(RANDOM.nextInt(5));
     }
 
     private void move(Location obj, char key) {
@@ -303,6 +346,9 @@ public class Engine {
                 }
                 if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.KEY) {
                     FLOWERS += 1;
+                }
+                if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.NOTE) {
+                    message = "Message:"+ chooseMessage();
                 }
                 if (moveHelper(newplayerlocation)) {
                     world[obj.getX()][obj.getY()] = Tileset.FLOOR;
@@ -318,6 +364,9 @@ public class Engine {
                 if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.KEY) {
                     FLOWERS += 1;
                 }
+                if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.NOTE) {
+                    message = "Message:"+ chooseMessage();
+                }
                 if (moveHelper(newplayerlocation)) {
                     world[obj.getX()][obj.getY()] = Tileset.FLOOR;
                     player = newplayerlocation;
@@ -331,6 +380,9 @@ public class Engine {
                 }
                 if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.KEY) {
                     FLOWERS += 1;
+                }
+                if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.NOTE) {
+                    message = "Message:"+ chooseMessage();
                 }
                 if (moveHelper(newplayerlocation)) {
                     world[obj.getX()][obj.getY()] = Tileset.FLOOR;
@@ -347,6 +399,9 @@ public class Engine {
                 if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.KEY) {
                     FLOWERS += 1;
                 }
+                if (world[newplayerlocation.getX()][newplayerlocation.getY()] == Tileset.NOTE) {
+                    message = "Message:"+ chooseMessage();
+                }
                 if (moveHelper(newplayerlocation)) {
                     world[obj.getX()][obj.getY()] = Tileset.FLOOR;
                     player = newplayerlocation;
@@ -359,22 +414,18 @@ public class Engine {
     }
 
     private void mouseHover() {
-        System.out.println("Before coordinates");
         int mx = (int) StdDraw.mouseX();
         int my = (int) StdDraw.mouseY();
-        System.out.println("After coordinates");
 
         // check if loc in image!!!! important
         Location loc = new Location(mx, my);
         if ((loc.getX() >= 0 && loc.getX() < WIDTH) && (loc.getY() >= 0 && loc.getY() < HEIGHT)) {
             showDescriptions(loc);
         }
-        StdDraw.text(WIDTH / 5, HEIGHT,
-                    "Collect all the flowers before the time runs out!");
         StdDraw.text(WIDTH / 5, HEIGHT - 1,
-                "Collect 3 hearts to extend your time!");
-        StdDraw.text(WIDTH * 4 / 5, HEIGHT - 1,
-                    "Health: " + HEALTH);
+                    "Collect all the flowers before the time runs out!");
+        StdDraw.text(WIDTH * 4/5, HEIGHT - 1,
+                "Collect hearts to extend your time!");
         StdDraw.text(WIDTH / 2, HEIGHT - 1,
                     "Time Left: " + TIMELEFT);
         StdDraw.show();
@@ -462,8 +513,6 @@ public class Engine {
         int save = input.indexOf(":q");
         char gameMode = input.charAt(0);
 
-        //System.out.println(characterInput);
-        //System.out.println(gameMode);
         if (gameMode == 'n') {
 
             endSeed = input.indexOf("s");
