@@ -48,7 +48,7 @@ public class Menu {
     }
 
     public static void makeHUD() {
-        StdDraw.filledRectangle(0.0, HEIGHT, 10,10);
+        StdDraw.filledRectangle(0.0, HEIGHT, 10, 10);
         StdDraw.show();
     }
 }

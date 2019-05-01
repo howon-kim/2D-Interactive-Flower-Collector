@@ -1,7 +1,6 @@
 package byow;
 
 import byow.Core.Engine;
-import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
@@ -11,13 +10,13 @@ public class WorldGenerator {
 
     private int WIDTH;
     private int HEIGHT;
-    public static long SEED;
+    private static long SEED;
     private Random RANDOM;
     private Room room;
 
     /* For World Mechanics */
-    public static TETile[][] world;
-    public static Location player;
+    private static TETile[][] world;
+    private static Location player;
 
 
     public WorldGenerator(TETile[][] w, long s) {
@@ -60,33 +59,33 @@ public class WorldGenerator {
 //        System.out.println(Room.rooms.size());
     }
 
-        /**
-         InputSource inputSource = new KeyboardInputSource();
-         String userInput = "";
-         boolean start = false;
-         while (inputSource.possibleNextInput())
-         {
-         char c = inputSource.getNextKey();
-         if (c == 'N' || c == 'n') {
-         System.out.println("start to record number");
-         start = true;
-         }
-         if(start){
-         userInput += c;
-         }
-         if(c == 'S' || c == 's'){
-         System.out.println(userInput);
-         break;
-         }
-         }
-        Scanner input = new Scanner(System.in);
-        //System.out.print("Enter text: ");
-        String userInput = input.next();
-        //System.out.println("Text entered = " +  userInput);
-        userInput = userInput.substring(1, userInput.length() - 1);
-        //System.out.println(userInput);
-        TETile[][] world = engine.interactWithInputString(userInput);
-         */
+    /**
+     * InputSource inputSource = new KeyboardInputSource();
+     * String userInput = "";
+     * boolean start = false;
+     * while (inputSource.possibleNextInput())
+     * {
+     * char c = inputSource.getNextKey();
+     * if (c == 'N' || c == 'n') {
+     * System.out.println("start to record number");
+     * start = true;
+     * }
+     * if(start){
+     * userInput += c;
+     * }
+     * if(c == 'S' || c == 's'){
+     * System.out.println(userInput);
+     * break;
+     * }
+     * }
+     * Scanner input = new Scanner(System.in);
+     * //System.out.print("Enter text: ");
+     * String userInput = input.next();
+     * //System.out.println("Text entered = " +  userInput);
+     * userInput = userInput.substring(1, userInput.length() - 1);
+     * //System.out.println(userInput);
+     * TETile[][] world = engine.interactWithInputString(userInput);
+     */
 
     public void clearWorld() {
         for (int x = 0; x < WIDTH; x += 1) {

@@ -1,14 +1,13 @@
 package byow.Core;
+
 import byow.*;
 import byow.TileEngine.TERenderer;
 import byow.TileEngine.*;
 
-import java.nio.file.LinkOption;
-import java.util.Random;
 import java.util.ArrayList;
 
-
 import edu.princeton.cs.introcs.StdDraw;
+
 import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,14 +16,18 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
+import java.util.Random;
 
 
 public class Engine {
+
     TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
     public static long SEED;
+    private Random RANDOM;
+
     private static final int MENUW = 40;
     private static final int MENUH = 60;
     private String keyboardInput;
@@ -59,21 +62,16 @@ public class Engine {
             if (!StdDraw.hasNextKeyTyped()) {
                 continue;
             }
+
             char key = StdDraw.nextKeyTyped();
             keyboardInput += key;
-            StdDraw.enableDoubleBuffering();
-            StdDraw.clear(Color.BLACK);
-
-            Menu.makeGUI();
-            StdDraw.show();
 
             switch (key) {
                 /* New Game Operations */
                 case ('n'): {
                     String seed = "";
                     char c = 'l';
-                    StdDraw.clear(Color.BLACK);
-                    Menu.makeGUI();
+
                     StdDraw.text(MENUW / 2, MENUH / 4,
                             "Let's generate a new world! Input a seed, then press 's' to begin.");
                     StdDraw.show();
@@ -93,14 +91,11 @@ public class Engine {
                     }
 
                     SEED = stringToInt(seed);
-
+                    RANDOM = new Random(SEED);
                     System.out.println("## SEED: " + SEED);
-
                     world = WorldGenerator.generateWorld();
-
                     player = makePlayer();
                     ter.initialize(Engine.WIDTH, Engine.HEIGHT);
-
                     ter.renderFrame(world);
                     worldlocs = new WorldLocations(player, world);
 
@@ -114,8 +109,6 @@ public class Engine {
                     world = (TETile[][]) data.get(0);
                     player = (Location) data.get(1);
                     //worldlocs = new WorldLocations((Location) loadWorld().get(1), WorldGenerator.getWorld());
-
-                    //System.out.println(world[3][3].toString());
 
                     ter = new TERenderer();
                     ter.initialize(Engine.WIDTH, Engine.HEIGHT);
@@ -144,35 +137,32 @@ public class Engine {
     }
 
     private Location getplayerEntry() {
-        for (Room room: Room.rooms) {
-            int x = room.getCenterX();
-            int y = room.getCenterY();
-            if (world[x][y] == Tileset.FLOOR) {
-                return new Location(x, y);
-            }
-        }
-        return new Location(50, 20);
+        int index = RANDOM.nextInt(Room.rooms.size());
+        Room room = Room.rooms.get(index);
+        int x = room.getCenterX();
+        int y = room.getCenterY();
+        return new Location(x, y);
     }
 
 
     private void playWorld(TETile[][] world) {
 
         /** new Thread(() -> {
-            while (COUNTER > 0) {
-                StdDraw.enableDoubleBuffering();
+         while (COUNTER > 0) {
+         StdDraw.enableDoubleBuffering();
 
-                timeCounter--;
-                //long hh = timeCounter / 60 / 60 % 60;
-                //long mm = timeCounter / 60 % 60;
-                //long ss = timeCounter % 60;
-                //System.out.println("left + hh + "hours" + mm + "minutes" + ss + "seconds");
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+         timeCounter--;
+         //long hh = timeCounter / 60 / 60 % 60;
+         //long mm = timeCounter / 60 % 60;
+         //long ss = timeCounter % 60;
+         //System.out.println("left + hh + "hours" + mm + "minutes" + ss + "seconds");
+         try {
+         Thread.sleep(1000);
+         } catch (InterruptedException e) {
+         e.printStackTrace();
+         }
+         }
+         }).start();
          */
 
         char key;
@@ -200,7 +190,7 @@ public class Engine {
             }
 
             move(player, key);
-            System.out.println(player.getX() + " " + player.getY());
+            //System.out.println(player.getX() + " " + player.getY());
             ter.renderFrame(world);
         }
         Menu.makeGUIBackground();
@@ -222,15 +212,15 @@ public class Engine {
         return Long.parseLong(str2);
     }
 
-    private Boolean moveHelper(Location obj){
-        if(world[obj.getX()][obj.getY()].character() == Tileset.WALL.character()) {
+    private Boolean moveHelper(Location obj) {
+        if (world[obj.getX()][obj.getY()].character() == Tileset.WALL.character()) {
             return false;
         } else {
-            System.out.println(world[obj.getX()][obj.getY()].description());
             world[obj.getX()][obj.getY()] = Tileset.AVATAR;
             return true;
         }
     }
+
     private void move(Location obj, char key) {
         switch (key) {
             case ('w'): {
@@ -245,9 +235,8 @@ public class Engine {
                 Location newplayerlocation = new Location(obj.getX(), obj.getY() - 1);
                 if (moveHelper(newplayerlocation)) {
                     world[obj.getX()][obj.getY()] = Tileset.FLOOR;
-                    player =  newplayerlocation;
+                    player = newplayerlocation;
                 }
-                System.out.println(obj.getX() + " " + obj.getY());
                 break;
             }
             case ('a'): {
@@ -266,55 +255,56 @@ public class Engine {
                     player = newplayerlocation;
                 }
                 break;
-            } default: return;
+            }
+            default:
+                return;
         }
     }
 
     /**
      private WorldLocations move(WorldLocations worldlocs, char key) {
 
-         switch (key) {
-            case ('w'): {
-                Location newplayerlocation = new Location(worldlocs.player().getX(), worldlocs.player().getY() + 1);
-                if (moveHelper(newplayerlocation)) {
-                    WorldGenerator.getWorld()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
-                    return new WorldLocations(newplayerlocation, WorldGenerator.getWorld());
-                } else {
-                    return worldlocs;
-                }
-            }
-            case ('s'): {
-                Location newplayerlocation = new Location(worldlocs.player().getX(), worldlocs.player().getY() - 1);
-                if (moveHelper(newplayerlocation)) {
-                    WorldGenerator.getWorld()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
-                    return new WorldLocations(newplayerlocation, WorldGenerator.getWorld());
-                } else {
-                    return worldlocs;
-                }
-            }
-            case ('a'): {
-                Location newplayerlocation = new Location(worldlocs.player().getX() - 1, worldlocs.player().getY());
-                if (moveHelper(newplayerlocation)) {
-                    WorldGenerator.getWorld()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
-                    return new WorldLocations(newplayerlocation, WorldGenerator.getWorld());
-                } else {
-                    return worldlocs;
-                }
-            }
+     switch (key) {
+     case ('w'): {
+     Location newplayerlocation = new Location(worldlocs.player().getX(), worldlocs.player().getY() + 1);
+     if (moveHelper(newplayerlocation)) {
+     WorldGenerator.getWorld()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
+     return new WorldLocations(newplayerlocation, WorldGenerator.getWorld());
+     } else {
+     return worldlocs;
+     }
+     }
+     case ('s'): {
+     Location newplayerlocation = new Location(worldlocs.player().getX(), worldlocs.player().getY() - 1);
+     if (moveHelper(newplayerlocation)) {
+     WorldGenerator.getWorld()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
+     return new WorldLocations(newplayerlocation, WorldGenerator.getWorld());
+     } else {
+     return worldlocs;
+     }
+     }
+     case ('a'): {
+     Location newplayerlocation = new Location(worldlocs.player().getX() - 1, worldlocs.player().getY());
+     if (moveHelper(newplayerlocation)) {
+     WorldGenerator.getWorld()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
+     return new WorldLocations(newplayerlocation, WorldGenerator.getWorld());
+     } else {
+     return worldlocs;
+     }
+     }
 
-            case ('d'): {
-                Location newplayerlocation = new Location(worldlocs.player().getX() + 1, worldlocs.player().getY());
-                if (moveHelper(newplayerlocation)) {
-                    WorldGenerator.getWorld()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
-                    return new WorldLocations(newplayerlocation, WorldGenerator.getWorld());
-                } else {
-                    return worldlocs;
-                }
-            } default: return worldlocs;
-        }
+     case ('d'): {
+     Location newplayerlocation = new Location(worldlocs.player().getX() + 1, worldlocs.player().getY());
+     if (moveHelper(newplayerlocation)) {
+     WorldGenerator.getWorld()[worldlocs.player().getX()][worldlocs.player().getY()] = Tileset.FLOOR;
+     return new WorldLocations(newplayerlocation, WorldGenerator.getWorld());
+     } else {
+     return worldlocs;
+     }
+     } default: return worldlocs;
+     }
      }
      **/
-
 
 
     /**
@@ -359,17 +349,18 @@ public class Engine {
 
         //System.out.println(characterInput);
         //System.out.println(gameMode);
-        if(gameMode == 'n') {
+        if (gameMode == 'n') {
 
             endSeed = input.indexOf("s");
             SEED = Long.parseLong(input.substring(1, endSeed));
+            RANDOM = new Random(SEED);
 
             /** World Generator Initiate **/
             world = WorldGenerator.generateWorld();
             player = makePlayer();
 
-        } else if(gameMode == 'l') {
-            world = (TETile [][]) loadWorld().get(0);
+        } else if (gameMode == 'l') {
+            world = (TETile[][]) loadWorld().get(0);
             player = (Location) loadWorld().get(1);
 
         } else {
@@ -377,105 +368,105 @@ public class Engine {
             return null;
         }
 
-        if(save != -1) {
+        if (save != -1) {
             move = input.substring(endSeed + 1, save);
-        } else{
+        } else {
             move = input.substring(endSeed + 1, input.length());
         }
 
 
         /** Move Character **/
-        if(!move.isEmpty()) {
-            for (int i = 0; i < move.length(); i++){
+        if (!move.isEmpty()) {
+            for (int i = 0; i < move.length(); i++) {
                 move(player, move.charAt(i));
                 //System.out.println(worldlocs.player().getX() + " " +  worldlocs.player().getY());
             }
         }
 
-        if(save != -1) {
+        if (save != -1) {
             saveWorld(world, player);
         }
-        System.out.println(world[0][0].description());
-
         return world;
     }
 
-    private TETile[][] inputStringGame(char key, String input) {
-        switch (key) {
-            case ('n'): {
-                SEED = stringToInt(input);
-
-                // WorldGenerator.generateWorld();
-                // player = makePlayer();
-                // ter.renderFrame(WorldGenerator.getWorld());
-                // worldlocs = new WorldLocations(player, WorldGenerator.getWorld());
-
-                WorldGenerator.getWorld();
-
-                int start = 1;
-                for (int i = 0; i < input.length(); i += 1) {
-                    if (input.charAt(i) == 's' || input.charAt(i) == 'S') {
-                        start = i + 1;
-                        break;
-                    }
-                }
-                for (int i = start; i < input.length(); i += 1) {
-                    //worldlocs = move(worldlocs, input.charAt(i));
-                    if ((input.charAt(i) == ':' && input.charAt(i + 1) == 'q')
-                            || (input.charAt(i) == ':' && input.charAt(i + 1) == 'Q')) {
-                        GAMEOVER = true;
-                        saveWorld(WorldGenerator.world, player);
-                        System.out.println("Saved");
-                        break;
-                    }
-                }
-                return WorldGenerator.getWorld();
-            }
-            case ('l'): {
-                WorldGenerator.world = (TETile [][]) loadWorld().get(0);
-                worldlocs = new WorldLocations((Location) loadWorld().get(1), WorldGenerator.getWorld());
-
-                int start = 1;
-                for (int i = 0; i < input.length(); i += 1) {
-                    if (input.charAt(i) == 's' || input.charAt(i) == 'S') {
-                        start = i + 1;
-                        break;
-                    }
-                }
-                for (int i = start; i < input.length(); i += 1) {
-                    if ((input.charAt(i) == ':' && input.charAt(i + 1) == 'q')
-                            || (input.charAt(i) == ':' && input.charAt(i + 1) == 'Q')) {
-                        GAMEOVER = true;
-                        saveWorld(WorldGenerator.getWorld(), player);
-                        System.out.println("Saved");
-                        break;
-                    }
-                    //worldlocs = move(worldlocs, input.charAt(i));
-                }
-                return WorldGenerator.getWorld();
-            }
-            case ('q'): {
-                GAMEOVER = true;
-                TETile[][] world = new TETile[80][30];
-                for (TETile[] x : world) {
-                    for (TETile y : x) {
-                        y = Tileset.NOTHING;
-                    }
-                }
-                return world;
-            } default: {
-                GAMEOVER = true;
-                TETile[][] world = new TETile[80][30];
-                for (TETile[] x : world) {
-                    for (TETile y : x) {
-                        y = Tileset.NOTHING;
-                    }
-                }
-                return world;
-            }
-        }
-    }
-
+    /**
+     * private TETile[][] inputStringGame(char key, String input) {
+     * switch (key) {
+     * case ('n'): {
+     * SEED = stringToInt(input);
+     * <p>
+     * // WorldGenerator.generateWorld();
+     * // player = makePlayer();
+     * // ter.renderFrame(WorldGenerator.getWorld());
+     * // worldlocs = new WorldLocations(player, WorldGenerator.getWorld());
+     * <p>
+     * WorldGenerator.getWorld();
+     * <p>
+     * int start = 1;
+     * for (int i = 0; i < input.length(); i += 1) {
+     * if (input.charAt(i) == 's' || input.charAt(i) == 'S') {
+     * start = i + 1;
+     * break;
+     * }
+     * }
+     * for (int i = start; i < input.length(); i += 1) {
+     * //worldlocs = move(worldlocs, input.charAt(i));
+     * if ((input.charAt(i) == ':' && input.charAt(i + 1) == 'q')
+     * || (input.charAt(i) == ':' && input.charAt(i + 1) == 'Q')) {
+     * GAMEOVER = true;
+     * saveWorld(world, player);
+     * System.out.println("Saved");
+     * break;
+     * }
+     * }
+     * return WorldGenerator.getWorld();
+     * }
+     * case ('l'): {
+     * world = (TETile[][]) loadWorld().get(0);
+     * worldlocs = new WorldLocations((Location) loadWorld().get(1), WorldGenerator.getWorld());
+     * <p>
+     * int start = 1;
+     * for (int i = 0; i < input.length(); i += 1) {
+     * if (input.charAt(i) == 's' || input.charAt(i) == 'S') {
+     * start = i + 1;
+     * break;
+     * }
+     * }
+     * for (int i = start; i < input.length(); i += 1) {
+     * if ((input.charAt(i) == ':' && input.charAt(i + 1) == 'q')
+     * || (input.charAt(i) == ':' && input.charAt(i + 1) == 'Q')) {
+     * GAMEOVER = true;
+     * saveWorld(WorldGenerator.getWorld(), player);
+     * System.out.println("Saved");
+     * break;
+     * }
+     * //worldlocs = move(worldlocs, input.charAt(i));
+     * }
+     * return WorldGenerator.getWorld();
+     * }
+     * case ('q'): {
+     * GAMEOVER = true;
+     * world = new TETile[80][30];
+     * for (TETile[] x : world) {
+     * for (TETile y : x) {
+     * y = Tileset.NOTHING;
+     * }
+     * }
+     * return world;
+     * }
+     * default: {
+     * GAMEOVER = true;
+     * world = new TETile[80][30];
+     * for (TETile[] x : world) {
+     * for (TETile y : x) {
+     * y = Tileset.NOTHING;
+     * }
+     * }
+     * return world;
+     * }
+     * }
+     * }
+     **/
     private static ArrayList loadWorld() {
         File file = new File("./save_data.txt");
         if (file.exists()) {
@@ -483,9 +474,7 @@ public class Engine {
                 FileInputStream fs = new FileInputStream(file);
                 ObjectInputStream os = new ObjectInputStream(fs);
                 return (ArrayList) os.readObject();
-            }
-
-            catch (FileNotFoundException e) {
+            } catch (FileNotFoundException e) {
                 System.out.println("File Not Found");
                 System.exit(0);
             } catch (IOException e) {
@@ -517,7 +506,7 @@ public class Engine {
             os.writeObject(data);
             System.out.println("saved");
 
-        }  catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             System.out.println("File Not Found");
             System.exit(0);
         } catch (IOException e) {
