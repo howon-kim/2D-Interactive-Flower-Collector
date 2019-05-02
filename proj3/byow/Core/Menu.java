@@ -42,12 +42,12 @@ public class Menu {
 
     public static void makeCustomMessageScreen(String string) {
         int x = MENUW / 2;
-        int y = MENUH / 2;
+        int y = MENUH * 2 / 3;
         StdDraw.clear();
         StdDraw.clear(Color.black);
         Font bigFont = new Font("Comic Sans Ms", Font.BOLD, 25);
         StdDraw.setFont(bigFont);
-        StdDraw.setPenColor(Color.red);
+        StdDraw.setPenColor(Color.white);
         StdDraw.text(x, y, string);
         StdDraw.show();
     }
