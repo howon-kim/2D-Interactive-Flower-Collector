@@ -233,6 +233,7 @@ public class WorldGenerator {
         horizontalRaycasting();
         verticalRaycasting();
         checkConnection();
+        
     }
 
     private boolean outbound(Room r) {

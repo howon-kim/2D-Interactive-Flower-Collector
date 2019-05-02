@@ -81,7 +81,7 @@ public class Engine {
                     break;
                 }
                 //default:
-                 //   return;
+                //   return;
             }
         }
     }
@@ -95,7 +95,7 @@ public class Engine {
         FLOWERS = 0;
         TIMELEFT = 30;
         message = null;
-        
+
         world = WorldGenerator.generateWorld(SEED);
         player = makePlayer();
         putHearts();
@@ -213,10 +213,16 @@ public class Engine {
 
 
     public ArrayList<Location> makeKeys() {
-        int numKeys = 5;
         int index;
+        int numRoom = Room.getRooms().size();
+
+        if(numRoom <= 10){
+            FLOWERS = 1;
+        } else {
+            FLOWERS = numRoom / 10;
+        }
         ArrayList<Location> keys = new ArrayList<>();
-        for(int i = 1; i <= numKeys; i++) {
+        for(int i = 1; i <= FLOWERS; i++) {
             index = RANDOM.nextInt(Room.getRooms().size());
             Room room = (Room) Room.getRooms().get(index);
             int x = room.getCenterX();
@@ -225,7 +231,6 @@ public class Engine {
 
             if (world[x][y] != Tileset.AVATAR && world[x][y] != Tileset.KEY) {
                 keys.add(loc);
-                FLOWERS += 1;
             } else {
                 i -= 1;
             }
@@ -308,7 +313,6 @@ public class Engine {
         }
 
         if(GAMEOVER) {
-            Menu.lostScreen();
             Menu.gameOverScreen();
             while (true) {
                 if (!StdDraw.hasNextKeyTyped()) {
@@ -400,13 +404,13 @@ public class Engine {
             showDescriptions(loc);
         }
         StdDraw.text(WIDTH / 5, HEIGHT - 1,
-                    "Collect all the flowers before the time runs out!");
+                "Collect all the flowers before the time runs out!");
         StdDraw.text(WIDTH * 4/5, HEIGHT - 1,
                 "Collect hearts to extend your time!");
         StdDraw.text(WIDTH / 2, HEIGHT - 1,
-                    "Time Left: " + TIMELEFT);
+                "Time Left: " + TIMELEFT);
         StdDraw.show();
-        }
+    }
 
     private void showDescriptions(Location loc) {
         int mx = loc.getX();
@@ -425,11 +429,11 @@ public class Engine {
             StdDraw.text(WIDTH * 4 / 5, 1, "you");
             StdDraw.text(WIDTH / 2, 1, "That's you! And you're running out of time!");
         } else if (world[mx][my].equals(Tileset.NEWAVATAR)) {
-                ter.renderFrame(world);
-                StdDraw.enableDoubleBuffering();
-                StdDraw.setPenColor(Color.white);
-                StdDraw.text(WIDTH * 4 / 5, 1, "you");
-                StdDraw.text(WIDTH / 2, 1, "That's you! Look at you go!");
+            ter.renderFrame(world);
+            StdDraw.enableDoubleBuffering();
+            StdDraw.setPenColor(Color.white);
+            StdDraw.text(WIDTH * 4 / 5, 1, "you");
+            StdDraw.text(WIDTH / 2, 1, "That's you! Look at you go!");
         } else if (world[mx][my].equals(Tileset.FLOOR)) {
             ter.renderFrame(world);
             StdDraw.enableDoubleBuffering();
