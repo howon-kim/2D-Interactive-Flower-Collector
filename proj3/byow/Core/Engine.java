@@ -403,10 +403,10 @@ public class Engine {
         if ((loc.getX() >= 0 && loc.getX() < WIDTH) && (loc.getY() >= 0 && loc.getY() < HEIGHT)) {
             showDescriptions(loc);
         }
-        StdDraw.textLeft(5, HEIGHT - 1,
+        StdDraw.textLeft(3, HEIGHT - 1,
                 "Collect all the flowers before the time runs out!");
-        StdDraw.textLeft(5, HEIGHT - 2,
-                "Collect hearts to extend your time!");
+        StdDraw.textLeft(WIDTH * 3.5 / 5, HEIGHT - 1,
+                "Collect hearts to gain 5 seconds!");
         StdDraw.text(WIDTH / 2, HEIGHT - 1,
                 "Time Left: " + TIMELEFT);
         StdDraw.show();
