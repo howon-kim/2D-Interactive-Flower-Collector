@@ -5,6 +5,7 @@ import byow.Core.RandomUtils;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class WorldGenerator {
@@ -98,31 +99,34 @@ public class WorldGenerator {
 
     public void randomizeRoom() {
         int index = 0;
+        int count = 0;
         int w, h;
-        int numRoom = RandomUtils.uniform(RANDOM, 40, 90);
+        int numRoom = RandomUtils.uniform(RANDOM, 10, 50);
         System.out.println("Room Number : " + numRoom);
 
-        while(index < numRoom) {
+        while (index < numRoom) {
             int x = RandomUtils.uniform(RANDOM, 0, WIDTH);
             int y = RandomUtils.uniform(RANDOM, 0, HEIGHT);
-            if(numRoom <= 30){
-                w = RandomUtils.uniform(RANDOM, 6, 8);
-                h = RandomUtils.uniform(RANDOM, 6, 8);
+            if (numRoom <= 20) {
+                w = RandomUtils.uniform(RANDOM, 10, 15);
+                h = RandomUtils.uniform(RANDOM, 10, 15);
             }
-            if(numRoom > 40 && numRoom <= 60){
-                w = RandomUtils.uniform(RANDOM, 2, 6);
-                h = 3;
-            } else if(numRoom > 60 && numRoom <= 80) {
-                w = 3;
-                h = RandomUtils.uniform(RANDOM, 2, 5);
+            if (numRoom > 20 && numRoom <= 35) {
+                w = RandomUtils.uniform(RANDOM, 8, 15);
+                h = RandomUtils.uniform(RANDOM, 8, 15);
             } else {
-                w = 3;
-                h = 3;
+                w = RandomUtils.uniform(RANDOM, 3, 6);
+                h = RandomUtils.uniform(RANDOM, 3, 6);
             }
             Room newRoom = new Room(x, y, w, h);
             if (!outbound(newRoom) && !intersects(newRoom)) {
                 room.putRoom(world, newRoom);
                 index++;
+            }
+            count++;
+            /** DEFENSIVE PROGRAMMING **/
+            if(count >= 10000){
+                index = numRoom;
             }
         }
     }
@@ -132,7 +136,8 @@ public class WorldGenerator {
             boolean detect = false;
             int goalX = 0;
             for (int x = r.getX2() + 1; x < WIDTH; x++) {
-                if (world[x][r.getCenterY()] == Tileset.WALL) {
+                if (world[x][r.getCenterY()] == Tileset.WALL && world[x + 1][r.getCenterY()] != Tileset.NOTHING
+                && world[x + 1][r.getCenterY()] != Tileset.WALL) {
                     detect = true;
                     goalX = x;
                     break;
@@ -143,14 +148,12 @@ public class WorldGenerator {
                     if (world[x][r.getCenterY() - 1] == Tileset.NOTHING) {
                         world[x][r.getCenterY() - 1] = Tileset.WALL;
                     }
-                    if (world[x][r.getCenterY()] == Tileset.NOTHING
-                            || world[x][r.getCenterY()] == Tileset.WALL) {
-                        world[x][r.getCenterY()] = Tileset.FLOOR;
-                    }
                     if (world[x][r.getCenterY() + 1] == Tileset.NOTHING) {
                         world[x][r.getCenterY() + 1] = Tileset.WALL;
                     }
+                    world[x][r.getCenterY()] = Tileset.FLOOR;
                 }
+
             }
         }
     }
@@ -160,39 +163,76 @@ public class WorldGenerator {
             boolean detect = false;
             int goalY = 0;
             for (int y = r.getY2() + 1; y < HEIGHT; y++) {
-                if (world[r.getCenterX()][y] == Tileset.WALL) {
+                if (world[r.getCenterX()][y] == Tileset.WALL && world[r.getCenterX()][y + 1] != Tileset.NOTHING
+                && world[r.getCenterX()][y + 1] != Tileset.WALL) {
                     detect = true;
                     goalY = y;
                     break;
                 }
             }
 
-            /* Trying to add Room to rooms Arraylist */
-            /* how do we modify this so we can get an array of rooms? */
 
             if (detect) {
                 for (int y = r.getY2(); y <= goalY; y++) {
                     if (world[r.getCenterX() - 1][y] == Tileset.NOTHING) {
                         world[r.getCenterX() - 1][y] = Tileset.WALL;
                     }
-                    if (world[r.getCenterX()][y] == Tileset.NOTHING
-                            || world[r.getCenterX()][y] == Tileset.WALL
-                            && world[r.getCenterX()][y + 1] != Tileset.NOTHING) {
-                        world[r.getCenterX()][y] = Tileset.FLOOR;
-                    }
                     if (world[r.getCenterX() + 1][y] == Tileset.NOTHING) {
                         world[r.getCenterX() + 1][y] = Tileset.WALL;
                     }
+                    world[r.getCenterX()][y] = Tileset.FLOOR;
                 }
             }
         }
     }
 
 
+    public void checkConnection(){
+        ArrayList<Room> deleteRoom = new ArrayList<>();
+        for (Room r : room.rooms) {
+            Boolean connect = false;
+            for (int x = r.getX1(); x <= r.getX2(); x++) {
+                if (world[x][r.getY1()] != Tileset.WALL) {
+                    connect = true;
+                }
+            }
+            for (int x = r.getX1(); x <= r.getX2(); x++) {
+                if (world[x][r.getY2()] != Tileset.WALL) {
+                    connect = true;
+                }
+            }
+            for (int y = r.getY1(); y <= r.getY2(); y++) {
+                if (world[r.getX1()][y] != Tileset.WALL) {
+                    connect = true;
+                }
+            }
+            for (int y = r.getY1(); y <= r.getY2(); y++) {
+                if (world[r.getX2()][y] != Tileset.WALL) {
+                    connect = true;
+                }
+            }
+            if(!connect) {
+                deleteRoom.add(r);
+                deleteRoom(r);
+            }
+        }
+        for (Room r: deleteRoom){
+            room.rooms.remove(r);
+        }
+    }
+
+    public void deleteRoom(Room r){
+        for (int x = r.getX1(); x <= r.getX2(); x++) {
+            for(int y = r.getY1(); y <= r.getY2(); y++){
+                world[x][y] = Tileset.NOTHING;
+            }
+        }
+    }
     public void randomizeWorld() {
         randomizeRoom();
         horizontalRaycasting();
         verticalRaycasting();
+        checkConnection();
     }
 
     private boolean outbound(Room r) {
