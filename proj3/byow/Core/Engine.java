@@ -143,7 +143,6 @@ public class Engine {
 
         initializeWorld();
         replay(move);
-        GAMEOVER = false;
         playWorld(world);
     }
 
@@ -164,6 +163,7 @@ public class Engine {
             ter.renderFrame(world);
             StdDraw.pause(100);
         }
+        HEALTH = 0;
     }
 
     public void putHearts() {
@@ -239,8 +239,7 @@ public class Engine {
     }
 
     private void playWorld(TETile[][] w) {
-
-        new Thread(() -> {
+        Thread worker = new Thread(() -> {
             while (TIMELEFT > 0) {
                 StdDraw.enableDoubleBuffering();
                 TIMELEFT--;
@@ -254,8 +253,9 @@ public class Engine {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }}}).start();
+                }}});
 
+        worker.start();
         char key;
         String move = "";
 
@@ -278,6 +278,7 @@ public class Engine {
 
             if (FLOWERS == 5) {
                 Menu.winScreen();
+                GAMEOVER = true;
                 break;
             }
 
@@ -313,7 +314,7 @@ public class Engine {
                 }
                 char input = Character.toLowerCase(StdDraw.nextKeyTyped());
                 if (input == 'y') {
-                    GAMEOVER = false;
+                    worker.stop();
                     interactWithKeyboard();
                 } else if(input == 'n') {
                     Menu.endGameScreen();

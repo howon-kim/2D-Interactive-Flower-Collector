@@ -1,6 +1,7 @@
 package byow;
 
 import byow.Core.Engine;
+import byow.Core.RandomUtils;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
@@ -96,21 +97,32 @@ public class WorldGenerator {
     }
 
     public void randomizeRoom() {
-        int loop = 10000;
-        int maxWidth = 7;
-        int minWidth = 4;
-        int maxHeight = 7;
-        int minHeight = 4;
+        int index = 0;
+        int w, h;
+        int numRoom = RandomUtils.uniform(RANDOM, 20, 100);
+        System.out.println("Room Number : " + numRoom);
 
-        for (int i = 0; i <= loop; i++) {
-            int w = RANDOM.nextInt((maxWidth - minWidth) + 1) + minWidth;
-            int h = RANDOM.nextInt((maxHeight - minHeight) + 1) + minHeight;
-            int x = RANDOM.nextInt(WIDTH);
-            int y = RANDOM.nextInt(HEIGHT);
+        while(index < numRoom) {
+            int x = RandomUtils.uniform(RANDOM, 0, WIDTH);
+            int y = RandomUtils.uniform(RANDOM, 0, HEIGHT);
+            if(numRoom <= 30){
+                w = RandomUtils.uniform(RANDOM, 6, 8);
+                h = RandomUtils.uniform(RANDOM, 6, 8);
+            }
+            if(numRoom > 30 && numRoom <= 40){
+                w = RandomUtils.uniform(RANDOM, 4, 6);
+                h = RandomUtils.uniform(RANDOM, 4, 6);
+            } else if(numRoom > 40 && numRoom <= 60) {
+                w = RandomUtils.uniform(RANDOM, 3, 5);
+                h = RandomUtils.uniform(RANDOM, 3, 5);
+            } else {
+                w = RandomUtils.uniform(RANDOM, 2, 4);
+                h = RandomUtils.uniform(RANDOM, 2, 4);
+            }
             Room newRoom = new Room(x, y, w, h);
-
             if (!outbound(newRoom) && !intersects(newRoom)) {
                 room.putRoom(world, newRoom);
+                index++;
             }
         }
     }
@@ -148,26 +160,23 @@ public class WorldGenerator {
             boolean detect = false;
             int goalY = 0;
             for (int y = r.getY2() + 1; y < HEIGHT; y++) {
-                if (world[r.getCenterX()][y] == Tileset.WALL) {
-                    detect = true;
-                    goalY = y;
-                    break;
+                for (Room r2 : room.rooms) {
+                    if (y == r2.getY1() && r.getCenterX() <= r2.getX2() && r.getCenterX() >= r2.getX1()) {
+                        detect = true;
+                        goalY = y;
+                        break;
+                    }
                 }
             }
 
-            /* Trying to add Room to rooms Arraylist */
-            /* how do we modify this so we can get an array of rooms? */
+
 
             if (detect) {
-                for (int y = r.getY2(); y <= goalY; y++) {
+                for (int y = r.getY2(); y <= goalY + 1; y++) {
                     if (world[r.getCenterX() - 1][y] == Tileset.NOTHING) {
                         world[r.getCenterX() - 1][y] = Tileset.WALL;
                     }
-                    if (world[r.getCenterX()][y] == Tileset.NOTHING
-                            || world[r.getCenterX()][y] == Tileset.WALL
-                            && world[r.getCenterX()][y + 1] != Tileset.NOTHING) {
-                        world[r.getCenterX()][y] = Tileset.FLOOR;
-                    }
+                    world[r.getCenterX()][y] = Tileset.FLOOR;
                     if (world[r.getCenterX() + 1][y] == Tileset.NOTHING) {
                         world[r.getCenterX() + 1][y] = Tileset.WALL;
                     }
@@ -175,6 +184,7 @@ public class WorldGenerator {
             }
         }
     }
+
 
     public void randomizeWorld() {
         randomizeRoom();
