@@ -101,7 +101,7 @@ public class WorldGenerator {
         int index = 0;
         int count = 0;
         int w, h;
-        int numRoom = RandomUtils.uniform(RANDOM, 10, 50);
+        int numRoom = RandomUtils.uniform(RANDOM, 20, 40);
         System.out.println("Room Number : " + numRoom);
 
         while (index < numRoom) {
@@ -112,8 +112,8 @@ public class WorldGenerator {
                 h = RandomUtils.uniform(RANDOM, 10, 15);
             }
             if (numRoom > 20 && numRoom <= 35) {
-                w = RandomUtils.uniform(RANDOM, 8, 15);
-                h = RandomUtils.uniform(RANDOM, 8, 15);
+                w = RandomUtils.uniform(RANDOM, 4, 15);
+                h = RandomUtils.uniform(RANDOM, 4, 15);
             } else {
                 w = RandomUtils.uniform(RANDOM, 3, 6);
                 h = RandomUtils.uniform(RANDOM, 3, 6);
