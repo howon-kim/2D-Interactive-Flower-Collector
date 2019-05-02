@@ -83,7 +83,7 @@ public class Menu {
     }
 
     public static void collectedHeart(){
-        StdDraw.text(WIDTH / 2, HEIGHT - 1,
+        StdDraw.textLeft(WIDTH / 2, HEIGHT - 1,
                 "You've collected a heart and gained 5 seconds!");
         StdDraw.show();
     }
