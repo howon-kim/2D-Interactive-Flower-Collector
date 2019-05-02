@@ -99,7 +99,7 @@ public class WorldGenerator {
     public void randomizeRoom() {
         int index = 0;
         int w, h;
-        int numRoom = RandomUtils.uniform(RANDOM, 20, 100);
+        int numRoom = RandomUtils.uniform(RANDOM, 40, 90);
         System.out.println("Room Number : " + numRoom);
 
         while(index < numRoom) {
@@ -109,15 +109,15 @@ public class WorldGenerator {
                 w = RandomUtils.uniform(RANDOM, 6, 8);
                 h = RandomUtils.uniform(RANDOM, 6, 8);
             }
-            if(numRoom > 30 && numRoom <= 40){
-                w = RandomUtils.uniform(RANDOM, 4, 6);
-                h = RandomUtils.uniform(RANDOM, 4, 6);
-            } else if(numRoom > 40 && numRoom <= 60) {
-                w = RandomUtils.uniform(RANDOM, 3, 5);
-                h = RandomUtils.uniform(RANDOM, 3, 5);
+            if(numRoom > 40 && numRoom <= 60){
+                w = RandomUtils.uniform(RANDOM, 2, 6);
+                h = 3;
+            } else if(numRoom > 60 && numRoom <= 80) {
+                w = 3;
+                h = RandomUtils.uniform(RANDOM, 2, 5);
             } else {
-                w = RandomUtils.uniform(RANDOM, 2, 4);
-                h = RandomUtils.uniform(RANDOM, 2, 4);
+                w = 3;
+                h = 3;
             }
             Room newRoom = new Room(x, y, w, h);
             if (!outbound(newRoom) && !intersects(newRoom)) {
@@ -160,23 +160,26 @@ public class WorldGenerator {
             boolean detect = false;
             int goalY = 0;
             for (int y = r.getY2() + 1; y < HEIGHT; y++) {
-                for (Room r2 : room.rooms) {
-                    if (y == r2.getY1() && r.getCenterX() <= r2.getX2() && r.getCenterX() >= r2.getX1()) {
-                        detect = true;
-                        goalY = y;
-                        break;
-                    }
+                if (world[r.getCenterX()][y] == Tileset.WALL) {
+                    detect = true;
+                    goalY = y;
+                    break;
                 }
             }
 
-
+            /* Trying to add Room to rooms Arraylist */
+            /* how do we modify this so we can get an array of rooms? */
 
             if (detect) {
-                for (int y = r.getY2(); y <= goalY + 1; y++) {
+                for (int y = r.getY2(); y <= goalY; y++) {
                     if (world[r.getCenterX() - 1][y] == Tileset.NOTHING) {
                         world[r.getCenterX() - 1][y] = Tileset.WALL;
                     }
-                    world[r.getCenterX()][y] = Tileset.FLOOR;
+                    if (world[r.getCenterX()][y] == Tileset.NOTHING
+                            || world[r.getCenterX()][y] == Tileset.WALL
+                            && world[r.getCenterX()][y + 1] != Tileset.NOTHING) {
+                        world[r.getCenterX()][y] = Tileset.FLOOR;
+                    }
                     if (world[r.getCenterX() + 1][y] == Tileset.NOTHING) {
                         world[r.getCenterX() + 1][y] = Tileset.WALL;
                     }
