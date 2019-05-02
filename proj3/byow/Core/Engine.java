@@ -41,7 +41,7 @@ public class Engine {
     /* Default Setting */
     private static boolean GAMEOVER = false;
     private int HEALTH = 0;
-    private int FLOWERS = 0;
+    private int FLOWERS;
     private int TIMELEFT = 60;
     private String message = null;
 
@@ -225,6 +225,7 @@ public class Engine {
 
             if (world[x][y] != Tileset.AVATAR && world[x][y] != Tileset.KEY) {
                 keys.add(loc);
+                FLOWERS += 1;
             } else {
                 i -= 1;
             }
@@ -276,7 +277,7 @@ public class Engine {
                 Menu.lostScreen();
             }
 
-            if (FLOWERS == 5) {
+            if (FLOWERS == 0) {
                 Menu.winScreen();
                 GAMEOVER = true;
                 break;
@@ -307,6 +308,7 @@ public class Engine {
         }
 
         if(GAMEOVER) {
+            Menu.lostScreen();
             Menu.gameOverScreen();
             while (true) {
                 if (!StdDraw.hasNextKeyTyped()) {
@@ -317,6 +319,7 @@ public class Engine {
                     worker.stop();
                     interactWithKeyboard();
                 } else if(input == 'n') {
+                    //Menu.lostScreen();
                     Menu.endGameScreen();
                 } else {
                     // Nothing happens
@@ -332,7 +335,7 @@ public class Engine {
             HEALTH += 1;
         }
         if (world[obj_e.getX()][obj_e.getY()] == Tileset.KEY) {
-            FLOWERS += 1;
+            FLOWERS -= 1;
         }
         if (world[obj_e.getX()][obj_e.getY()] == Tileset.NOTE) {
             message = chooseMessage();
