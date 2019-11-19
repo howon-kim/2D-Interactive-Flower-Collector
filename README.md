@@ -1,4 +1,6 @@
 # 2D Interactive Flower Collector Game
+Designed own data structure to save diﬀerent tiles, locations of stars and characters. Made own algorithm to generate a randomized game map each time a player played.
+
 <i><b>Even though this repository is public, that does not mean that anybody can copy, download, or recreate my work</b></i>
 
 
